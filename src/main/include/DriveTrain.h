@@ -1,0 +1,31 @@
+#pragma once
+
+#include <frc/drive/DifferentialDrive.h>
+#include <frc/motorcontrol/MotorControllerGroup.h>
+
+#include <ctre/Phoenix.h>
+
+#include "PID.h"
+
+class DriveTrain {
+public:
+    DriveTrain();
+    ~DriveTrain();
+
+    void Tank(double l, double r);
+    void Arcade(double v, double h);
+
+    double GetEncoderL();
+    double GetEncoderR();
+
+    bool MoveDistance(bool dir, int distance);
+    void MoveStraight(bool dir, double power);
+    void Turn(bool dir, double angle);
+
+private:
+    WPI_TalonSRX *l1, *l2, *r1, *r2;
+    frc::MotorControllerGroup *lSide, *rSide;
+    frc::DifferentialDrive *driveTrain;
+
+    PID *movePID;
+};
