@@ -2,6 +2,9 @@
 
 #include <frc/Joystick.h>
 
+#include "Maps/XboxMap.h"
+#include "Maps/ThrustMastersMap.h"
+
 class Control {
 public:
     Control();

@@ -21,9 +21,9 @@ double DriveTrain::GetEncoderL() { return l1->GetSelectedSensorPosition(); }
 double DriveTrain::GetEncoderR() { return r1->GetSelectedSensorPosition(); }
 
 bool DriveTrain::MoveDistance(bool dir, int distance) {
-    double l = movePID->Get(fabs(GetEncoderL()), fabs(GetEncoderL()) + (double)distance);
+    /*double l = movePID->Get(fabs(GetEncoderL()), fabs(GetEncoderL()) + (double)distance);
     double r = movePID->Get(fabs(GetEncoderR()), fabs(GetEncoderR()) + (double)distance);
-    Tank(l, -r);
+    Tank(l, -r);*/
     return true;
 }
 void DriveTrain::MoveStraight(bool dir, double power) {

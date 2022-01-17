@@ -6,11 +6,10 @@ Control::Control() {
     right = new frc::Joystick(3);
 }
 
-double Control::LeftX() { left->GetRawAxis(0); }
-double Control::LeftY() { left->GetRawAxis(0); }
-double Control::RightX() { right->GetRawAxis(0); }
-double Control::RightY() { right->GetRawAxis(0); }
-
+double Control::LeftX() { return left->GetRawAxis(xAxisJS); }
+double Control::LeftY() { return left->GetRawAxis(yAxisJS); }
+double Control::RightX() { return right->GetRawAxis(xAxisJS); }
+double Control::RightY() { return right->GetRawAxis(yAxisJS); }
 
 //===========================================================================
 Control::PressOnce::PressOnce() {

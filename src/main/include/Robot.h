@@ -21,5 +21,6 @@ public:
   void TestPeriodic() override;
 
 private:
-
+  Control *control;
+  DriveTrain *driveTrain;
 };

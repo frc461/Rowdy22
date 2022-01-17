@@ -1,7 +1,9 @@
 #include "Robot.h"
 
 void Robot::RobotInit() {
-
+  control = new Control();
+  
+  driveTrain = new DriveTrain();
 }
 
 void Robot::AutonomousInit() {
