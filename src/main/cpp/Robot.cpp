@@ -1,16 +1,7 @@
 #include "Robot.h"
 
-DriveTrainPeriodic() {
+void Robot::DriveTrainPeriodic() {
   driveTrain->Tank(control->LeftX(), control->RightX, 0.8);
-}
-ClimberPeriodic() {
-  
-}
-Intake() {
-  
-}
-Shooter() {
-  
 }
 
 //==================================================
