@@ -11,6 +11,10 @@ public:
     MoveHookMotor(bool dir);
     MoveSwingMotor(bool dir);
     
+    double GetHookEncoder();
+    double GetHangEncoder();
+    double GetSwingEncoder();
+    
 private:
     WPI_TalonSRX *hangMotor, *swingMotor, *hookMotor;
     
