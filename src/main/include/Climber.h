@@ -13,4 +13,6 @@ public:
     
 private:
     WPI_TalonSRX *hangMotor, *swingMotor, *hookMotor;
+    
+    double speed;
 };
