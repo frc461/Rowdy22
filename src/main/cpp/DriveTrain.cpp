@@ -14,16 +14,16 @@ DriveTrain::DriveTrain() {
     movePID = new PID(0.0, 0.0, 0.0, "move");
 }
 
-void DriveTrain::Tank(double l, double r) { driveTrain->TankDrive(l, r); }
-void DriveTrain::Arcade(double v, double h) { driveTrain->ArcadeDrive(v, h); }
+void DriveTrain::Tank(double l, double r, double speedCap) { driveTrain->TankDrive(l*speedCap, r*speedCap); }
+void DriveTrain::Arcade(double v, double h, double speedCap) { driveTrain->ArcadeDrive(v*speedCap, h*speedCap); }
 
 double DriveTrain::GetEncoderL() { return l1->GetSelectedSensorPosition(); }
 double DriveTrain::GetEncoderR() { return r1->GetSelectedSensorPosition(); }
 
 bool DriveTrain::MoveDistance(bool dir, int distance) {
-    /*double l = movePID->Get(fabs(GetEncoderL()), fabs(GetEncoderL()) + (double)distance);
+    double l = movePID->Get(fabs(GetEncoderL()), fabs(GetEncoderL()) + (double)distance);
     double r = movePID->Get(fabs(GetEncoderR()), fabs(GetEncoderR()) + (double)distance);
-    Tank(l, -r);*/
+    Tank(l, -r);
     return true;
 }
 void DriveTrain::MoveStraight(bool dir, double power) {
