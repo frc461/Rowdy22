@@ -12,8 +12,8 @@ public:
     DriveTrain();
     ~DriveTrain();
 
-    void Tank(double l, double r);
-    void Arcade(double v, double h);
+    void Tank(double l, double r, double speedCap);
+    void Arcade(double v, double h, double speedCap);
 
     double GetEncoderL();
     double GetEncoderR();
