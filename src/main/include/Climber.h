@@ -7,9 +7,9 @@ public:
     Climber();
     ~Climber();
     
-    MoveHangMotor(bool dir);
-    MoveHookMotor(bool dir);
-    MoveSwingMotor(bool dir);
+    void MoveHangMotor(bool dir);
+    void MoveHookMotor(bool dir);
+    void MoveSwingMotor(bool dir);
     
     double GetHookEncoder();
     double GetHangEncoder();
