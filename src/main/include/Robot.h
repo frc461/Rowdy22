@@ -21,8 +21,7 @@ public:
   void TestPeriodic() override;
   //==================================================
   
-  DriveTrainPeriodic();
-  ClimberPeriodic();
+  void DriveTrainPeriodic();
 
 private:
   Control *control;
