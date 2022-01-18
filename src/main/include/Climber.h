@@ -7,9 +7,9 @@ public:
     Climber();
     ~Climber();
     
-    void MoveHangMotor(bool dir);
-    void MoveHookMotor(bool dir);
-    void MoveSwingMotor(bool dir);
+    void RunHangMotor(double speed);
+    void RunHookMotor(double speed);
+    void RunSwingMotor(double speed);
     
     double GetHookEncoder();
     double GetHangEncoder();
@@ -17,6 +17,4 @@ public:
     
 private:
     WPI_TalonSRX *hangMotor, *swingMotor, *hookMotor;
-    
-    double speed;
 };
