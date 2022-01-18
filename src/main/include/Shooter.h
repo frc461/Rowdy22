@@ -5,9 +5,9 @@ public:
   Shooter();
   ~Shooter();
   
-  void MoveMotor(bool dir, double speed);
-  void MoveHood(bool dir, double speed);
+  void RunShooter(double speed);
+  void RunHood(double speed);
   
 private:
-  WPI_TalonSRX *motor, *hood;
+  WPI_TalonSRX *shooter, *hood;
 };
