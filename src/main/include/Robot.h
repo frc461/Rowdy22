@@ -23,8 +23,6 @@ public:
   
   DriveTrainPeriodic();
   ClimberPeriodic();
-  Intake();
-  Shooter();
 
 private:
   Control *control;
