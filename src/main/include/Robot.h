@@ -1,7 +1,6 @@
 #pragma once
 
 #include <iostream>
-
 #include <frc/TimedRobot.h>
 
 #include "Control.h"
@@ -9,6 +8,7 @@
 
 class Robot : public frc::TimedRobot {
 public:
+  //==================================================
   void RobotInit() override;
   void RobotPeriodic() override;
   void AutonomousInit() override;
@@ -19,6 +19,12 @@ public:
   void DisabledPeriodic() override;
   void TestInit() override;
   void TestPeriodic() override;
+  //==================================================
+  
+  DriveTrainPeriodic();
+  ClimberPeriodic();
+  Intake();
+  Shooter();
 
 private:
   Control *control;
