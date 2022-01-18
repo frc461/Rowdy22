@@ -1,5 +1,19 @@
 #include "Robot.h"
 
+DriveTrainPeriodic() {
+  driveTrain->Tank(control->LeftX(), control->RightX, 0.8);
+}
+ClimberPeriodic() {
+  
+}
+Intake() {
+  
+}
+Shooter() {
+  
+}
+
+//==================================================
 void Robot::RobotInit() {
   control = new Control();
   
@@ -22,14 +36,9 @@ void Robot::TeleopPeriodic() {
 
 }
 
-void Robot::DisabledInit() {}
-void Robot::DisabledPeriodic() {}
-void Robot::RobotPeriodic() {}
-void Robot::TestInit() {}
-void Robot::TestPeriodic() {}
-
 #ifndef RUNNING_FRC_TESTS
 int main() {
   return frc::StartRobot<Robot>();
 }
 #endif
+//==================================================
