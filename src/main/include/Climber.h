@@ -7,9 +7,9 @@ public:
     Climber();
     ~Climber();
     
-    void RunHangMotor(double speed);
-    void RunHookMotor(double speed);
-    void RunSwingMotor(double speed);
+    void RunHang(double speed);
+    void RunHook(double speed);
+    void RunSwing(double speed);
     
     double GetHookEncoder();
     double GetHangEncoder();
