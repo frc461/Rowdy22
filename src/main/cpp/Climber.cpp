@@ -6,9 +6,9 @@ Climber::Climber() {
     swingMotor = new WPI_TalonSRX(0);
 }
 
-void RunHookMotor(double speed) { hookMotor->Set(speed); }
-void RunHangMotor(double speed) { hangMotor->Set(speed); }
-void RunSwingMotor(double speed) { swingMotor->Set(speed); }
+void RunHook(double speed) { hookMotor->Set(speed); }
+void RunHang(double speed) { hangMotor->Set(speed); }
+void RunSwing(double speed) { swingMotor->Set(speed); }
 
 double GetHookEncoder() { return hookMotor->GetSelectedSensorPosition(); }
 double GetHangEncoder() { return hangMotor->GetSelectedSensorPosition(); }
