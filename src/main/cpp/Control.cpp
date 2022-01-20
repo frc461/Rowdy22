@@ -11,6 +11,10 @@ double Control::LeftY() { return left->GetRawAxis(yAxisJS); }
 double Control::RightX() { return right->GetRawAxis(xAxisJS); }
 double Control::RightY() { return right->GetRawAxis(yAxisJS); }
 
+bool Control::Shooter() { return xbox->GetRawAxis(XboxAxisRightTrigger)>0.1; }
+bool Control::Intake() { return xbox->GetRawButton(XboxButtonRightBumper); }
+bool Control::Conveyor() { return xbox->GetRawAxis(XboxAxisLeftTrigger >0.1); }
+
 //===========================================================================
 Control::PressOnce::PressOnce() {
     pressed = false;

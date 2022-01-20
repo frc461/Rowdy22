@@ -12,7 +12,7 @@ Climber::Climber() {
 void Climber::RunLeft(double speed) {
     leftMotor->Set(speed);
 }
-void Climber::RunLeft(double speed) {
+void Climber::RunRight(double speed) {
     rightMotor->Set(speed);
 }
 void Climber::RunGrab(bool dir) {

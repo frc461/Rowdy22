@@ -11,6 +11,8 @@ DriveTrain::DriveTrain() {
 
     driveTrain = new frc::DifferentialDrive(*lSide, *rSide);
 
+    gyro = new frc::ADXRS450_Gyro(frc::SPI::Port::kOnboardCS0);
+
     movePID = new PID(0.0, 0.0, 0.0, "move");
 }
 
@@ -19,6 +21,7 @@ void DriveTrain::Arcade(double v, double h, double speedCap) { driveTrain->Arcad
 
 double DriveTrain::GetEncoderL() { return l1->GetSelectedSensorPosition(); }
 double DriveTrain::GetEncoderR() { return r1->GetSelectedSensorPosition(); }
+double DriveTrain::GetAngle() { return gyro->GetAngle(); }
 
 bool DriveTrain::MoveDistance(bool dir, int distance) {
     double l = movePID->Get(fabs(GetEncoderL()), fabs(GetEncoderL()) + (double)distance);

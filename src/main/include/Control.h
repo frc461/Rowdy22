@@ -15,6 +15,10 @@ public:
     double RightX();
     double RightY();
 
+    bool Shooter();
+    bool Intake();
+    bool Conveyor();
+
 private:
     class PressOnce {
     public:
