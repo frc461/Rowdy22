@@ -34,10 +34,18 @@ public:
 
 private:
   Control *control;
+  
   DriveTrain *driveTrain;
+  
   Intake *intake;
+  
   Climber *climber;
+  bool tiltState, grabState;
+  
   Shooter *shooter;
+  
   Vision *vision;
+  
   Conveyor *conveyor;
+  
 };
