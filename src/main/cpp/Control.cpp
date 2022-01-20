@@ -5,6 +5,7 @@ Control::Control() {
     left = new frc::Joystick(2);
     right = new frc::Joystick(3);
     
+    hood = new PressOnce();
     tilt = new PressOnce();
     grab = new PressOnce();
 }
@@ -15,13 +16,15 @@ double Control::RightX() { return right->GetRawAxis(xAxisJS); }
 double Control::RightY() { return right->GetRawAxis(yAxisJS); }
 
 bool Control::Shooter() { return xbox->GetRawAxis(XboxAxisRightTrigger)>0.1; }
+bool Control::ShooterHood() { return hood->Get(true); } //-----------------------------------WIP
+
 bool Control::Intake() { return xbox->GetRawButton(XboxButtonRightBumper); }
 bool Control::Conveyor() { return xbox->GetRawAxis(XboxAxisLeftTrigger >0.1); }
 
-bool Control::ClimberExtend() { return true; }
-bool Control::ClimberRetract() { return true; }
-bool Control::ClimberTilt() { return tilt->Get(true); }
-bool Control::ClimberGrab() { return tilt->Get(true); }
+bool Control::ClimberExtend() { return true; } //-----------------------------------WIP
+bool Control::ClimberRetract() { return true; } //-----------------------------------WIP
+bool Control::ClimberTilt() { return tilt->Get(true); } //-----------------------------------WIP
+bool Control::ClimberGrab() { return grab->Get(true); } //-----------------------------------WIP
 
 //===========================================================================
 Control::PressOnce::PressOnce() {
