@@ -43,6 +43,7 @@ private:
   bool tiltState, grabState;
   
   Shooter *shooter;
+  bool hoodState;
   
   Vision *vision;
   
