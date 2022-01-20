@@ -18,6 +18,11 @@ public:
     bool Shooter();
     bool Intake();
     bool Conveyor();
+    
+    bool ClimberExtend();
+    bool ClimberRetract();
+    bool ClimberTilt();
+    bool ClimberGrab();
 
 private:
     class PressOnce {
@@ -27,6 +32,8 @@ private:
     private:
         bool pressed;
     };
+    
+    PressOnce *tilt, *grab;
 
     frc::Joystick *xbox, *left, *right;
 };
