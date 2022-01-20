@@ -24,5 +24,3 @@ void Climber::RunTilt(bool dir) {
 void Climber::RunBrake(bool dir) {
     brake->Set(dir);
 }
-
-// OINAI NAIN KA INA IT WORGN
