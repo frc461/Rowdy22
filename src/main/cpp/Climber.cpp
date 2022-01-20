@@ -9,18 +9,9 @@ Climber::Climber() {
     brake = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
 }
 
-void Climber::RunLeft(double speed) {
-    leftMotor->Set(speed);
-}
-void Climber::RunRight(double speed) {
-    rightMotor->Set(speed);
-}
-void Climber::RunGrab(bool dir) {
-    grab->Set(dir);
-}
-void Climber::RunTilt(bool dir) {
-    tilt->Set(dir);
-}
-void Climber::RunBrake(bool dir) {
-    brake->Set(dir);
-}
+void Climber::RunLeft(double speed) { leftMotor->Set(speed); }
+void Climber::RunRight(double speed) { rightMotor->Set(speed); }
+
+void Climber::RunGrab(bool dir) { grab->Set(dir); }
+void Climber::RunTilt(bool dir) { tilt->Set(dir); }
+void Climber::RunBrake(bool dir) { brake->Set(dir); }
