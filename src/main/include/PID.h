@@ -8,6 +8,8 @@ public:
     ~PID();
 
     double Get(double val, double ideal);
+    
+    void Reset();
 
 private:
     double p, i, d;
