@@ -23,7 +23,7 @@ public:
     void Turn(bool dir, double angle);
 
 private:
-    WPI_TalonSRX *l1, *l2, *r1, *r2;
+    WPI_TalonFX *l1, *l2, *r1, *r2;
     frc::MotorControllerGroup *lSide, *rSide;
     frc::DifferentialDrive *driveTrain;
 

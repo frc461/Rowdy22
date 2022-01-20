@@ -1,20 +1,22 @@
 #pragma once
 
+#include <frc/Solenoid.h>
+
 #include <ctre/Phoenix.h>
 
 class Climber {
 public:
     Climber();
     ~Climber();
-    
-    void RunHang(double speed);
-    void RunHook(double speed);
-    void RunSwing(double speed);
-    
-    double GetHookEncoder();
-    double GetHangEncoder();
-    double GetSwingEncoder();
+
+    void RunLeft(double speed);
+    void RunRight(double speed);
+    void RunGrab(bool dir);
+    void RunTilt(bool dir);
+    void RunBrake(bool dir);
     
 private:
-    WPI_TalonSRX *hangMotor, *swingMotor, *hookMotor;
+    WPI_TalonSRX *leftMotor, *rightMotor;
+
+    frc::Solenoid *tilt, *grab, *brake;
 };

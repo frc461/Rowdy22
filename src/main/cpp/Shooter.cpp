@@ -1,9 +1,9 @@
 #include "Shooter.h"
 
 Shooter::Shooter() {
-  motor = new WPI_TalonSRX(0);
-  hood = new WPI_TalonSRX(0);
+  shooter = new WPI_TalonFX(0);
+  hood = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
 }
 
 void Shooter::RunShooter(double speed) { shooter->Set(speed); }
-void Shooter::RunHood(double speed) { hood->Set(speed); }
+void Shooter::RunHood(bool dir) { hood->Set(dir); }

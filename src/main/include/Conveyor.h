@@ -1,19 +1,18 @@
 #pragma once
 
 #include <ctre/Phoenix.h>
+
 #include <frc/Solenoid.h>
 
-class Intake {
+class Conveyor{
 public:
-    Intake();
-    ~Intake();
-    
+    Conveyor();
+    ~Conveyor();
+
     void RunMotor(double speed);
-    void RunPush(bool dir);
+    void RunHold(bool dir);
 
 private:
     WPI_TalonSRX *motor;
-    frc::Solenoid *push;
-    
-    double speedCap;
+    frc::Solenoid *hold;
 };

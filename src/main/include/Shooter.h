@@ -1,4 +1,8 @@
+#pragma once
+
 #include <ctre/Phoenix.h>
+
+#include <frc/Solenoid.h>
 
 class Shooter {
 public:
@@ -6,8 +10,10 @@ public:
   ~Shooter();
   
   void RunShooter(double speed);
-  void RunHood(double speed);
+  void RunHood(bool dir);
   
 private:
-  WPI_TalonSRX *shooter, *hood;
+  WPI_TalonFX *shooter;
+
+  frc::Solenoid *hood;
 };
