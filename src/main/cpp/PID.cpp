@@ -19,4 +19,4 @@ double PID::Get(double val, double ideal) {
     return (p*error + i*errorSum + d*errorRate);
 }
 
-// MAKE RESET FUNC
+void PID::Reset() { errorSum = 0; }
