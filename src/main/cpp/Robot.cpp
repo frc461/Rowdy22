@@ -27,7 +27,7 @@ void Robot::ClimberPeriodic() {
   climber->RunRight((control->ClimberExtend()) ? 0.5 : (control->ClimberRetract()) ? -0.5 : 0.0);
   climber->RunBrake(!control->ClimberExtend() && !control->ClimberRetract());
   
-  if (control->ClimberTilt()) {tiltState = (tiltState) ? false : true; }
+  if (control->ClimberTilt()) { tiltState = (tiltState) ? false : true; }
   climber->RunTilt(tiltState);
   
   if (control->ClimberGrab()) { grabState = (grabState) ? false : true; }
@@ -78,8 +78,6 @@ void Robot::TestInit() {}
 void Robot::TestPeriodic() {}
 
 #ifndef RUNNING_FRC_TESTS
-int main() {
-  return frc::StartRobot<Robot>();
-}
+int main() { return frc::StartRobot<Robot>(); }
 #endif
 //==================================================
