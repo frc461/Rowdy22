@@ -1,44 +1,79 @@
 #include "Robot.h"
 
+//------------------------------------------------------------------------DriveTrain-----
 void Robot::DriveTrainPeriodic() {
-  driveTrain->Tank(control->LeftX(), control->RightX(), 0.8);
+  driveTrain->Tank(control->LeftX(), control->RightX(), 1.0);
 }
+//-------------------------------------------------------------------------Intake-----
 void Robot::IntakePeriodic() {
   if (control->Intake()){
-    intake->RunMotor(0.6);
+    intake->RunMotor(0.5);
     intake->RunPush(true);
-  }else{
+  }
+  else{
     intake->RunMotor(0);
     intake->RunPush(false);
   }
 }
+//--------------------------------------------------------------------------Conveyor----
 void Robot::ConveyorPeriodic() {
   if (control->Conveyor()){
     conveyor->RunHold(false);
-    conveyor->RunMotor(0.66);
-  }else{
-    conveyor->RunHold(true);
+    conveyor->RunMotor(0.5);
   }
-
+  else{
+    conveyor->RunHold(true);
+    conveyor->RunMotor(0.0);
+  }
 }
+//--------------------------------------------------------------------------Shooter-----
 void Robot::ShooterPeriodic() {
   if(control->Shooter()){
     shooter->RunHood(true);
-    shooter->RunShooter(0.66+0.03);
-  }else{
+    shooter->RunShooter(0.5);
+  }
+  else{
     shooter->RunShooter(0.0);
   }
-
 }
+//-----------------------------------------------------------------------------Climber-
 void Robot::ClimberPeriodic() {
-  //nasty
+  if (control->ClimberExtend()) {
+    climber->RunLeft(0.5);
+    climber->RunRight(0.5);
+    climber->RunBrake(false);
+  }
+  else if (control->ClimberRetract()) {
+    climber->RunLeft(-0.5);
+    climber->RunRight(-0.5);
+    climber->RunBrake(false);
+  }
+  else {
+    climber->RunBrake(true);
+  }
+  
+  if (control->ClimberTilt()) {
+    if (!tiltState) tiltState = true;
+    else tiltState = false;
+  }
+  climber->RunTilt(tiltState);
+  
+  if (control->ClimberGrab()) {
+    if (!grabState) grabState = true;
+    else grabState = false;
+  }
+  climber->RunGrab(grabState);
 }
+//--------------------------------------------------------------------------------------
+
 
 //==================================================
 void Robot::RobotInit() {
   control = new Control();
   
   driveTrain = new DriveTrain();
+  
+  tiltState = false;
 }
 
 void Robot::AutonomousInit() {
