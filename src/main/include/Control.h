@@ -16,6 +16,8 @@ public:
     double RightY();
 
     bool Shooter();
+    bool ShooterHood();
+    
     bool Intake();
     bool Conveyor();
     
@@ -33,6 +35,7 @@ private:
         bool pressed;
     };
     
+    PressOnce *hood;
     PressOnce *tilt, *grab;
 
     frc::Joystick *xbox, *left, *right;
