@@ -6,62 +6,31 @@ void Robot::DriveTrainPeriodic() {
 }
 //-------------------------------------------------------------------------Intake-----
 void Robot::IntakePeriodic() {
-  if (control->Intake()){
-    intake->RunMotor(0.5);
-    intake->RunPush(true);
-  }
-  else{
-    intake->RunMotor(0);
-    intake->RunPush(false);
-  }
+  intake->RunPush(control->Intake());
+  intake->RunMotor((control->Intake()) ? 0.5 : 0.0);
 }
 //--------------------------------------------------------------------------Conveyor----
 void Robot::ConveyorPeriodic() {
-  if (control->Conveyor()){
-    conveyor->RunHold(false);
-    conveyor->RunMotor(0.5);
-  }
-  else{
-    conveyor->RunHold(true);
-    conveyor->RunMotor(0.0);
-  }
+  conveyor->RunHold(!control->Conveyor());
+  conveyor->RunMotor((control->Conveyor()) ? 0.5 : 0.0);
 }
 //--------------------------------------------------------------------------Shooter-----
 void Robot::ShooterPeriodic() {
-  if(control->Shooter()){
-    shooter->RunHood(true);
-    shooter->RunShooter(0.5);
-  }
-  else{
-    shooter->RunShooter(0.0);
-  }
+  shooter->RunShooter((control->Shooter()) ? 0.5 : 0.0);
+  
+  if (control->ShooterHood()) { hoodState = (hoodState) ? false : true; }
+  shooter->RunHood(hoodState);
 }
 //-----------------------------------------------------------------------------Climber-
 void Robot::ClimberPeriodic() {
-  if (control->ClimberExtend()) {
-    climber->RunLeft(0.5);
-    climber->RunRight(0.5);
-    climber->RunBrake(false);
-  }
-  else if (control->ClimberRetract()) {
-    climber->RunLeft(-0.5);
-    climber->RunRight(-0.5);
-    climber->RunBrake(false);
-  }
-  else {
-    climber->RunBrake(true);
-  }
+  climber->RunLeft((control->ClimberExtend()) ? 0.5 : (control->ClimberRetract()) ? -0.5 : 0.0);
+  climber->RunRight((control->ClimberExtend()) ? 0.5 : (control->ClimberRetract()) ? -0.5 : 0.0);
+  climber->RunBrake(!control->ClimberExtend() && !control->ClimberRetract());
   
-  if (control->ClimberTilt()) {
-    if (!tiltState) tiltState = true;
-    else tiltState = false;
-  }
+  if (control->ClimberTilt()) {tiltState = (tiltState) ? false : true; }
   climber->RunTilt(tiltState);
   
-  if (control->ClimberGrab()) {
-    if (!grabState) grabState = true;
-    else grabState = false;
-  }
+  if (control->ClimberGrab()) { grabState = (grabState) ? false : true; }
   climber->RunGrab(grabState);
 }
 //--------------------------------------------------------------------------------------
@@ -72,8 +41,14 @@ void Robot::RobotInit() {
   control = new Control();
   
   driveTrain = new DriveTrain();
+  shooter = new Shooter();
+  intake = new Intake();
+  climber = new Climber();
+  conveyor = new Conveyor();
+  vision = new Vision();
   
-  tiltState = false;
+  tiltState = grabState = false;
+  hoodState = false;
 }
 
 void Robot::AutonomousInit() {
