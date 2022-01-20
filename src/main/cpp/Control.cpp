@@ -31,15 +31,9 @@ Control::PressOnce::PressOnce() {
     pressed = false;
 }
 bool Control::PressOnce::Get(bool p) {
-    if (p && !pressed) {
-        pressed = true;
-    }
-    else if (p && pressed) {
-        return false;
-    }
-    else if (!p && pressed) {
-        pressed = false;
-    }
+    if (p && !pressed) pressed = true;
+    else if (p && pressed) return false;
+    else if (!p && pressed) pressed = false;
     return pressed;
 }
 //===========================================================================
