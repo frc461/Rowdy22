@@ -20,6 +20,9 @@ public:
     double GetEncoderL();
     double GetEncoderR();
     double GetAngle();
+    
+    void ResetEncoder();
+    void ResetGyro();
 
     bool MoveDistance(bool dir, int distance);
     void MoveStraight(bool dir, double power);
