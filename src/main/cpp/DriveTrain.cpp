@@ -23,6 +23,9 @@ double DriveTrain::GetEncoderL() { return l1->GetSelectedSensorPosition(); }
 double DriveTrain::GetEncoderR() { return r1->GetSelectedSensorPosition(); }
 double DriveTrain::GetAngle() { return gyro->GetAngle(); }
 
+void DriveTrain::ResetEncoder() {  }
+void DriveTrain::ResetGyro() {  }
+
 bool DriveTrain::MoveDistance(bool dir, int distance) {
     double l = movePID->Get(fabs(GetEncoderL()), fabs(GetEncoderL()) + (double)distance);
     double r = movePID->Get(fabs(GetEncoderR()), fabs(GetEncoderR()) + (double)distance);
