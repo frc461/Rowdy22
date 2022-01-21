@@ -14,10 +14,11 @@ DriveTrain::DriveTrain() {
     gyro = new frc::ADXRS450_Gyro(frc::SPI::Port::kOnboardCS0);
 
     movePID = new PID(0.0, 0.0, 0.0, "move");
+    turnPID = new PID(0.0, 0.0, 0.0, "turn");
 }
 
-void DriveTrain::Tank(double l, double r, double speedCap) { driveTrain->TankDrive(l*speedCap, r*speedCap); }
-void DriveTrain::Arcade(double v, double h, double speedCap) { driveTrain->ArcadeDrive(v*speedCap, h*speedCap); }
+void DriveTrain::Tank(double l, double r, double min, double max) { driveTrain->TankDrive(l*max, r*max); }
+void DriveTrain::Arcade(double v, double h, double min, double max) { driveTrain->ArcadeDrive(v*max, h*max); }
 
 double DriveTrain::GetEncoderL() { return l1->GetSelectedSensorPosition(); }
 double DriveTrain::GetEncoderR() { return r1->GetSelectedSensorPosition(); }
@@ -26,15 +27,17 @@ double DriveTrain::GetAngle() { return gyro->GetAngle(); }
 void DriveTrain::ResetEncoder() {  }
 void DriveTrain::ResetGyro() {  }
 
-bool DriveTrain::MoveDistance(bool dir, int distance) {
+bool DriveTrain::MoveDistance(int distance) {
     double l = movePID->Get(fabs(GetEncoderL()), fabs(GetEncoderL()) + (double)distance);
     double r = movePID->Get(fabs(GetEncoderR()), fabs(GetEncoderR()) + (double)distance);
-    Tank(l, -r, 1.0);
+    Tank(l, -r, 0.0, 1.0);
     return true;
 }
-void DriveTrain::MoveStraight(bool dir, double power) {
-    
+bool DriveTrain::Turn(double angle) {
+    double speed = turnPID->Get(GetAngle(), GetAngle() + angle);
+    Tank(speed, -speed, 0.0, 1.0);
+    return true;
 }
-void DriveTrain::Turn(bool dir, double angle) {
-    
+void DriveTrain::MoveStraight(double power) {
+    Arcade(power, -(GetAngle() / 7.5), 0.0, 1.0);
 }
