@@ -14,8 +14,8 @@ public:
     DriveTrain();
     ~DriveTrain();
 
-    void Tank(double l, double r, double speedCap);
-    void Arcade(double v, double h, double speedCap);
+    void Tank(double l, double r, double min, double max);
+    void Arcade(double v, double h, double min, double max);
 
     double GetEncoderL();
     double GetEncoderR();
@@ -24,9 +24,9 @@ public:
     void ResetEncoder();
     void ResetGyro();
 
-    bool MoveDistance(bool dir, int distance);
-    void MoveStraight(bool dir, double power);
-    void Turn(bool dir, double angle);
+    bool MoveDistance(int distance);
+    bool Turn(double angle);
+    void MoveStraight(double power);
 
 private:
     WPI_TalonFX *l1, *l2, *r1, *r2;
@@ -35,5 +35,5 @@ private:
 
     frc::ADXRS450_Gyro *gyro;
 
-    PID *movePID;
+    PID *movePID, *turnPID;
 };
