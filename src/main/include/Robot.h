@@ -48,5 +48,4 @@ private:
   Vision *vision;
   
   Conveyor *conveyor;
-  
 };
