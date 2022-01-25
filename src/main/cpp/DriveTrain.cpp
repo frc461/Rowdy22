@@ -17,6 +17,10 @@ DriveTrain::DriveTrain() {
     turnPID = new PID(0.5, 0.0, 0.0, "turn");
     
     max = 1.0;
+    
+    crossedMove = false;
+    sumMove = 0.0;
+    nMove = 0;
 }
 
 void DriveTrain::Tank(double l, double r) { driveTrain->TankDrive(l*max, r*max); }
@@ -29,16 +33,31 @@ double DriveTrain::GetAngle() { return gyro->GetAngle(); }
 void DriveTrain::ResetEncoder() { l1->SetSelectedSensorPosition(0.0); r1->SetSelectedSensorPosition(0.0); }
 void DriveTrain::ResetGyro() { gyro->Reset(); }
 
-bool DriveTrain::MoveDistance(int distance) {
-    double l = movePID->Get(fabs(GetEncoderL()), fabs(GetEncoderL()) + (double)distance);
-    double r = movePID->Get(fabs(GetEncoderR()), fabs(GetEncoderR()) + (double)distance);
-    Tank(l, -r);
-    return true;
+bool DriveTrain::MoveDistance(double distance) {
+    double l = movePID->Get(GetEncoderL(), distance);
+    double r = movePID->Get(GetEncoderR(), -distance);
+    Tank(l, r);
+    
+    if (fabs(GetEncoderL()) >= fabs(distance) && !crossedMove) crossedMove = true;
+    if (crossedMove) {
+        sumMove += fabs(GetEncoderL());
+        nMove++;
+        
+        if (fabs(GetEncoderL()) - (sumMove / (double)nMove) < 1.0) return true; 
+    }
+    return false;
 }
+void DriveTrain::ResetMoveVars() {
+    ResetEncoder();
+    crossedMove = false;
+    sumMove = 0.0;
+    nMove = 0;
+}
+
 bool DriveTrain::Turn(double angle) {
     double speed = turnPID->Get(GetAngle(), GetAngle() + angle);
     Tank(speed, -speed);
-    return true;
+    return false;
 }
 void DriveTrain::MoveStraight(double power) {
     Arcade(power, -(GetAngle() / 7.5));
