@@ -3,6 +3,7 @@
 #include <iostream>
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SmartDashboard.h>
+#include <frc/Timer.h>
 
 #include "Control.h"
 #include "DriveTrain.h"
@@ -34,6 +35,7 @@ public:
   void ClimberPeriodic();
 
 private:
+  //------------------------------------------------
   Control *control;
   
   DriveTrain *driveTrain;
@@ -49,4 +51,7 @@ private:
   Vision *vision;
   
   Conveyor *conveyor;
+  //------------------------------------------------
+  
+  frc::Timer *timer;
 };
