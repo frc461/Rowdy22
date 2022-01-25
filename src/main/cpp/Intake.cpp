@@ -1,7 +1,7 @@
 #include "Intake.h"
 
 Intake::Intake() {
-    motor = new WPI_TalonSRX(0);
+    motor = new WPI_TalonSRX(13);
     push = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
     
     speedCap = 1.0;

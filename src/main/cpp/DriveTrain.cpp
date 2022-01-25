@@ -11,7 +11,7 @@ DriveTrain::DriveTrain() {
 
     driveTrain = new frc::DifferentialDrive(*lSide, *rSide);
 
-    gyro = new frc::ADXRS450_Gyro(frc::SPI::Port::kOnboardCS0);
+    //gyro = new frc::ADXRS450_Gyro(frc::SPI::Port::kOnboardCS0);
 
     movePID = new PID(0.5, 0.0, 0.0, "move");
     turnPID = new PID(0.5, 0.0, 0.0, "turn");

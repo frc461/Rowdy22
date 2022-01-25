@@ -7,6 +7,8 @@
 
 #include <ctre/Phoenix.h>
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
 #include "PID.h"
 
 class DriveTrain {
@@ -27,6 +29,8 @@ public:
     bool MoveDistance(int distance);
     bool Turn(double angle);
     void MoveStraight(double power);
+
+    void ToggleDriveMode();
 
 private:
     WPI_TalonFX *l1, *l2, *r1, *r2;

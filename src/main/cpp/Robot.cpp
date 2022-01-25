@@ -21,7 +21,7 @@ void Robot::ShooterPeriodic() {
   if (control->ShooterHood()) { hoodState = (hoodState) ? false : true; }
   shooter->RunHood(hoodState);
 }
-//-----------------------------------------------------------------------------Climber-
+//-----------------------------------------------------------------------------Climber--
 void Robot::ClimberPeriodic() {
   climber->RunLeft((control->ClimberExtend()) ? 0.5 : (control->ClimberRetract()) ? -0.5 : 0.0);
   climber->RunRight((control->ClimberExtend()) ? 0.5 : (control->ClimberRetract()) ? -0.5 : 0.0);
@@ -49,6 +49,8 @@ void Robot::RobotInit() {
   
   tiltState = grabState = false;
   hoodState = false;
+
+  frc::SmartDashboard::PutBoolean("Tank", true);
 }
 
 void Robot::AutonomousInit() {

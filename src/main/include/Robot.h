@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <frc/TimedRobot.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Control.h"
 #include "DriveTrain.h"

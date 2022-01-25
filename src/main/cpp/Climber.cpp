@@ -4,9 +4,9 @@ Climber::Climber() {
     leftMotor = new WPI_TalonSRX(0);
     leftMotor = new WPI_TalonSRX(0);
 
-    tilt = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
-    grab = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
-    brake = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
+    //tilt = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
+    //grab = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
+    //brake = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
 }
 
 void Climber::RunLeft(double speed) { leftMotor->Set(speed); }

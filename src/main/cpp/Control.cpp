@@ -16,15 +16,15 @@ double Control::RightX() { return right->GetRawAxis(xAxisJS); }
 double Control::RightY() { return right->GetRawAxis(yAxisJS); }
 
 bool Control::Shooter() { return xbox->GetRawAxis(XboxAxisRightTrigger)>0.1; }
-bool Control::ShooterHood() { return hood->Get(xbox->GetRawButton(XboxButtonA)); } //-----------------------------------WIP
+bool Control::ShooterHood() { return hood->Get(xbox->GetRawButton(XboxButtonA)); }
 
 bool Control::Intake() { return xbox->GetRawButton(XboxButtonRightBumper); }
 bool Control::Conveyor() { return xbox->GetRawAxis(XboxAxisLeftTrigger >0.1); }
 
-bool Control::ClimberExtend() { return left->GetRawButton(thumbSwitch); } //-----------------------------------WIP
-bool Control::ClimberRetract() { return right->GetRawButton(thumbSwitch); } //-----------------------------------WIP
-bool Control::ClimberTilt() { return tilt->Get(left->GetRawButton(trigger)); } //-----------------------------------WIP
-bool Control::ClimberGrab() { return grab->Get(right->GetRawButton(trigger)); } //-----------------------------------WIP
+bool Control::ClimberExtend() { return left->GetRawButton(thumbSwitch); }
+bool Control::ClimberRetract() { return right->GetRawButton(thumbSwitch); }
+bool Control::ClimberTilt() { return tilt->Get(left->GetRawButton(trigger)); }
+bool Control::ClimberGrab() { return grab->Get(right->GetRawButton(trigger)); }
 
 //===========================================================================
 Control::PressOnce::PressOnce() {
