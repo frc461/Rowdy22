@@ -2,7 +2,7 @@
 
 //------------------------------------------------------------------------DriveTrain-----
 void Robot::DriveTrainPeriodic() {
-  driveTrain->Tank(control->LeftX(), control->RightX(), 0.0, 1.0);
+  driveTrain->Tank(control->LeftX(), control->RightX());
 }
 //-------------------------------------------------------------------------Intake-----
 void Robot::IntakePeriodic() {
