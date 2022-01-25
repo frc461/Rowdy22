@@ -26,7 +26,9 @@ public:
     void ResetEncoder();
     void ResetGyro();
 
-    bool MoveDistance(int distance);
+    bool MoveDistance(double distance);
+    void ResetMoveVars();
+    
     bool Turn(double angle);
     void MoveStraight(double power);
 
@@ -40,4 +42,10 @@ private:
     frc::ADXRS450_Gyro *gyro;
 
     PID *movePID, *turnPID;
+    
+    double max;
+    
+    bool crossedMove;
+    double sumMove;
+    int nMove;
 };
