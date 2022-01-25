@@ -54,11 +54,19 @@ void Robot::RobotInit() {
 }
 
 void Robot::AutonomousInit() {
-
+  timer = new frc::Timer();
+  timer->Start();
 }
 
 void Robot::AutonomousPeriodic() {
-
+  // Run Shooter and Conveyor
+  // Push Intake Out, Run Intake In
+  // Move Back
+  // Turn to next ball
+  // Move Back
+  // Turn to Hoop
+  // Move Forward
+  // Run Shooter and Conveyor
 }
 
 void Robot::TeleopInit() {
