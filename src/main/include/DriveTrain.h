@@ -45,7 +45,7 @@ private:
     
     double max;
     
-    bool crossedMove;
-    double sumMove;
-    int nMove;
+    bool crossedMove, crossedTurn;
+    double sumMove, sumTurn;
+    int nMove, nTurn;
 };
