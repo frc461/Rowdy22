@@ -2,7 +2,8 @@
 
 //------------------------------------------------------------------------DriveTrain-----
 void Robot::DriveTrainPeriodic() {
-  driveTrain->Tank(control->LeftX(), control->RightX());
+  bool t = frc::SmartDashboard::GetBoolean("Tank",true);
+  (t) ? driveTrain->Tank(control->LeftY(),control->RightY()) : driveTrain->Arcade(control->LeftY(),control->RightX());
 }
 //-------------------------------------------------------------------------Intake-----
 void Robot::IntakePeriodic() {
@@ -64,7 +65,7 @@ void Robot::AutonomousPeriodic() {
   // Move Back
   // Turn to next ball
   // Move Back
-  // Turn to Hoop
+  // Turn (for da Hoopin)
   // Move Forward
   // Run Shooter and Conveyor
 }
