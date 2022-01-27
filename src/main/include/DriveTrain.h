@@ -30,6 +30,8 @@ public:
     void ResetMoveVars();
     
     bool Turn(double angle);
+    void ResetTurnVars();
+    
     void MoveStraight(double power);
 
     void ToggleDriveMode();
