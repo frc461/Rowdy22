@@ -2,7 +2,7 @@
 
 Shooter::Shooter() {
   shooter = new WPI_TalonFX(0);
-  //hood = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
+  hood = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
 }
 
 void Shooter::RunShooter(double speed) { shooter->Set(speed); }
