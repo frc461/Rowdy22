@@ -18,9 +18,9 @@ DriveTrain::DriveTrain() {
     
     max = 1.0;
     
-    crossedMove = false;
-    sumMove = 0.0;
-    nMove = 0;
+    crossedMove = crossedTurn = false;
+    sumMove = sumTurn = 0.0;
+    nMove = nTurn = 0;
 }
 
 void DriveTrain::Tank(double l, double r) { driveTrain->TankDrive(l*max, r*max); }
@@ -55,10 +55,26 @@ void DriveTrain::ResetMoveVars() {
 }
 
 bool DriveTrain::Turn(double angle) {
-    double speed = turnPID->Get(GetAngle(), GetAngle() + angle);
+    double speed = turnPID->Get(GetAngle(), angle);
     Tank(speed, -speed);
+    
+    if (fabs(GetAngle()) >= fabs(angle) && !crossedTurn) crossedTurn = true;
+    if (crossedMove) {
+        sumTurn += fabs(GetAngle());
+        nTurn++;
+        
+        if (fabs(GetAngle()) - (sumTurn / (double)nTurn) < 0.25) return true;
+    }
+    
     return false;
 }
+void DriveTrain::ResetTurnVars() {
+    ResetGyro();
+    crossedTurn = false;
+    sumTurn = 0.0;
+    nTurn = 0;
+}
+
 void DriveTrain::MoveStraight(double power) {
     Arcade(power, -(GetAngle() / 7.5));
 }
