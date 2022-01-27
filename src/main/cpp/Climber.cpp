@@ -2,7 +2,7 @@
 
 Climber::Climber() {
     leftMotor = new WPI_TalonSRX(0);
-    leftMotor = new WPI_TalonSRX(0);
+    rightMotor = new WPI_TalonSRX(0);
 
     //tilt = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
     //grab = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
