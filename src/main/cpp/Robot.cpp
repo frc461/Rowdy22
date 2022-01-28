@@ -55,8 +55,7 @@ void Robot::RobotInit() {
 }
 
 void Robot::AutonomousInit() {
-  timer = new frc::Timer();
-  timer->Start();
+  
 }
 
 void Robot::AutonomousPeriodic() {
