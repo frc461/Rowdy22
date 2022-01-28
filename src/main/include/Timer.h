@@ -8,6 +8,7 @@ public:
   ~Timer();
   
   void Start();
+  void Stop();
   
   bool SecondsPassed(double t);
   
