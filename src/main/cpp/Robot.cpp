@@ -55,7 +55,7 @@ void Robot::RobotInit() {
 }
 
 void Robot::AutonomousInit() {
-  
+  timer = new Timer();
 }
 
 void Robot::AutonomousPeriodic() {
