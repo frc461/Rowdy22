@@ -25,7 +25,7 @@ void Robot::ShooterPeriodic() {
 //-----------------------------------------------------------------------------Climber--
 void Robot::ClimberPeriodic() {
   climber->RunLeft((control->ClimberExtend()) ? 0.5 : (control->ClimberRetract()) ? -0.5 : 0.0);
-  climber->RunRight((control->ClimberExtend()) ? 0.5 : (control->ClimberRetract()) ? -0.5 : 0.0);
+  climber->RunRight((control->ClimberExtend()) ? -0.5 : (control->ClimberRetract()) ? 0.5 : 0.0);
   climber->RunBrake(!control->ClimberExtend() && !control->ClimberRetract());
   
   if (control->ClimberTilt()) { tiltState = (tiltState) ? false : true; }
