@@ -11,7 +11,7 @@ void Timer::Start() { timer->Start(); }
 
 bool Timer::SecondsPassed(double t) {
   if (!firstCall) {
-    initTime = timer->getFPGATimestamp();
+    initTime = timer->Get();
     firstCall = true;
   }
   if (timer->HasPeriodPassed(initTime + t)) {
