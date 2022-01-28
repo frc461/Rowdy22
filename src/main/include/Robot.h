@@ -3,7 +3,6 @@
 #include <iostream>
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-#include <frc/Timer.h>
 
 #include "Control.h"
 #include "DriveTrain.h"
@@ -52,6 +51,4 @@ private:
   
   Conveyor *conveyor;
   //------------------------------------------------
-  
-  frc::Timer *timer;
 };
