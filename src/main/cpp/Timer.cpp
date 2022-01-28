@@ -8,6 +8,7 @@ Timer::Timer() {
 }
 
 void Timer::Start() { timer->Start(); }
+void Timer::Stop() { timer->Stop(); }
 
 bool Timer::SecondsPassed(double t) {
   if (!firstCall) {
