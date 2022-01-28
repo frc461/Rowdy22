@@ -11,6 +11,7 @@
 #include "Shooter.h"
 #include "Vision.h"
 #include "Conveyor.h"
+#include "Timer.h"
 
 class Robot : public frc::TimedRobot {
 public:
@@ -51,4 +52,6 @@ private:
   
   Conveyor *conveyor;
   //------------------------------------------------
+  
+  Timer *timer;
 };
