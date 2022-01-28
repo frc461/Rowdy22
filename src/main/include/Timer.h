@@ -7,6 +7,13 @@ public:
   Timer();
   ~Timer();
   
+  void Start();
+  
+  bool SecondsPassed(double t);
+  
 private:
   frc::Timer *timer;
+  
+  bool firstCall;
+  double initTime;
 };
