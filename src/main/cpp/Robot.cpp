@@ -56,17 +56,12 @@ void Robot::RobotInit() {
 
 void Robot::AutonomousInit() {
   timer = new Timer();
+  timer->Start();
+  shoot1 = back1 = turn1 = back2 = turn2 = shoot2 = false;
 }
 
 void Robot::AutonomousPeriodic() {
-  // Run Shooter and Conveyor
-  // Push Intake Out, Run Intake In
-  // Move Back
-  // Turn to next ball
-  // Move Back
-  // Turn (for da Hoopin)
-  // Move Forward
-  // Run Shooter and Conveyor
+  
 }
 
 void Robot::TeleopInit() {
