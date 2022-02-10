@@ -57,5 +57,5 @@ private:
   
   //------------------------------------------------
   
-  bool shoot1, back1, turn1, back2, turn2, shoot2;
+  bool shoot1, back1, turn1, back2, turn2, forward1, shoot2;
 };

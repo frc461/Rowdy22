@@ -57,11 +57,39 @@ void Robot::RobotInit() {
 void Robot::AutonomousInit() {
   timer = new Timer();
   timer->Start();
-  shoot1 = back1 = turn1 = back2 = turn2 = shoot2 = false;
+  shoot1 = back1 = turn1 = back2 = turn2 = forward1 = shoot2 = false;
 }
-
+void Robot::AutoOne(){
+  if (!shoot1) {
+    shooter->RunShooter(0.5);
+    shooter->RunHood(false);
+    conveyor->RunMotor(0.5);
+    if (timer->SecondsPassed(1.0)) shoot1 = true;
+  }
+  else if (shoot1 && !back1) {
+    intake->RunPush(true);
+    intake->RunMotor(0.5);
+    if (driveTrain->MoveDistance(/* */)) back1 = true;
+  }
+  else if (back1 && !turn1) {
+    if (driveTrain->Turn(/* */)) turn1 = true;
+  }
+  else if (turn1 && !back2) {
+    if (driveTrain->MoveDistance(/* */)) back2 = true;
+  }
+  else if (back1 && turn2) {
+    if (driveTrain->Turn(/* */)) turn2 = true;
+  }
+  else if (turn2 && !forward1) {
+    if (driveTrain->MoveDistance(/* */)) forward1 = true;
+  }
+  else if (forward1) {
+    shoot1 = false;
+  }
+}
 void Robot::AutonomousPeriodic() {
-  
+
+ AutoOne() 
 }
 
 void Robot::TeleopInit() {
