@@ -36,6 +36,9 @@ public:
 
     void ToggleDriveMode();
 
+    double GetLeftVelocity();
+    double GetRightVelocity();
+
 private:
     WPI_TalonFX *l1, *l2, *r1, *r2;
     frc::MotorControllerGroup *lSide, *rSide;

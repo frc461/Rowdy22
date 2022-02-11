@@ -12,7 +12,7 @@ public:
     void RunPush(bool dir);
 
 private:
-    WPI_TalonSRX *motor;
+    WPI_VictorSPX *motor;
     frc::Solenoid *push;
     
     double speedCap;

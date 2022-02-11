@@ -1,8 +1,9 @@
 #include "Shooter.h"
 
 Shooter::Shooter() {
-  shooter = new WPI_TalonFX(0);
-  hood = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
+  shooter = new WPI_TalonFX(17);
+  shooter->SetNeutralMode(NeutralMode::Coast);
+  // hood = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
 }
 
 void Shooter::RunShooter(double speed) { shooter->Set(speed); }

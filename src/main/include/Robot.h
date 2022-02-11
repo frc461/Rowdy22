@@ -33,12 +33,14 @@ public:
   void ConveyorPeriodic();
   void ShooterPeriodic();
   void ClimberPeriodic();
+  void AutoOne();
 
 private:
   //------------------------------------------------
   Control *control;
   
   DriveTrain *driveTrain;
+  double lSpeed,rSpeed;
   
   Intake *intake;
   
