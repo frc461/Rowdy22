@@ -13,6 +13,8 @@
 #include "Conveyor.h"
 #include "Timer.h"
 
+using namespace::std;
+
 class Robot : public frc::TimedRobot {
 public:
   //==================================================
@@ -29,8 +31,7 @@ public:
   //==================================================
   
   void DriveTrainPeriodic();
-  void IntakePeriodic();
-  void ConveyorPeriodic();
+  void IntakeConveyorPeriodic();
   void ShooterPeriodic();
   void ClimberPeriodic();
   void AutoOne();

@@ -6,18 +6,13 @@ void Robot::DriveTrainPeriodic() {
   (t) ? driveTrain->Tank(-control->LeftY(),control->RightY()) : driveTrain->Arcade(-control->LeftY(),control->RightX());
 }
 //-------------------------------------------------------------------------Intake-----
-void Robot::IntakePeriodic() {
-  //intake->RunPush(control->Intake());
-  intake->RunMotor((control->Intake()) ? 0.5 : 0.0);
-}
-//--------------------------------------------------------------------------Conveyor----
-void Robot::ConveyorPeriodic() {
-  //conveyor->RunHold(!control->Conveyor());
-  conveyor->RunMotor((control->Conveyor()) ? 0.5 : 0.0);
+void Robot::IntakeConveyorPeriodic() {
+  intake->RunMotor((control->IntakeConveyor()) ? 0.8 : (control->IntakeConveyorR()) ? -0.8 : 0.0);
+  conveyor->RunMotor((control->IntakeConveyor()) ? 0.8 : (control->IntakeConveyorR()) ? -0.8 : 0.0);
 }
 //--------------------------------------------------------------------------Shooter-----
 void Robot::ShooterPeriodic() {
-  shooter->RunShooter((control->Shooter()) ? 0.5 : 0.0);
+  shooter->RunShooter((control->Shooter()) ? frc::SmartDashboard::GetNumber("ShootaSPeed", 0.7) : 0.0);
   
   // if (control->ShooterHood()) { hoodState = (hoodState) ? false : true; }
   // shooter->RunHood(hoodState);
@@ -52,6 +47,7 @@ void Robot::RobotInit() {
   hoodState = false;
 
   frc::SmartDashboard::PutBoolean("Tank", true);
+  frc::SmartDashboard::PutNumber("ShootaSPeed", 0.7);
 }
 
 void Robot::AutonomousInit() {
@@ -99,8 +95,7 @@ void Robot::TeleopInit() {
 
 void Robot::TeleopPeriodic() {
   DriveTrainPeriodic();
-  IntakePeriodic();
-  //ConveyorPeriodic();
+  IntakeConveyorPeriodic();
   ShooterPeriodic();
   ClimberPeriodic();
 }

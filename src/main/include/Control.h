@@ -20,11 +20,16 @@ public:
     
     bool Intake();
     bool Conveyor();
+
+    bool IntakeConveyor();
+    bool IntakeConveyorR();
     
     bool ClimberExtend();
     bool ClimberRetract();
     bool ClimberTilt();
     bool ClimberGrab();
+
+
 
 private:
     class PressOnce {

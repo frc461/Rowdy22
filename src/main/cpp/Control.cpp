@@ -18,8 +18,10 @@ double Control::RightY() { return right->GetRawAxis(yAxisJS); }
 bool Control::Shooter() { return xbox->GetRawAxis(XboxAxisRightTrigger)>0.1; }
 bool Control::ShooterHood() { return hood->Get(xbox->GetRawButton(XboxButtonA)); }
 
-bool Control::Intake() { return xbox->GetRawButton(XboxButtonRightBumper); }
-bool Control::Conveyor() { return xbox->GetRawAxis(XboxAxisLeftTrigger >0.1); }
+bool Control::Intake() { return false; }
+bool Control::Conveyor() { return false;}
+bool Control::IntakeConveyor() { return xbox->GetRawButton(XboxButtonRightBumper); }
+bool Control::IntakeConveyorR() { return xbox->GetRawButton(XboxButtonLeftBumper); }
 
 bool Control::ClimberExtend() { return left->GetRawButton(thumbSwitch); }
 bool Control::ClimberRetract() { return right->GetRawButton(thumbSwitch); }
