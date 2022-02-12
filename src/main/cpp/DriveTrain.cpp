@@ -24,7 +24,7 @@ DriveTrain::DriveTrain() {
 }
 
 void DriveTrain::Tank(double l, double r) { driveTrain->TankDrive(l*max, r*max); }
-void DriveTrain::Arcade(double v, double h) { driveTrain->ArcadeDrive(v*max, h*max); }
+void DriveTrain::Arcade(double v, double h) { driveTrain->ArcadeDrive(h*max, v*max); }
 
 double DriveTrain::GetEncoderL() { return l1->GetSelectedSensorPosition(); }
 double DriveTrain::GetEncoderR() { return r1->GetSelectedSensorPosition(); }

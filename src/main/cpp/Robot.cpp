@@ -5,9 +5,15 @@ void Robot::DriveTrainPeriodic() {
   bool t = frc::SmartDashboard::GetBoolean("Tank",true);
   
   if (t) {
-    lSpeed += (control->LeftY()==0) ? -lSpeed : (control->LeftY()>0) ? 0.05 : (control->LeftY()<0) ? -0.05 : 0.0;
-    rSpeed += (control->RightY()==0) ? -rSpeed : (control->RightY()>0) ? 0.05 : (control->RightY()<0) ? -0.05 : 0.0;
-    driveTrain->Tank(lSpeed, rSpeed);
+    if (driveTrain->GetLeftVelocity() > 7500) {
+      driveTrain->Tank(-control->LeftY(), control->RightY());
+    } else if (driveTrain->GetLeftVelocity() < 7500) {
+      double increment = .015;
+      lSpeed = (control->LeftY()>0) ? std::min(lSpeed+increment, control->LeftY()) : (control->LeftY()<0) ? std::max(lSpeed-increment, control->LeftY()) : 0.0;
+      rSpeed = (control->RightY()>0) ? std::min(rSpeed+increment, control->RightY()) : (control->RightY()<0) ? std::max(rSpeed-increment, control->RightY()) : 0.0;
+      driveTrain->Tank(-lSpeed, rSpeed);
+    }
+   
   }
   else {
     driveTrain->Arcade(-control->LeftY(),control->RightX());
@@ -37,9 +43,7 @@ void Robot::ClimberPeriodic() {
   // if (control->ClimberGrab()) { grabState = (grabState) ? false : true; }
   // climber->RunGrab(grabState);
 }
-//--------------------------------------------------------------------------------------
-
-
+//------------------------------------------
 //==================================================
 void Robot::RobotInit() {
   control = new Control();
@@ -50,8 +54,9 @@ void Robot::RobotInit() {
   climber = new Climber();
   conveyor = new Conveyor();
   // vision = new Vision();
-  
+
   lSpeed = rSpeed = 0.0;
+  ramp = false;
   
   tiltState = grabState = false;
   hoodState = false;
@@ -96,7 +101,7 @@ void Robot::AutoOne(){
   // }
 }
 void Robot::AutonomousPeriodic() {
-  AutoOne(); 
+  AutoOne();
 }
 
 void Robot::TeleopInit() {
