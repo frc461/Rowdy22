@@ -3,7 +3,15 @@
 //------------------------------------------------------------------------DriveTrain-----
 void Robot::DriveTrainPeriodic() {
   bool t = frc::SmartDashboard::GetBoolean("Tank",true);
-  (t) ? driveTrain->Tank(-control->LeftY(),control->RightY()) : driveTrain->Arcade(-control->LeftY(),control->RightX());
+  
+  if (t) {
+    lSpeed += (control->LeftY()==0) ? -lSpeed : (control->LeftY()>0) ? 0.05 : (control->LeftY()<0) ? -0.05 : 0.0;
+    rSpeed += (control->RightY()==0) ? -rSpeed : (control->RightY()>0) ? 0.05 : (control->RightY()<0) ? -0.05 : 0.0;
+    driveTrain->Tank(lSpeed, rSpeed);
+  }
+  else {
+    driveTrain->Arcade(-control->LeftY(),control->RightX());
+  }
 }
 //-------------------------------------------------------------------------Intake-----
 void Robot::IntakeConveyorPeriodic() {
@@ -42,6 +50,8 @@ void Robot::RobotInit() {
   climber = new Climber();
   conveyor = new Conveyor();
   // vision = new Vision();
+  
+  lSpeed = rSpeed = 0.0;
   
   tiltState = grabState = false;
   hoodState = false;
