@@ -11,7 +11,6 @@
 #include "Shooter.h"
 #include "Vision.h"
 #include "Conveyor.h"
-#include "Timer.h"
 
 using namespace::std;
 
@@ -56,8 +55,6 @@ private:
   
   Conveyor *conveyor;
   //------------------------------------------------
-  
-  Timer *timer;
   
   //------------------------------------------------
   
