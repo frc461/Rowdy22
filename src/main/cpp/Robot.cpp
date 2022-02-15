@@ -68,8 +68,6 @@ void Robot::RobotInit() {
 }
 
 void Robot::AutonomousInit() {
-  //timer = new Timer();
-  //timer->Start();
   shoot1 = back1 = turn1 = back2 = turn2 = forward1 = shoot2 = false;
 }
 void Robot::AutoOne(){
