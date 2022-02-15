@@ -42,7 +42,6 @@ private:
   
   DriveTrain *driveTrain;
   double lSpeed,rSpeed;
-  bool ramp;
 
   Intake *intake;
 

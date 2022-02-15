@@ -10,12 +10,19 @@ DriveTrain::DriveTrain() {
     rSide = new frc::MotorControllerGroup(*r1, *r2);
 
     driveTrain = new frc::DifferentialDrive(*lSide, *rSide);
+    
+    l1->SetNeutralMode(NeutralMode::Coast);
+    l2->SetNeutralMode(NeutralMode::Coast);
+    r1->SetNeutralMode(NeutralMode::Coast);
+    r2->SetNeutralMode(NeutralMode::Coast);
+
 
     // gyro = new frc::ADXRS450_Gyro(frc::SPI::Port::kOnboardCS0);
 
     movePID = new PID(0.5, 0.0, 0.0, "move");
     turnPID = new PID(0.5, 0.0, 0.0, "turn");
     
+
     max = 1.0;
     
     crossedMove = crossedTurn = false;

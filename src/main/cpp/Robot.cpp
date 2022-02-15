@@ -3,17 +3,18 @@
 //------------------------------------------------------------------------DriveTrain-----
 void Robot::DriveTrainPeriodic() {
   bool t = frc::SmartDashboard::GetBoolean("Tank",true);
+  bool ramp = frc::SmartDashboard::GetBoolean("Ramp",true);
   
   if (t) {
-    if (driveTrain->GetLeftVelocity() > 7500) {
+    if (driveTrain->GetLeftVelocity() > 7500 || !ramp) {
       driveTrain->Tank(-control->LeftY(), control->RightY());
-    } else if (driveTrain->GetLeftVelocity() < 7500) {
+    }
+    else if (driveTrain->GetLeftVelocity() < 7500 && ramp) {
       double increment = .015;
       lSpeed = (control->LeftY()>0) ? std::min(lSpeed+increment, control->LeftY()) : (control->LeftY()<0) ? std::max(lSpeed-increment, control->LeftY()) : 0.0;
       rSpeed = (control->RightY()>0) ? std::min(rSpeed+increment, control->RightY()) : (control->RightY()<0) ? std::max(rSpeed-increment, control->RightY()) : 0.0;
       driveTrain->Tank(-lSpeed, rSpeed);
     }
-   
   }
   else {
     driveTrain->Arcade(-control->LeftY(),control->RightX());
@@ -55,13 +56,14 @@ void Robot::RobotInit() {
   conveyor = new Conveyor();
   // vision = new Vision();
 
+  driveTrain->ResetEncoder();
   lSpeed = rSpeed = 0.0;
-  ramp = false;
   
   tiltState = grabState = false;
   hoodState = false;
 
   frc::SmartDashboard::PutBoolean("Tank", true);
+  frc::SmartDashboard::PutBoolean("Ramp", true);
   frc::SmartDashboard::PutNumber("ShootaSPeed", 0.7);
 }
 
