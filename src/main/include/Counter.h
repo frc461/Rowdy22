@@ -2,7 +2,7 @@
 
 #include <frc/Timer.h>
 
-class Timer {
+class Counter {
 public:
   Timer();
   ~Timer();
