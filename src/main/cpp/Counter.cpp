@@ -15,7 +15,7 @@ bool Counter::SecondsPassed(double t) {
     initTime = timer->Get();
     firstCall = true;
   }
-  if (timer->HasPeriodPassed(initTime + t)) {
+  if (timer->AdvanceIfElapsed(initTime + t)) {
     firstCall = false;
     return true;
   }
