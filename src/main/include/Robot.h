@@ -36,10 +36,7 @@ public:
   void ShooterPeriodic();
   void ClimberPeriodic();
   
-  void AutoMove();
-  void Auto1Ball();
-  void Auto2Balls();
-  void Auto3Balls();
+  void Auto(int level);
 
 private:
   //------------------------------------------------
