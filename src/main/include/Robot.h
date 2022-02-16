@@ -12,6 +12,8 @@
 #include "Vision.h"
 #include "Conveyor.h"
 
+#include "Counter.h"
+
 using namespace::std;
 
 class Robot : public frc::TimedRobot {
@@ -55,6 +57,8 @@ private:
   
   Conveyor *conveyor;
   //------------------------------------------------
+  
+  Counter *counter;
   
   //------------------------------------------------
   
