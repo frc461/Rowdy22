@@ -88,25 +88,25 @@ void Robot::Auto(int level){
     intake->RunMotor(0.5);
     if (driveTrain->MoveDistance(/* */)) {
       back1 = true;
-      driveTrain->ResetEncoder(); driveTrain->ResetGyro();
+      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
     }
   }
   else if (back1 && !turn1) {
     if (driveTrain->Turn(/* */)) {
       turn1 = true;
-      driveTrain->ResetEncoder(); driveTrain->ResetGyro();
+      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
     }
   }
   else if (turn1 && !back2) {
     if (driveTrain->MoveDistance(/* */)) {
       back2 = true;
-      driveTrain->ResetEncoder(); driveTrain->ResetGyro();
+      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
     }
   }
   else if (back1 && turn2) {
     if (driveTrain->Turn(/* */)) {
       turn2 = true;
-      driveTrain->ResetEncoder(); driveTrain->ResetGyro();
+      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
     }
   }
   else if (turn2 && !forward1) {
