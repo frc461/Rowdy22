@@ -35,7 +35,11 @@ public:
   void IntakeConveyorPeriodic();
   void ShooterPeriodic();
   void ClimberPeriodic();
-  void AutoOne();
+  
+  void AutoMove();
+  void Auto1Ball();
+  void Auto2Balls();
+  void Auto3Balls();
 
 private:
   //------------------------------------------------
