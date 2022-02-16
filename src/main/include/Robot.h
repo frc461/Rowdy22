@@ -11,7 +11,8 @@
 #include "Shooter.h"
 #include "Vision.h"
 #include "Conveyor.h"
-#include "Timer.h"
+
+#include "Counter.h"
 
 using namespace::std;
 
@@ -34,7 +35,8 @@ public:
   void IntakeConveyorPeriodic();
   void ShooterPeriodic();
   void ClimberPeriodic();
-  void AutoOne();
+  
+  void Auto(int level);
 
 private:
   //------------------------------------------------
@@ -58,7 +60,7 @@ private:
   bool fingerstate;
   //------------------------------------------------
   
-  Timer *timer;
+  Counter *counter;
   
   //------------------------------------------------
   

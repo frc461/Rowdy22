@@ -43,16 +43,16 @@ void DriveTrain::ResetEncoder() { l1->SetSelectedSensorPosition(0.0); r1->SetSel
 void DriveTrain::ResetGyro() { gyro->Reset(); }
 
 bool DriveTrain::MoveDistance(double distance) {
-    double l = movePID->Get(GetEncoderL(), distance);
-    double r = movePID->Get(GetEncoderR(), -distance);
+    double l = movePID->Get(GetEncoderL(), distance * ENC_PER_INCH);
+    double r = movePID->Get(GetEncoderR(), -distance * ENC_PER_INCH);
     Tank(l, r);
     
-    if (fabs(GetEncoderL()) >= fabs(distance) && !crossedMove) crossedMove = true;
+    if (fabs(GetEncoderL()) >= fabs(distance * ENC_PER_INCH) && !crossedMove) crossedMove = true;
     if (crossedMove) {
         sumMove += fabs(GetEncoderL());
         nMove++;
         
-        if (fabs(GetEncoderL()) - (sumMove / (double)nMove) < 1.0) return true; 
+        if ((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH) < 1.0) return true; 
     }
     return false;
 }
@@ -72,14 +72,8 @@ bool DriveTrain::Turn(double angle) {
         sumTurn += fabs(GetAngle());
         nTurn++;
         
-        if (fabs(GetAngle()) - (sumTurn / (double)nTurn) < 0.25) return true;
-    /*68 + 1 */}
-    
-   /*70 - 1 */ 
-   
-   
-   
-   
+        if ((sumTurn / (double)nTurn) - fabs(angle) < 0.25) return true;
+    }
     return false;
 }
 void DriveTrain::ResetTurnVars() {

@@ -11,6 +11,8 @@
 
 #include "PID.h"
 
+#define ENC_PER_INCH 100
+
 class DriveTrain {
 public:
     DriveTrain();

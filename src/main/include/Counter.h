@@ -2,10 +2,10 @@
 
 #include <frc/Timer.h>
 
-class Timer {
+class Counter {
 public:
-  Timer();
-  ~Timer();
+  Counter();
+  ~Counter();
   
   void Start();
   void Stop();
