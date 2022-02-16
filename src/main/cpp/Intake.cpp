@@ -2,7 +2,7 @@
 
 Intake::Intake() {
     motor = new WPI_VictorSPX(18);
-    // push = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 0);
+    push = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, PUSH_SOLENOID_CHANNEL);
     
     speedCap = 1.0;
 }

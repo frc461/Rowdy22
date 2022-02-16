@@ -21,28 +21,37 @@ void Robot::DriveTrainPeriodic() {
   }
 }
 //-------------------------------------------------------------------------Intake-----
-void Robot::IntakeConveyorPeriodic() {
-  intake->RunMotor((control->IntakeConveyor()) ? 0.8 : (control->IntakeConveyorR()) ? -0.8 : 0.0);
-  conveyor->RunMotor((control->IntakeConveyor()) ? 0.8 : (control->IntakeConveyorR()) ? -0.8 : 0.0);
+void Robot::IntakeConveyorPeriodic()  {
+  double speed = 0.8;
+  intake->RunMotor((control->IntakeConveyor()) ? speed : (control->IntakeConveyorR()) ? -speed : 0.0);
+  conveyor->RunMotor((control->IntakeConveyor()) ? speed : (control->IntakeConveyorR()) ? -speed : 0.0);
+
+  if(control->IntakeOut()) intake->RunPush(0); else if(control->IntakeIn()) intake->RunPush(1);
+
+  if(control->Hold()){
+    fingerstate = (fingerstate) ? false: true;
+    conveyor->RunHold(fingerstate);
+  }
 }
 //--------------------------------------------------------------------------Shooter-----
 void Robot::ShooterPeriodic() {
   shooter->RunShooter((control->Shooter()) ? frc::SmartDashboard::GetNumber("ShootaSPeed", 0.7) : 0.0);
   
-  // if (control->ShooterHood()) { hoodState = (hoodState) ? false : true; }
-  // shooter->RunHood(hoodState);
+  if (control->ShooterHood()) { hoodState = (hoodState) ? false : true; }
+  shooter->RunHood(hoodState);
 }
 //-----------------------------------------------------------------------------Climber--
 void Robot::ClimberPeriodic() {
-  climber->RunLeft((control->ClimberExtend()) ? 0.5 : (control->ClimberRetract()) ? -0.5 : 0.0);
-  climber->RunRight((control->ClimberExtend()) ? -0.5 : (control->ClimberRetract()) ? 0.5 : 0.0);
-  //climber->RunBrake(!control->ClimberExtend() && !control->ClimberRetract());
+  double speed = 0.8;
+  climber->RunLeft((control->ClimberExtend()) ? speed : (control->ClimberRetract()) ? -speed : 0.0);
+  climber->RunRight((control->ClimberExtend()) ? -speed : (control->ClimberRetract()) ? speed : 0.0);
+  climber->RunBrake(!control->ClimberExtend() && !control->ClimberRetract());
   
-  // if (control->ClimberTilt()) { tiltState = (tiltState) ? false : true; }
-  // climber->RunTilt(tiltState);
+  if (control->ClimberTilt()) { tiltState = (tiltState) ? false : true; }
+  climber->RunTilt(tiltState);
   
-  // if (control->ClimberGrab()) { grabState = (grabState) ? false : true; }
-  // climber->RunGrab(grabState);
+  if (control->ClimberGrab()) { grabState = (grabState) ? false : true; }
+  climber->RunGrab(grabState);
 }
 //------------------------------------------
 //==================================================

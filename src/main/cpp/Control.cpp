@@ -8,6 +8,7 @@ Control::Control() {
     hood = new PressOnce();
     tilt = new PressOnce();
     grab = new PressOnce();
+    hold = new PressOnce();
 }
 
 double Control::LeftX() { return left->GetRawAxis(xAxisJS); }
@@ -27,6 +28,11 @@ bool Control::ClimberExtend() { return left->GetRawButton(thumbSwitch); }
 bool Control::ClimberRetract() { return right->GetRawButton(thumbSwitch); }
 bool Control::ClimberTilt() { return tilt->Get(left->GetRawButton(trigger)); }
 bool Control::ClimberGrab() { return grab->Get(right->GetRawButton(trigger)); }
+
+bool Control::IntakeOut() { return xbox->GetPOV(XboxDPadUp); }
+bool Control::IntakeIn() { return xbox->GetPOV(XboxDPadDown); }
+
+bool Control::Hold() { return hold->Get(xbox->GetRawButton(XboxButtonB)); }
 
 //===========================================================================
 Control::PressOnce::PressOnce() {

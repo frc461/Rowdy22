@@ -29,7 +29,10 @@ public:
     bool ClimberTilt();
     bool ClimberGrab();
 
+    bool IntakeIn();
+    bool IntakeOut();
 
+    bool Hold();
 
 private:
     class PressOnce {
@@ -40,8 +43,8 @@ private:
         bool pressed;
     };
     
-    PressOnce *hood;
-    PressOnce *tilt, *grab;
+    PressOnce *hood, *tilt, *grab;
+    PressOnce *hold;
 
     frc::Joystick *xbox, *left, *right;
 };

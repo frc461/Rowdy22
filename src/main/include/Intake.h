@@ -3,6 +3,8 @@
 #include <ctre/Phoenix.h>
 #include <frc/Solenoid.h>
 
+#define PUSH_SOLENOID_CHANNEL 13
+
 class Intake {
 public:
     Intake();

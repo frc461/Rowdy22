@@ -55,6 +55,7 @@ private:
   Vision *vision;
   
   Conveyor *conveyor;
+  bool fingerstate;
   //------------------------------------------------
   
   Timer *timer;
