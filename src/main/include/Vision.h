@@ -4,6 +4,9 @@
 #include "networktables/NetworkTableEntry.h"
 #include "networktables/NetworkTableInstance.h"
 
+#include "cameraserver/CameraServer.h"
+#include <opencv2/core/core.hpp>
+
 class Vision {
 public:
     Vision();
@@ -14,9 +17,16 @@ public:
     };
     Vision::Values GetValues();
 
-    void SetCamState(bool state);
+    void SetLimelightState(bool state);
+    
+    void SetBackCamState(bool state);
 
 private:
-    std::shared_ptr<nt::NetworkTable> cam;
+    std::shared_ptr<nt::NetworkTable> limelight;
     Values values;
+    
+    cs::UsbCamera *backCam;
+    cs::CvSink *sink;
+    cs::CvSource *output;
+    cv::Mat frameData;
 };
