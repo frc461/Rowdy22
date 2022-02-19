@@ -17,22 +17,16 @@ public:
 
     bool Shooter();
     bool ShooterHood();
-    
-    bool Intake();
-    bool Conveyor();
 
     bool IntakeConveyor();
     bool IntakeConveyorR();
+
+    bool Conveyor();
     
     bool ClimberExtend();
     bool ClimberRetract();
     bool ClimberTilt();
     bool ClimberGrab();
-
-    bool IntakeIn();
-    bool IntakeOut();
-
-    bool Hold();
 
 private:
     class PressOnce {
@@ -44,7 +38,6 @@ private:
     };
     
     PressOnce *hood, *tilt, *grab;
-    PressOnce *hold;
 
-    frc::Joystick *xbox, *left, *right;
+    frc::Joystick *oper, *driver;
 };

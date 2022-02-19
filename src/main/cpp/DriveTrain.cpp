@@ -20,7 +20,6 @@ DriveTrain::DriveTrain() {
 
     movePID = new PID(0.5, 0.0, 0.0, "move");
     turnPID = new PID(0.5, 0.0, 0.0, "turn");
-    
 
     max = 1.0;
     

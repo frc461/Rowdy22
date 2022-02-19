@@ -14,8 +14,6 @@
 
 #include "Counter.h"
 
-using namespace::std;
-
 class Robot : public frc::TimedRobot {
 public:
   //==================================================
@@ -47,7 +45,6 @@ private:
 
   Intake *intake;
 
-  
   Climber *climber;
   bool tiltState, grabState;
   
@@ -57,7 +54,6 @@ private:
   Vision *vision;
   
   Conveyor *conveyor;
-  bool fingerstate;
   //------------------------------------------------
   
   Counter *counter;

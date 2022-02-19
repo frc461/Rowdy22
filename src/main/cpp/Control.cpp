@@ -1,38 +1,29 @@
 #include "Control.h"
 
 Control::Control() {
-    xbox = new frc::Joystick(1);
-    left = new frc::Joystick(2);
-    right = new frc::Joystick(3);
+    oper = new frc::Joystick(1);
+    driver = new frc::Joystick(2);
     
     hood = new PressOnce();
     tilt = new PressOnce();
     grab = new PressOnce();
-    hold = new PressOnce();
 }
 
-double Control::LeftX() { return left->GetRawAxis(xAxisJS); }
-double Control::LeftY() { return left->GetRawAxis(yAxisJS); }
-double Control::RightX() { return right->GetRawAxis(xAxisJS); }
-double Control::RightY() { return right->GetRawAxis(yAxisJS); }
+double Control::LeftX() { return driver->GetRawAxis(XboxAxisLeftStickX); }
+double Control::LeftY() { return driver->GetRawAxis(XboxAxisLeftStickY); }
+double Control::RightX() { return driver->GetRawAxis(XboxAxisRightStickX); }
+double Control::RightY() { return driver->GetRawAxis(XboxAxisRightStickY); }
 
-bool Control::Shooter() { return xbox->GetRawAxis(XboxAxisRightTrigger)>0.1; }
-bool Control::ShooterHood() { return hood->Get(xbox->GetRawButton(XboxButtonA)); }
+bool Control::Shooter() { return oper->GetRawAxis(XboxAxisRightTrigger)>0.1; }
+bool Control::ShooterHood() { return hood->Get(oper->GetRawButton(XboxButtonA)); }
 
-bool Control::Intake() { return false; }
-bool Control::Conveyor() { return false;}
-bool Control::IntakeConveyor() { return xbox->GetRawButton(XboxButtonRightBumper); }
-bool Control::IntakeConveyorR() { return xbox->GetRawButton(XboxButtonLeftBumper); }
-
-bool Control::ClimberExtend() { return left->GetRawButton(thumbSwitch); }
-bool Control::ClimberRetract() { return right->GetRawButton(thumbSwitch); }
-bool Control::ClimberTilt() { return tilt->Get(left->GetRawButton(trigger)); }
-bool Control::ClimberGrab() { return grab->Get(right->GetRawButton(trigger)); }
-
-bool Control::IntakeOut() { return xbox->GetPOV(XboxDPadUp); }
-bool Control::IntakeIn() { return xbox->GetPOV(XboxDPadDown); }
-
-bool Control::Hold() { return hold->Get(xbox->GetRawButton(XboxButtonB)); }
+bool Control::IntakeConveyor() { return oper->GetRawButton(XboxButtonRightBumper); }
+bool Control::IntakeConveyorR() { return oper->GetRawButton(XboxButtonLeftBumper); }
+bool Control::Conveyor() {return oper->GetRawButton(XboxButtonB);}
+bool Control::ClimberExtend() { return driver->GetRawButton(XboxButtonA); }
+bool Control::ClimberRetract() { return driver->GetRawButton(XboxButtonB); }
+bool Control::ClimberTilt() { return tilt->Get(driver->GetRawButton(XboxButtonX)); }
+bool Control::ClimberGrab() { return grab->Get(driver->GetRawButton(XboxButtonLeftBumper)); }
 
 //===========================================================================
 Control::PressOnce::PressOnce() {

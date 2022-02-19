@@ -24,21 +24,21 @@ void Robot::DriveTrainPeriodic() {
 void Robot::IntakeConveyorPeriodic()  {
   double speed = 0.8;
   intake->RunMotor((control->IntakeConveyor()) ? speed : (control->IntakeConveyorR()) ? -speed : 0.0);
-  conveyor->RunMotor((control->IntakeConveyor()) ? speed : (control->IntakeConveyorR()) ? -speed : 0.0);
+  conveyor->RunMotor((control->IntakeConveyor() || control->Conveyor()) ? speed : (control->IntakeConveyorR()) ? -speed : 0.0);
 
-  if(control->IntakeOut()) intake->RunPush(0); else if(control->IntakeIn()) intake->RunPush(1);
-
-  if(control->Hold()){
-    fingerstate = (fingerstate) ? false: true;
-    conveyor->RunHold(fingerstate);
-  }
+  intake->RunPush((control->IntakeConveyor()) ? true : false);
 }
 //--------------------------------------------------------------------------Shooter-----
 void Robot::ShooterPeriodic() {
-  shooter->RunShooter((control->Shooter()) ? frc::SmartDashboard::GetNumber("ShootaSPeed", 0.7) : 0.0);
+  shooter->RunShooter((control->Shooter()) ? frc::SmartDashboard::GetNumber("ShootaSPeed", 0.8) : 0.0);
   
-  if (control->ShooterHood()) { hoodState = (hoodState) ? false : true; }
+  if (control->ShooterHood()) { 
+    hoodState = (hoodState) ? false : true;
+    frc::SmartDashboard::PutNumber("ShootaSPeed", (hoodState) ? 0.8 : 0.35);
+  }
   shooter->RunHood(hoodState);
+
+  conveyor->RunHold((control->Shooter()) ? true : false);
 }
 //-----------------------------------------------------------------------------Climber--
 void Robot::ClimberPeriodic() {
@@ -63,9 +63,10 @@ void Robot::RobotInit() {
   intake = new Intake();
   climber = new Climber();
   conveyor = new Conveyor();
-  // vision = new Vision();
+  vision = new Vision();
 
   driveTrain->ResetEncoder();
+  //driveTrain->ResetGyro();
   lSpeed = rSpeed = 0.0;
   
   tiltState = grabState = false;
@@ -73,7 +74,7 @@ void Robot::RobotInit() {
 
   frc::SmartDashboard::PutBoolean("Tank", true);
   frc::SmartDashboard::PutBoolean("Ramp", true);
-  frc::SmartDashboard::PutNumber("ShootaSPeed", 0.7);
+  frc::SmartDashboard::PutNumber("ShootaSPeed", 0.8);
 }
 
 void Robot::AutonomousInit() {
@@ -81,54 +82,54 @@ void Robot::AutonomousInit() {
   counter->Start();
   shoot1 = back1 = turn1 = back2 = turn2 = forward1 = shoot2 = false;
 }
-void Robot::Auto(int level){
-  if (!shoot1) {
-    shooter->RunShooter(0.5);
-    shooter->RunHood(false);
-    conveyor->RunMotor(0.5);
-    if (timer->SecondsPassed(1.0)) {
-      shoot1 = true;
-    }
-  }
-  else if (shoot1 && !back1) {
-    shooter->RunShooter(0.0);
-    conveyor->RunMotor(0.0);
-    intake->RunPush(true);
-    intake->RunMotor(0.5);
-    if (driveTrain->MoveDistance(/* */)) {
-      back1 = true;
-      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-    }
-  }
-  else if (back1 && !turn1) {
-    if (driveTrain->Turn(/* */)) {
-      turn1 = true;
-      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-    }
-  }
-  else if (turn1 && !back2) {
-    if (driveTrain->MoveDistance(/* */)) {
-      back2 = true;
-      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-    }
-  }
-  else if (back1 && turn2) {
-    if (driveTrain->Turn(/* */)) {
-      turn2 = true;
-      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-    }
-  }
-  else if (turn2 && !forward1) {
-    if (driveTrain->MoveDistance(/* */)) {
-      forward1 = true;
-    }
-  }
-  else if (forward1) {
-    shoot1 = false;
-  }
-}
+// void Robot::Auto(int level){
+//   if (!shoot1) {
+//     shooter->RunShooter(0.5);
+//     shooter->RunHood(false);
+//     conveyor->RunMotor(0.5);
+//     if (counter->SecondsPassed(1.0)) {
+//       shoot1 = true;
+//     }
+//   }
+//   else if (shoot1 && !back1) {
+//     shooter->RunShooter(0.0);
+//     conveyor->RunMotor(0.0);
+//     intake->RunPush(true);
+//     intake->RunMotor(0.5);
+//     if (driveTrain->MoveDistance(0)) {
+//       back1 = true;
+//       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
+//     }
+//   }
+//   else if (back1 && !turn1) {
+//     if (driveTrain->Turn(0)) {
+//       turn1 = true;
+//       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
+//     }
+//   }
+//   else if (turn1 && !back2) {
+//     if (driveTrain->MoveDistance(0)) {
+//       back2 = true;
+//       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
+//     }
+//   }
+//   else if (back1 && turn2) {
+//     if (driveTrain->Turn(0)) {
+//       turn2 = true;
+//       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
+//     }
+//   }
+//   else if (turn2 && !forward1) {
+//     if (driveTrain->MoveDistance(0)) {
+//       forward1 = true;
+//     }
+//   }
+//   else if (forward1) {
+//     shoot1 = false;
+//   }
+// }
 void Robot::AutonomousPeriodic() {
-  Auto(3);
+  //Auto(3);
 }
 
 void Robot::TeleopInit() {
