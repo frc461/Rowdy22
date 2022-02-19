@@ -14,6 +14,11 @@
 
 #include "Counter.h"
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#define SHOOTER_SPEED_TOP 0.8
+#define SHOOTER_SPEED_BOT 0.35
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 class Robot : public frc::TimedRobot {
 public:
   //==================================================
@@ -33,6 +38,7 @@ public:
   void IntakeConveyorPeriodic();
   void ShooterPeriodic();
   void ClimberPeriodic();
+  void VisionPeriodic();
   
   void Auto(int level);
 
@@ -44,9 +50,11 @@ private:
   double lSpeed,rSpeed;
 
   Intake *intake;
+  bool intakeState;
 
   Climber *climber;
   bool tiltState, grabState;
+  bool climb;
   
   Shooter *shooter;
   bool hoodState;

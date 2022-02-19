@@ -7,6 +7,8 @@
 #include "cameraserver/CameraServer.h"
 #include <opencv2/core/core.hpp>
 
+#include <iostream>
+
 class Vision {
 public:
     Vision();
@@ -17,16 +19,9 @@ public:
     };
     Vision::Values GetValues();
 
-    void SetLimelightState(bool state);
-    
-    void SetBackCamState(bool state);
+    void SetLimelightState(bool cam, bool light);
 
 private:
     std::shared_ptr<nt::NetworkTable> limelight;
     Values values;
-    
-    cs::UsbCamera *backCam;
-    cs::CvSink *sink;
-    cs::CvSource *output;
-    cv::Mat frameData;
 };

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <frc/Solenoid.h>
+#include <frc/DigitalInput.h>
 
 #include <ctre/Phoenix.h>
 
@@ -14,9 +15,14 @@ public:
     void RunGrab(bool dir);
     void RunTilt(bool dir);
     void RunBrake(bool dir);
+
+    bool GetTopLimit();
+    bool GetBotLimit();
     
 private:
     WPI_TalonSRX *leftMotor, *rightMotor;
 
     frc::Solenoid *tilt, *grab, *brake;
+
+    frc::DigitalInput *topLimit, *botLimit;
 };

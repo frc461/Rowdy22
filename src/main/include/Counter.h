@@ -10,7 +10,7 @@ public:
   void Start();
   void Stop();
   
-  bool SecondsPassed(double t);
+  bool SecondsPassed(double sec);
   
 private:
   frc::Timer *timer;

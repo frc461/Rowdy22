@@ -11,13 +11,13 @@ void Counter::Start() { timer->Start(); }
 void Counter::Stop() { timer->Stop(); }
 
 bool Counter::SecondsPassed(double t) {
-  // if (!firstCall) {
-  //   initTime = timer->Get();
-  //   firstCall = true;
-  // }
-  // if (timer->AdvanceIfElapsed(initTime + t)) {
-  //   firstCall = false;
-  //   return true;
-  // }
+  if (!firstCall) {
+    initTime = (double)timer->Get();
+    firstCall = true;
+  }
+  if (timer->AdvanceIfElapsed((units::time::second_t)(initTime + t))) {
+    firstCall = false;
+    return true;
+  }
   return false;
 }

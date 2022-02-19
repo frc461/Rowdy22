@@ -20,6 +20,7 @@ public:
 
     bool IntakeConveyor();
     bool IntakeConveyorR();
+    bool IntakePush();
 
     bool Conveyor();
     
@@ -37,7 +38,8 @@ private:
         bool pressed;
     };
     
-    PressOnce *hood, *tilt, *grab;
+    PressOnce *hood, *tilt, *grab, *push;
 
     frc::Joystick *oper, *driver;
+    frc::Joystick *left, *right;
 };

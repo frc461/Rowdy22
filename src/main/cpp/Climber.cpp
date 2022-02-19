@@ -7,6 +7,9 @@ Climber::Climber() {
     tilt = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 12);
     grab = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 9);
     brake = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 11);
+
+    topLimit = new frc::DigitalInput(6);
+    botLimit = new frc::DigitalInput(7);
 }
 
 void Climber::RunLeft(double speed) { leftMotor->Set(speed); }
@@ -15,3 +18,6 @@ void Climber::RunRight(double speed) { rightMotor->Set(speed); }
 void Climber::RunGrab(bool dir) { grab->Set(dir); }
 void Climber::RunTilt(bool dir) { tilt->Set(dir); }
 void Climber::RunBrake(bool dir) { brake->Set(dir); }
+
+bool Climber::GetTopLimit() { return topLimit->Get(); }
+bool Climber::GetBotLimit() { return botLimit->Get(); }
