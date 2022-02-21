@@ -15,9 +15,10 @@ void Robot::DriveTrainPeriodic() {
       rSpeed = (control->RightY()>0) ? std::min(rSpeed+increment, control->RightY()) : (control->RightY()<0) ? std::max(rSpeed-increment, control->RightY()) : 0.0;
       driveTrain->Tank(-lSpeed, rSpeed);
     }
+    driveTrain->Tank(-control->LeftY(),control->RightY());
   }
   else {
-    driveTrain->Arcade(-control->LeftY(),control->RightX());
+    driveTrain->Arcade(control->LeftY(),control->RightX());
   }
 }
 //-------------------------------------------------------------------------Intake-----
@@ -33,12 +34,9 @@ void Robot::IntakeConveyorPeriodic()  {
 }
 //--------------------------------------------------------------------------Shooter-----
 void Robot::ShooterPeriodic() {
-  shooter->RunShooter((control->Shooter()) ? frc::SmartDashboard::GetNumber("ShootaSPeed", SHOOTER_SPEED_TOP) : 0.0);
+  shooter->RunShooter((control->Shooter()) ? (hoodState) ? frc::SmartDashboard::GetNumber("HighSpeed", SHOOTER_SPEED_TOP) : frc::SmartDashboard::GetNumber("LowSpeed", SHOOTER_SPEED_BOT) : 0.0);
   
-  if (control->ShooterHood()) { 
-    hoodState = (hoodState) ? false : true;
-    frc::SmartDashboard::PutNumber("ShootaSPeed", (hoodState) ? SHOOTER_SPEED_TOP : SHOOTER_SPEED_BOT);
-  }
+  if (control->ShooterHood()) { hoodState = (hoodState) ? false : true; }
   shooter->RunHood((climb) ? false : hoodState);
 }
 //-----------------------------------------------------------------------------Climber--
@@ -73,10 +71,10 @@ void Robot::RobotInit() {
   intake = new Intake();
   climber = new Climber();
   conveyor = new Conveyor();
-  //vision = new Vision();
+  vision = new Vision();
 
   driveTrain->ResetEncoder();
-  //driveTrain->ResetGyro();
+  driveTrain->ResetGyro();
   lSpeed = rSpeed = 0.0;
   
   tiltState = grabState = false;
@@ -86,7 +84,8 @@ void Robot::RobotInit() {
 
   frc::SmartDashboard::PutBoolean("Tank", true);
   frc::SmartDashboard::PutBoolean("Ramp", true);
-  frc::SmartDashboard::PutNumber("ShootaSPeed", 0.8);
+  frc::SmartDashboard::PutNumber("HighSpeed", SHOOTER_SPEED_TOP);
+  frc::SmartDashboard::PutNumber("LowSpeed", SHOOTER_SPEED_BOT);
 }
 
 void Robot::AutonomousInit() {
@@ -153,6 +152,8 @@ void Robot::TeleopPeriodic() {
   IntakeConveyorPeriodic();
   ShooterPeriodic();
   ClimberPeriodic();
+  VisionPeriodic();
+  driveTrain->MoveStraight(0.1);
 }
 
 void Robot::RobotPeriodic() {}

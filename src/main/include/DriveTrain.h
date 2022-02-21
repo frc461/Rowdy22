@@ -7,6 +7,8 @@
 
 #include <ctre/Phoenix.h>
 
+#include <iostream>
+
 #include <frc/smartdashboard/SmartDashboard.h>
 
 #include "PID.h"
