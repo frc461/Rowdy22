@@ -97,10 +97,10 @@ void Robot::AutonomousInit() {
 void Robot::Auto(int level){
   if (!shoot1) {
     shooter->RunShooter(SHOOTER_SPEED_BOT);
-    shooter->RunHood(false);
+    shooter->RunHood(true);
     conveyor->RunMotor(0.5);
     conveyor->RunHold(false);
-    if (counter->SecondsPassed(5.0)) {
+    if (counter->SecondsPassed(3.0)) {
       shoot1 = true;
     }
   }
@@ -127,7 +127,7 @@ void Robot::Auto(int level){
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
     }
   }
-  else if (back1 && turn2) {
+  else if (back2 && !turn2) {
     if (driveTrain->Turn(0)) {
       turn2 = true;
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
@@ -136,6 +136,8 @@ void Robot::Auto(int level){
   else if (turn2 && !forward1) {
     if (driveTrain->MoveDistance(0)) {
       forward1 = true;
+      intake->RunPush(false);
+      intake->RunMotor(0.0);
     }
   }
   else if (forward1) {
