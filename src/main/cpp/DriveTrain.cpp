@@ -54,6 +54,7 @@ bool DriveTrain::MoveDistance(double distance) {
         sumMove += fabs(GetEncoderL());
         nMove++;
         
+        frc::SmartDashboard::PutNumber("mov", fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)));
         if (fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)) < 1.0) return true; 
     }
     return false;
