@@ -19,9 +19,9 @@
 #define SHOOTER_SPEED_BOT 0.35
 
 #define PUT_BOOL(name,val) frc::SmartDashboard::PutBoolean(name,val)
-#define GET_BOOL(name,val) frc::SmartDashboard::PutBoolean(name,val)
-#define PUT_NUM(name,val) frc::SmartDashboard::PutBoolean(name,val)
-#define GET_NUM(name,val) frc::SmartDashboard::PutBoolean(name,val)
+#define GET_BOOL(name,val) frc::SmartDashboard::GetBoolean(name,val)
+#define PUT_NUM(name,val) frc::SmartDashboard::PutNumber(name,val)
+#define GET_NUM(name,val) frc::SmartDashboard::GetNumber(name,val)
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 class Robot : public frc::TimedRobot {
