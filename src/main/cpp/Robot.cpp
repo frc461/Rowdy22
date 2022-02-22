@@ -29,8 +29,10 @@ void Robot::IntakeConveyorPeriodic()  {
 
   conveyor->RunHold(control->Conveyor());
 
-  if (control->IntakePush()) { intakeState = (intakeState) ? false : true; }
-  intake->RunPush(intakeState);
+  if (control->IntakePush()) { {
+    intakeState = (intakeState) ? false : true;
+    intake->RunPush(intakeState);
+  }
 }
 //--------------------------------------------------------------------------Shooter-----
 void Robot::ShooterPeriodic() {
@@ -49,21 +51,23 @@ void Robot::ClimberPeriodic() {
   climber->RunRight((control->ClimberExtend() && climber->GetBotLimit()) ? -speed : (control->ClimberRetract() && climber->GetTopLimit()) ? speed : 0.0);
   climber->RunBrake(!((!control->ClimberExtend() && !control->ClimberRetract()) || (!climber->GetBotLimit() && !control->ClimberRetract()) || (!climber->GetTopLimit() && !control->ClimberExtend())));
 
-  if (control->ClimberExtend() || control->ClimberRetract()) climb = true;
+  if (control->ClimberExtend() || control->ClimberRetract() || control->ClimberTilt() || control->ClimberGrab()) climb = true;
 
   frc::SmartDashboard::PutBoolean("t",climber->GetTopLimit());
   frc::SmartDashboard::PutBoolean("b",climber->GetBotLimit());
 
-  if (control->ClimberTilt()) { tiltState = (tiltState) ? false : true; }
-  climber->RunTilt(tiltState);
-  
-  if (control->ClimberGrab()) { grabState = (grabState) ? false : true; }
-  climber->RunGrab(grabState);
+  if (control->ClimberTilt()) { 
+    tiltState = (tiltState) ? false : true;
+    climber->RunTilt(tiltState);
+  }
+  if (control->ClimberGrab()) { 
+    grabState = (grabState) ? false : true;
+    climber->RunGrab(grabState);
+  }
 }
 //--------------------------------------------------------------------------------Vision---------
 void Robot::VisionPeriodic() {
-  // frc::SmartDashboard::PutNumber("gyro",driveTrain->GetAngle());
-  std::cout << driveTrain->GetAngle() << std::endl;
+  frc::SmartDashboard::PutNumber("gyro",driveTrain->GetAngle());
 }
 //-----------------------------------------------------------------------------------------
 //====================================================================================================================================================
