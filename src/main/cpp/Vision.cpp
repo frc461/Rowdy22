@@ -4,7 +4,6 @@ Vision::Vision() {
     auto instance = nt::NetworkTableInstance::GetDefault();
     limelight = instance.GetTable("limelight");
     
-    
     backCam = frc::CameraServer::StartAutomaticCapture("backCam", 0);
     backCam->SetResolution(320,240);
     output = frc::CameraServer::PutVideo("backCam",320,240);
