@@ -10,4 +10,4 @@ Intake::Intake() {
 void Intake::RunMotor(double speed) { motor->Set(speed * speedCap); }
 void Intake::RunPush(bool dir) { push->Set(dir); }
 
-void Intake::GetPushState() { return push->Get(); }
+bool Intake::GetPushState() { return push->Get(); }
