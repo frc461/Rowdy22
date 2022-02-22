@@ -12,6 +12,8 @@ public:
   void RunShooter(double speed);
   void RunHood(bool dir);
   
+  bool GetHoodState();
+  
 private:
   WPI_TalonFX *shooter;
 
