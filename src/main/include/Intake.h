@@ -12,6 +12,8 @@ public:
     
     void RunMotor(double speed);
     void RunPush(bool dir);
+    
+    bool GetPushState();
 
 private:
     WPI_VictorSPX *motor;
