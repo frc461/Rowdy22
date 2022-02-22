@@ -3,7 +3,7 @@
 //------------------------------------------------------------------------DriveTrain-----
 void Robot::DriveTrainPeriodic() {
   bool t = frc::SmartDashboard::GetBoolean("Tank",true);
-  bool ramp = frc::SmartDashboard::GetBoolean("Ramp",true);
+  bool ramp = frc::SmartDashboard::GetBoolean("Ramp",false);
   
   if (t) {
     if (driveTrain->GetLeftVelocity() > 7500 || !ramp) {
@@ -36,8 +36,11 @@ void Robot::IntakeConveyorPeriodic()  {
 void Robot::ShooterPeriodic() {
   shooter->RunShooter((control->Shooter()) ? (hoodState) ? frc::SmartDashboard::GetNumber("HighSpeed", SHOOTER_SPEED_TOP) : frc::SmartDashboard::GetNumber("LowSpeed", SHOOTER_SPEED_BOT) : 0.0);
   
-  if (control->ShooterHood()) { hoodState = (hoodState) ? false : true; }
-  shooter->RunHood((climb) ? false : hoodState);
+  if (control->ShooterHood()) { 
+    hoodState = (hoodState) ? false : true;
+    climb = false;
+  }
+  shooter->RunHood((climb) ? true : hoodState);
 }
 //-----------------------------------------------------------------------------Climber--
 void Robot::ClimberPeriodic() {
@@ -46,7 +49,7 @@ void Robot::ClimberPeriodic() {
   climber->RunRight((control->ClimberExtend() && climber->GetBotLimit()) ? -speed : (control->ClimberRetract() && climber->GetTopLimit()) ? speed : 0.0);
   climber->RunBrake(!((!control->ClimberExtend() && !control->ClimberRetract()) || (!climber->GetBotLimit() && !control->ClimberRetract()) || (!climber->GetTopLimit() && !control->ClimberExtend())));
 
-  //if (control->ClimberExtend()) climb = true;
+  if (control->ClimberExtend() || control->ClimberRetract()) climb = true;
 
   frc::SmartDashboard::PutBoolean("t",climber->GetTopLimit());
   frc::SmartDashboard::PutBoolean("b",climber->GetBotLimit());
@@ -59,7 +62,8 @@ void Robot::ClimberPeriodic() {
 }
 //--------------------------------------------------------------------------------Vision---------
 void Robot::VisionPeriodic() {
-  
+  // frc::SmartDashboard::PutNumber("gyro",driveTrain->GetAngle());
+  std::cout << driveTrain->GetAngle() << std::endl;
 }
 //-----------------------------------------------------------------------------------------
 //====================================================================================================================================================
@@ -73,8 +77,8 @@ void Robot::RobotInit() {
   conveyor = new Conveyor();
   vision = new Vision();
 
-  driveTrain->ResetEncoder();
-  driveTrain->ResetGyro();
+  driveTrain->CalibrateGyro();
+
   lSpeed = rSpeed = 0.0;
   
   tiltState = grabState = false;
@@ -83,7 +87,7 @@ void Robot::RobotInit() {
   hoodState = false;
 
   frc::SmartDashboard::PutBoolean("Tank", true);
-  frc::SmartDashboard::PutBoolean("Ramp", true);
+  frc::SmartDashboard::PutBoolean("Ramp", false);
   frc::SmartDashboard::PutNumber("HighSpeed", SHOOTER_SPEED_TOP);
   frc::SmartDashboard::PutNumber("LowSpeed", SHOOTER_SPEED_BOT);
 }
@@ -91,6 +95,10 @@ void Robot::RobotInit() {
 void Robot::AutonomousInit() {
   counter = new Counter();
   counter->Start();
+
+  driveTrain->ResetEncoder();
+  driveTrain->ResetGyro();
+
   shoot1 = back1 = turn1 = back2 = turn2 = forward1 = shoot2 = false;
 }
 void Robot::Auto(int level){
@@ -157,7 +165,6 @@ void Robot::TeleopPeriodic() {
   ShooterPeriodic();
   ClimberPeriodic();
   VisionPeriodic();
-  driveTrain->MoveStraight(0.1);
 }
 
 void Robot::RobotPeriodic() {}

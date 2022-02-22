@@ -13,4 +13,6 @@ Vision::Values Vision::GetValues() {
 void Vision::SetLimelightState(bool cam, bool light) {
     limelight->PutNumber("ledMode", (light) ? 3 : 1);
     limelight->PutNumber("camMode", (cam) ? 0 : 1);
+
+    
 }

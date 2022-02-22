@@ -41,5 +41,4 @@ private:
     PressOnce *hood, *tilt, *grab, *push;
 
     frc::Joystick *oper, *driver;
-    frc::Joystick *left, *right;
 };

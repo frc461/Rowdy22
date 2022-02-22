@@ -5,6 +5,8 @@
 
 #include <frc/ADXRS450_Gyro.h>
 
+#include <frc/Encoder.h>
+
 #include <ctre/Phoenix.h>
 
 #include <iostream>
@@ -13,7 +15,7 @@
 
 #include "PID.h"
 
-#define ENC_PER_INCH 100
+#define ENC_PER_INCH 20.3
 
 class DriveTrain {
 public:
@@ -29,6 +31,7 @@ public:
     
     void ResetEncoder();
     void ResetGyro();
+    void CalibrateGyro();
 
     bool MoveDistance(double distance);
     void ResetMoveVars();
@@ -47,6 +50,8 @@ private:
     WPI_TalonFX *l1, *l2, *r1, *r2;
     frc::MotorControllerGroup *lSide, *rSide;
     frc::DifferentialDrive *driveTrain;
+
+    frc::Encoder *leftEncoder, *rightEncoder;
 
     frc::ADXRS450_Gyro *gyro;
 

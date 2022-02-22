@@ -10,6 +10,9 @@ DriveTrain::DriveTrain() {
     rSide = new frc::MotorControllerGroup(*r1, *r2);
 
     driveTrain = new frc::DifferentialDrive(*lSide, *rSide);
+
+    leftEncoder = new frc::Encoder(0,1);
+    rightEncoder = new frc::Encoder(2,3);
     
     l1->SetNeutralMode(NeutralMode::Coast);
     l2->SetNeutralMode(NeutralMode::Coast);
@@ -31,15 +34,15 @@ DriveTrain::DriveTrain() {
 void DriveTrain::Tank(double l, double r) { driveTrain->TankDrive(l*max, r*max); }
 void DriveTrain::Arcade(double v, double h) { driveTrain->ArcadeDrive(h*max, v*max); }
 
-double DriveTrain::GetEncoderL() { return l1->GetSelectedSensorPosition(); }
-double DriveTrain::GetEncoderR() { return r1->GetSelectedSensorPosition(); }
+double DriveTrain::GetEncoderL() { return leftEncoder->GetRaw(); }
+double DriveTrain::GetEncoderR() { return rightEncoder->GetRaw(); }
 double DriveTrain::GetAngle() { return gyro->GetAngle(); }
 double DriveTrain::GetLeftVelocity() { return l1->GetSelectedSensorVelocity(); }
 double DriveTrain::GetRightVelocity() { return r1->GetSelectedSensorVelocity(); }
 
-
-void DriveTrain::ResetEncoder() { l1->SetSelectedSensorPosition(0.0); r1->SetSelectedSensorPosition(0.0); }
+void DriveTrain::ResetEncoder() { leftEncoder->Reset(); rightEncoder->Reset(); }
 void DriveTrain::ResetGyro() { gyro->Reset(); }
+void DriveTrain::CalibrateGyro() { gyro->Calibrate(); }
 
 bool DriveTrain::MoveDistance(double distance) {
     double l = movePID->Get(GetEncoderL(), distance * ENC_PER_INCH);
@@ -51,7 +54,7 @@ bool DriveTrain::MoveDistance(double distance) {
         sumMove += fabs(GetEncoderL());
         nMove++;
         
-        if ((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH) < 1.0) return true; 
+        if (fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)) < 1.0) return true; 
     }
     return false;
 }

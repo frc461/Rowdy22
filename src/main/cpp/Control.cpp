@@ -3,9 +3,6 @@
 Control::Control() {
     oper = new frc::Joystick(1);
     driver = new frc::Joystick(2);
-
-    left = new frc::Joystick(3);
-    right = new frc::Joystick(4);
     
     hood = new PressOnce();
     tilt = new PressOnce();
@@ -26,8 +23,8 @@ bool Control::IntakeConveyorR() { return oper->GetRawButton(XboxButtonLeftBumper
 bool Control::Conveyor() { return oper->GetRawAxis(XboxAxisLeftTrigger)>0.1; }
 bool Control::IntakePush() { return push->Get(oper->GetRawButton(XboxButtonB)); }
 
-bool Control::ClimberExtend() { return driver->GetRawButton(XboxButtonLeftBumper); }
-bool Control::ClimberRetract() { return driver->GetRawButton(XboxButtonRightBumper); }
+bool Control::ClimberExtend() { return driver->GetRawButton(XboxButtonRightBumper); }
+bool Control::ClimberRetract() { return driver->GetRawButton(XboxButtonLeftBumper); }
 bool Control::ClimberTilt() { return tilt->Get(driver->GetRawAxis(XboxAxisLeftTrigger)>0.1); }
 bool Control::ClimberGrab() { return grab->Get(driver->GetRawAxis(XboxAxisRightTrigger)>0.1); }
 
