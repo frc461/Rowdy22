@@ -104,25 +104,27 @@ void Robot::AutonomousInit() {
 void Robot::Auto(int level){
   if (!shoot1) {
     shooter->RunShooter(SHOOTER_SPEED_BOT);
-    shooter->RunHood(true);
+    shooter->RunHood(false);
     conveyor->RunMotor(0.5);
-    conveyor->RunHold(false);
-    if (counter->SecondsPassed(3.0)) {
+    conveyor->RunHold(true);
+    if (counter->SecondsPassed(2.0)) {
       shoot1 = true;
+      shooter->RunShooter(0.0);
+      conveyor->RunMotor(0.0);
+      conveyor->RunHold(false);
     }
   }
   else if (shoot1 && !back1) {
-    shooter->RunShooter(0.0);
-    conveyor->RunMotor(0.0);
-    conveyor->RunHold(true);
-    intake->RunPush(true);
-    intake->RunMotor(0.5);
-    if (driveTrain->MoveDistance(0)) {
+    if (level != 1) {
+      intake->RunPush(true);
+      intake->RunMotor(0.5);
+    }
+    if (driveTrain->MoveDistance((level==1) ? 48.0 : 24.0)) {
       back1 = true;
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
     }
   }
-  else if (back1 && !turn1) {
+  else if (back1 && !turn1 && level != 1) {
     if (driveTrain->Turn(0)) {
       turn1 = true;
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
@@ -152,7 +154,7 @@ void Robot::Auto(int level){
   }
 }
 void Robot::AutonomousPeriodic() {
-  Auto(3);
+  Auto(1);
 }
 
 void Robot::TeleopInit() {
