@@ -60,6 +60,7 @@ bool DriveTrain::MoveDistance(double distance) {
 }
 void DriveTrain::ResetMoveVars() {
     ResetEncoder();
+    movePID->Reset();
     crossedMove = false;
     sumMove = 0.0;
     nMove = 0;
@@ -80,6 +81,7 @@ bool DriveTrain::Turn(double angle) {
 }
 void DriveTrain::ResetTurnVars() {
     ResetGyro();
+    turnPID->Reset();
     crossedTurn = false;
     sumTurn = 0.0;
     nTurn = 0;
