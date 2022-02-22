@@ -19,6 +19,9 @@ public:
     bool GetTopLimit();
     bool GetBotLimit();
     
+    bool GetGrabState();
+    bool GetTiltState();
+    
 private:
     WPI_TalonSRX *leftMotor, *rightMotor;
 
