@@ -8,3 +8,5 @@ Shooter::Shooter() {
 
 void Shooter::RunShooter(double speed) { shooter->Set(speed); }
 void Shooter::RunHood(bool dir) { hood->Set(dir); }
+
+bool Shooter::GetHoodState() { return hood->Get(); }
