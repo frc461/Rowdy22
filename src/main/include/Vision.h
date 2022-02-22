@@ -28,6 +28,6 @@ private:
     
     cs::UsbCamera *backCam;
     cs::CvSink *sink;
-    cs::CvSource *output;
+    cs::CvSource output;
     cv::Mat frameData;
 };
