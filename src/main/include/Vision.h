@@ -20,8 +20,14 @@ public:
     Vision::Values GetValues();
 
     void SetLimelightState(bool cam, bool light);
+    void SetBackCamState(bool state);
 
 private:
     std::shared_ptr<nt::NetworkTable> limelight;
     Values values;
+    
+    cs::UsbCamera *backCam;
+    cs::CvSink *sink;
+    cs::CvSource *output;
+    cv::Mat frameData;
 };
