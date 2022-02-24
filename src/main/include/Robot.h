@@ -15,7 +15,7 @@
 #include "Counter.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#define SHOOTER_SPEED_TOP 0.8
+#define SHOOTER_SPEED_TOP 0.7
 #define SHOOTER_SPEED_BOT 0.35
 
 #define PUT_BOOL(name,val) frc::SmartDashboard::PutBoolean(name,val)
@@ -55,10 +55,8 @@ private:
   double lSpeed,rSpeed;
 
   Intake *intake;
-  bool intakeState;
 
   Climber *climber;
-  bool tiltState, grabState;
   bool climb;
   
   Shooter *shooter;

@@ -15,7 +15,7 @@
 
 #include "PID.h"
 
-#define ENC_PER_INCH 20.3
+#define ENC_PER_INCH 74.46
 
 class DriveTrain {
 public:

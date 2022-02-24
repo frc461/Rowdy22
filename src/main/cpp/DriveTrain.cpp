@@ -21,8 +21,8 @@ DriveTrain::DriveTrain() {
 
     gyro = new frc::ADXRS450_Gyro(frc::SPI::Port::kOnboardCS0);
 
-    movePID = new PID(0.5, 0.0, 0.0, "move");
-    turnPID = new PID(0.5, 0.0, 0.0, "turn");
+    movePID = new PID(0.000575, 0.0, 0.0, "move");
+    turnPID = new PID(0.01, 0.0, 0.0, "turn");
 
     max = 1.0;
     
@@ -45,9 +45,16 @@ void DriveTrain::ResetGyro() { gyro->Reset(); }
 void DriveTrain::CalibrateGyro() { gyro->Calibrate(); }
 
 bool DriveTrain::MoveDistance(double distance) {
-    double l = movePID->Get(GetEncoderL(), distance * ENC_PER_INCH);
-    double r = movePID->Get(GetEncoderR(), -distance * ENC_PER_INCH);
-    Tank(l, r);
+    //movePID->SetP(frc::SmartDashboard::GetNumber("p", 0.0002));
+    double l = movePID->Get(fabs(GetEncoderL()), fabs(distance * ENC_PER_INCH));
+    //double r = movePID->Get(fabs(GetEncoderR()), fabs(distance * ENC_PER_INCH));
+
+    l = (l<0) ? std::max(l, -0.7) : std::min(l, 0.7);
+    //l *= (l<0) ? -1 : 1;
+
+    //frc::SmartDashboard::PutNumber("in", GetEncoderL()/ENC_PER_INCH);
+    
+    Tank(-l, l);
     
     if (fabs(GetEncoderL()) >= fabs(distance * ENC_PER_INCH) && !crossedMove) crossedMove = true;
     if (crossedMove) {
@@ -55,7 +62,7 @@ bool DriveTrain::MoveDistance(double distance) {
         nMove++;
         
         frc::SmartDashboard::PutNumber("mov", fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)));
-        if (fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)) < 1.0) return true; 
+        if (fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)) < 500.0) return true; 
     }
     return false;
 }
@@ -88,6 +95,6 @@ void DriveTrain::ResetTurnVars() {
     nTurn = 0;
 }
 
-void DriveTrain::MoveStraight(double power) {
+/*void DriveTrain::MoveStraight(double power) {
     Arcade(power, -(GetAngle() / 7.5));
-}
+}*/
