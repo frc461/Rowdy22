@@ -114,7 +114,7 @@ void Robot::Auto(int level){
       intake->RunPush(true);
       intake->RunMotor(0.5);
     }
-    if (driveTrain->MoveDistance((level==1) ? -50.0 : -24.0)) {
+    if (driveTrain->MoveDistance((level==1) ? -80.0 : -60.0)) {
       back1 = true;
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
     }
