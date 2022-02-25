@@ -45,24 +45,18 @@ void DriveTrain::ResetGyro() { gyro->Reset(); }
 void DriveTrain::CalibrateGyro() { gyro->Calibrate(); }
 
 bool DriveTrain::MoveDistance(double distance) {
-    //movePID->SetP(frc::SmartDashboard::GetNumber("p", 0.0002));
-    double l = movePID->Get(fabs(GetEncoderL()), fabs(distance * ENC_PER_INCH));
-    //double r = movePID->Get(fabs(GetEncoderR()), fabs(distance * ENC_PER_INCH));
-
-    l = (l<0) ? std::max(l, -0.7) : std::min(l, 0.7);
-    //l *= (l<0) ? -1 : 1;
-
-    //frc::SmartDashboard::PutNumber("in", GetEncoderL()/ENC_PER_INCH);
+    //movePID->SetP(frc::SmartDashboard::GetNumber("p", 0.000575));
+    double power = std::min(movePID->Get(fabs(GetEncoderL()), fabs(distance * ENC_PER_INCH)), 0.6);
+    power *= (distance < 0) ? -1 : 1;
     
-    Tank(-l, l);
+    Tank(power, -power);
     
     if (fabs(GetEncoderL()) >= fabs(distance * ENC_PER_INCH) && !crossedMove) crossedMove = true;
     if (crossedMove) {
         sumMove += fabs(GetEncoderL());
         nMove++;
-        
-        frc::SmartDashboard::PutNumber("mov", fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)));
-        if (fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)) < 500.0) return true; 
+        //frc::SmartDashboard::PutNumber("mov", fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)));
+        if (fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)) < ENC_PER_INCH*3) return true; 
     }
     return false;
 }
@@ -75,7 +69,7 @@ void DriveTrain::ResetMoveVars() {
 }
 
 bool DriveTrain::Turn(double angle) {
-    double speed = turnPID->Get(GetAngle(), angle);
+    double speed = turnPID->Get(fabs(GetAngle()), fabs(angle));
     Tank(speed, -speed);
     
     if (fabs(GetAngle()) >= fabs(angle) && !crossedTurn) crossedTurn = true;
@@ -83,7 +77,7 @@ bool DriveTrain::Turn(double angle) {
         sumTurn += fabs(GetAngle());
         nTurn++;
         
-        if ((sumTurn / (double)nTurn) - fabs(angle) < 0.25) return true;
+        if (fabs((sumTurn / (double)nTurn) - fabs(angle)) < 4) return true;
     }
     return false;
 }
