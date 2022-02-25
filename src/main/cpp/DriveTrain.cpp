@@ -51,13 +51,13 @@ bool DriveTrain::MoveDistance(double distance) {
     
     Tank(power, -power);
     
-    if (fabs(GetEncoderL()) >= fabs(distance * ENC_PER_INCH) && !crossedMove) crossedMove = true;
-    if (crossedMove) {
-        sumMove += fabs(GetEncoderL());
-        nMove++;
-        //frc::SmartDashboard::PutNumber("mov", fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)));
-        if (fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)) < ENC_PER_INCH*3) return true; 
-    }
+    if (fabs(GetEncoderL()) >= fabs(distance * ENC_PER_INCH) && !crossedMove) return true; //crossedMove = true;
+    // if (crossedMove) {
+    //     sumMove += fabs(GetEncoderL());
+    //     nMove++;
+    //     //frc::SmartDashboard::PutNumber("mov", fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)));
+    //     if (fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)) < ENC_PER_INCH*3) return true; 
+    // }
     return false;
 }
 void DriveTrain::ResetMoveVars() {

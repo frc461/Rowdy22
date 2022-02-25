@@ -84,6 +84,7 @@ void Robot::RobotInit() {
   frc::SmartDashboard::PutBoolean("Ramp", false);
   frc::SmartDashboard::PutNumber("HighSpeed", SHOOTER_SPEED_TOP);
   frc::SmartDashboard::PutNumber("LowSpeed", SHOOTER_SPEED_BOT);
+  frc::SmartDashboard::PutNumber("Auto", 1);
   frc::SmartDashboard::PutNumber("p", 0.0002);
 }
 
@@ -96,13 +97,14 @@ void Robot::AutonomousInit() {
 
   shoot1 = back1 = turn1 = back2 = turn2 = forward1 = shoot2 = false;
 }
-void Robot::Auto(int level){
+void Robot::Auto(int level, bool high) {
   if (!shoot1) {
-    shooter->RunShooter(SHOOTER_SPEED_BOT);
-    shooter->RunHood(false);
-    conveyor->RunMotor(0.5);
+    shooter->RunShooter((high) ? SHOOTER_SPEED_TOP : SHOOTER_SPEED_BOT);
+    shooter->RunHood(high);
     conveyor->RunHold(true);
-    if (counter->SecondsPassed(3.0)) {
+    conveyor->RunMotor(0.8);
+    if (counter->SecondsPassed(2.0)) {
+      if (shoot2) while(true) {}
       shooter->RunShooter(0.0);
       conveyor->RunMotor(0.0);
       conveyor->RunHold(false);
@@ -112,44 +114,48 @@ void Robot::Auto(int level){
   else if (shoot1 && !back1) {
     if (level != 1) {
       intake->RunPush(true);
-      intake->RunMotor(0.5);
+      intake->RunMotor(0.8);
+      conveyor->RunMotor(0.8);
     }
-    if (driveTrain->MoveDistance((level==1) ? -80.0 : -60.0)) {
+    if (driveTrain->MoveDistance((level==1) ? -110.0 : -110.0)) {
       back1 = true;
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
     }
   }
   else if (back1 && !turn1 && level != 1) {
-    if (driveTrain->Turn(0)) {
+    if (driveTrain->MoveDistance(110)) {
       turn1 = true;
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
     }
   }
-  else if (turn1 && !back2) {
-    if (driveTrain->MoveDistance(0)) {
-      back2 = true;
-      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-    }
+  else if (turn1 && !shoot2) {
+    shoot1 = true;
   }
-  else if (back2 && !turn2) {
-    if (driveTrain->Turn(0)) {
-      turn2 = true;
-      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-    }
-  }
-  else if (turn2 && !forward1) {
-    if (driveTrain->MoveDistance(0)) {
-      forward1 = true;
-      intake->RunPush(false);
-      intake->RunMotor(0.0);
-    }
-  }
-  else if (forward1) {
-    shoot1 = false;
-  }
+  // else if (turn1 && !back2) {
+  //   if (driveTrain->MoveDistance(0)) {
+  //     back2 = true;
+  //     driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
+  //   }
+  // }
+  // else if (back2 && !turn2) {
+  //   if (driveTrain->Turn(0)) {
+  //     turn2 = true;
+  //     driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
+  //   }
+  // }
+  // else if (turn2 && !forward1) {
+  //   if (driveTrain->MoveDistance(0)) {
+  //     forward1 = true;
+  //     intake->RunPush(false);
+  //     intake->RunMotor(0.0);
+  //   }
+  // }
+  // else if (forward1) {
+  //   shoot1 = false;
+  // }
 }
 void Robot::AutonomousPeriodic() {
-  Auto(1);
+  Auto((double)frc::SmartDashboard::GetNumber("Auto", 1), true);
 }
 
 void Robot::TeleopInit() {

@@ -45,7 +45,7 @@ public:
   void ClimberPeriodic();
   void VisionPeriodic();
   
-  void Auto(int level);
+  void Auto(int level, bool high);
 
 private:
   //------------------------------------------------
