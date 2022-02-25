@@ -157,13 +157,13 @@ void Robot::TeleopInit() {
 }
 
 void Robot::TeleopPeriodic() {
-  // DriveTrainPeriodic();
-  // IntakeConveyorPeriodic();
-  // ShooterPeriodic();
-  // ClimberPeriodic();
-  // VisionPeriodic();
-  // if (control->Shooter()) std::cout << driveTrain->MoveDistance(-40) << std::endl;
-  // if (control->IntakeConveyor()) driveTrain->ResetEncoder();
+  DriveTrainPeriodic();
+  IntakeConveyorPeriodic();
+  ShooterPeriodic();
+  ClimberPeriodic();
+  VisionPeriodic();
+  //  if (control->Shooter()) std::cout << driveTrain->MoveDistance(-40) << std::endl;
+  //  if (control->IntakeConveyor()) driveTrain->ResetEncoder();
 }
 
 void Robot::RobotPeriodic() {}
