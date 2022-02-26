@@ -18,7 +18,7 @@ void Robot::DriveTrainPeriodic() {
     driveTrain->Tank(-control->LeftY(),control->RightY());
   }
   else {
-    driveTrain->Arcade(control->LeftY(),control->RightX());
+    driveTrain->Arcade(-control->LeftY(),control->RightX());
   }
 }
 //-------------------------------------------------------------------------Intake-----
