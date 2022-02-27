@@ -58,8 +58,4 @@ private:
     PID *movePID, *turnPID;
     
     double max;
-    
-    bool crossedMove, crossedTurn;
-    double sumMove, sumTurn;
-    int nMove, nTurn;
 };

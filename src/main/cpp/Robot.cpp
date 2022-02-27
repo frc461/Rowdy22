@@ -2,8 +2,8 @@
 
 //------------------------------------------------------------------------DriveTrain-----
 void Robot::DriveTrainPeriodic() {
-  bool t = frc::SmartDashboard::GetBoolean("Tank", true);
-  bool ramp = frc::SmartDashboard::GetBoolean("Ramp",false);
+  bool t = GET_BOOL("Tank", true);
+  bool ramp = GET_BOOL("Ramp",false);
   
   if (t) {
     if (driveTrain->GetLeftVelocity() > 7500 || !ramp) {
@@ -33,7 +33,7 @@ void Robot::IntakeConveyorPeriodic()  {
 }
 //--------------------------------------------------------------------------Shooter-----
 void Robot::ShooterPeriodic() {
-  shooter->RunShooter((control->Shooter()) ? (hoodState) ? frc::SmartDashboard::GetNumber("HighSpeed", SHOOTER_SPEED_TOP) : frc::SmartDashboard::GetNumber("LowSpeed", SHOOTER_SPEED_BOT) : 0.0);
+  shooter->RunShooter((control->Shooter()) ? (hoodState) ? GET_NUM("HighSpeed", SHOOTER_SPEED_TOP) : GET_NUM("LowSpeed", SHOOTER_SPEED_BOT) : 0.0);
   
   if (control->ShooterHood()) { 
     hoodState = (hoodState) ? false : true;
@@ -43,23 +43,25 @@ void Robot::ShooterPeriodic() {
 }
 //-----------------------------------------------------------------------------Climber--
 void Robot::ClimberPeriodic() {
-  double speed = 0.8;
+  double speed = 1.0;
   climber->RunLeft((control->ClimberExtend() && climber->GetBotLimit()) ? speed : (control->ClimberRetract() && climber->GetTopLimit()) ? -speed : 0.0);
   climber->RunRight((control->ClimberExtend() && climber->GetBotLimit()) ? -speed : (control->ClimberRetract() && climber->GetTopLimit()) ? speed : 0.0);
   climber->RunBrake(!((!control->ClimberExtend() && !control->ClimberRetract()) || (!climber->GetBotLimit() && !control->ClimberRetract()) || (!climber->GetTopLimit() && !control->ClimberExtend())));
 
   if (control->ClimberExtend() || control->ClimberRetract()) climb = true;
 
-  frc::SmartDashboard::PutBoolean("t",climber->GetTopLimit());
-  frc::SmartDashboard::PutBoolean("b",climber->GetBotLimit());
+  PUT_BOOL("t",climber->GetTopLimit());
+  PUT_BOOL("b",climber->GetTopLimit());
 
-  if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? false : true); }
-  if (control->ClimberGrab()) { climber->RunGrab((climber->GetGrabState()) ? false : true); }
+  if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? false : true); climb = true; }
+  if (control->ClimberGrab()) { climber->RunGrab((climber->GetGrabState()) ? false : true); climb = true; }
 }
 //--------------------------------------------------------------------------------Vision---------
 void Robot::VisionPeriodic() {
-  frc::SmartDashboard::PutNumber("gyro",driveTrain->GetAngle());
-  std::cout << driveTrain->GetEncoderL() << " " << driveTrain->GetEncoderR() << std::endl;
+  PUT_NUM("Gyro",driveTrain->GetAngle());
+  PUT_NUM("topSensor",conveyor->GetBallSensorState(true));
+  PUT_NUM("bottomSensor",conveyor->GetBallSensorState(false));
+  PUT_NUM("CLIMBER",climber->GetEncoder());
 }
 //-----------------------------------------------------------------------------------------
 //====================================================================================================================================================
@@ -80,12 +82,12 @@ void Robot::RobotInit() {
   climb = false;
   hoodState = false;
 
-  frc::SmartDashboard::PutBoolean("Tank", true);
-  frc::SmartDashboard::PutBoolean("Ramp", false);
-  frc::SmartDashboard::PutNumber("HighSpeed", SHOOTER_SPEED_TOP);
-  frc::SmartDashboard::PutNumber("LowSpeed", SHOOTER_SPEED_BOT);
-  frc::SmartDashboard::PutNumber("Auto", 1);
-  frc::SmartDashboard::PutNumber("p", 0.0002);
+  PUT_BOOL("Tank", true);
+  PUT_BOOL("Ramp", false);
+  PUT_NUM("HighSpeed", SHOOTER_SPEED_TOP);
+  PUT_NUM("LowSpeed", SHOOTER_SPEED_BOT);
+  PUT_NUM("Auto", 2);
+  PUT_NUM("p", 0.0007);
 }
 
 void Robot::AutonomousInit() {
@@ -95,48 +97,51 @@ void Robot::AutonomousInit() {
   driveTrain->ResetEncoder();
   driveTrain->ResetGyro();
 
+  loaded = true;
+
   done = shoot1 = back1 = forward1 = shoot2 = false; // CURRENT AUTO ORDER
   turn1 = back2 = turn2 = false;
 }
 void Robot::Auto(int level, bool high) {
-  if (!done) {
-    if (!shoot1) {
-      shooter->RunShooter((high) ? SHOOTER_SPEED_TOP : SHOOTER_SPEED_BOT);
-      shooter->RunHood(high);
-      conveyor->RunHold(true);
+  if (!shoot1) {
+    shooter->RunHood(high);   shooter->RunShooter((high) ? SHOOTER_SPEED_TOP : SHOOTER_SPEED_BOT);
+    conveyor->RunHold(true);  conveyor->RunMotor(0.8);
+    if (loaded && !conveyor->GetBallSensorState(true)) {
+      //std::cout << shoot2 << std::endl;
+      loaded = false;
+      shooter->RunShooter(0.0);
+      conveyor->RunMotor(0.0); conveyor->RunHold(false);
+      shoot1 = true;
+    }
+  }
+  else if (shoot1 && !back1) {
+    //(level==1) ? driveTrain->MoveDistance(-110.0) : driveTrain->Arcade(-0.6, 0.0);
+    if (level != 1) {
+      intake->RunPush(true);
+      intake->RunMotor(0.8);
       conveyor->RunMotor(0.8);
-      if (counter->SecondsPassed(2.0)) {
-        shooter->RunShooter(0.0);
-        conveyor->RunMotor(0.0);
-        conveyor->RunHold(false);
-        shoot1 = true;
-        done = shoot2;
-      }
     }
-    else if (shoot1 && !back1) {
-      if (level != 1) {
-        intake->RunPush(true);
-        intake->RunMotor(0.8);
-        conveyor->RunMotor(0.8);
-      }
-      if (driveTrain->MoveDistance((level==1) ? -110.0 : -110.0)) {
-        back1 = true;
-        driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-      }
+    if (driveTrain->MoveDistance((level==1) ? -110.0 : -110.0)) {
+      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
+      intake->RunPush(false); intake->RunMotor(0.0);
+      back1 = true;
     }
-    else if (back1 && !forward && level != 1) {
-      if (driveTrain->MoveDistance(110)) {
-        forward1 = true;
-        driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-      }
+  }
+  else if (back1 && !forward1 && level != 1) {
+    loaded = conveyor->GetBallSensorState(true);
+    conveyor->RunMotor((!loaded) ? 0.8 : 0.0);
+    if (driveTrain->MoveDistance(110.0)) { // distanceToMove
+      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
+      forward1 = true;
     }
-    else if (forward1 && !shoot2) {
-      shoot1 = shoot2 = true;
-    }
+  }
+  else if (forward1 && !shoot2) {
+    counter->ResetAll();
+    shoot1 = shoot2 = true;
   }
 }
 void Robot::AutonomousPeriodic() {
-  Auto((int)frc::SmartDashboard::GetNumber("Auto", 1), true);
+  Auto(GET_NUM("Auto", 2), true);
 }
 
 void Robot::TeleopInit() {
@@ -149,8 +154,8 @@ void Robot::TeleopPeriodic() {
   ShooterPeriodic();
   ClimberPeriodic();
   VisionPeriodic();
-  //  if (control->Shooter()) std::cout << driveTrain->MoveDistance(-40) << std::endl;
-  //  if (control->IntakeConveyor()) driveTrain->ResetEncoder();
+  // if (control->Shooter()) std::cout << driveTrain->MoveDistance(-40) << std::endl;
+  // if (control->IntakeConveyor()) driveTrain->ResetEncoder();
 }
 
 void Robot::RobotPeriodic() {}

@@ -9,6 +9,11 @@ Counter::Counter() {
 
 void Counter::Start() { timer->Start(); }
 void Counter::Stop() { timer->Stop(); }
+void Counter::ResetAll() {
+  timer->Reset();
+  firstCall = false;
+  initTime = 0.0;
+}
 
 bool Counter::SecondsPassed(double t) {
   if (!firstCall) {

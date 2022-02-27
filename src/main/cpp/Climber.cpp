@@ -10,6 +10,8 @@ Climber::Climber() {
 
     topLimit = new frc::DigitalInput(6);
     botLimit = new frc::DigitalInput(7);
+
+    encoder = new frc::Encoder(8,9);
 }
 
 void Climber::RunLeft(double speed) { leftMotor->Set(speed); }
@@ -24,3 +26,5 @@ bool Climber::GetBotLimit() { return botLimit->Get(); }
 
 bool Climber::GetGrabState() { return grab->Get(); }
 bool Climber::GetTiltState() { return tilt->Get(); }
+
+double Climber::GetEncoder() { return encoder->GetRaw(); }

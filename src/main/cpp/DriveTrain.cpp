@@ -21,14 +21,10 @@ DriveTrain::DriveTrain() {
 
     gyro = new frc::ADXRS450_Gyro(frc::SPI::Port::kOnboardCS0);
 
-    movePID = new PID(0.000575, 0.0, 0.0, "move");
+    movePID = new PID(0.0007, 0.0, 0.0, "move");
     turnPID = new PID(0.01, 0.0, 0.0, "turn");
 
     max = 1.0;
-    
-    crossedMove = crossedTurn = false;
-    sumMove = sumTurn = 0.0;
-    nMove = nTurn = 0;
 }
 
 void DriveTrain::Tank(double l, double r) { driveTrain->TankDrive(l*max, r*max); }
@@ -45,49 +41,27 @@ void DriveTrain::ResetGyro() { gyro->Reset(); }
 void DriveTrain::CalibrateGyro() { gyro->Calibrate(); }
 
 bool DriveTrain::MoveDistance(double distance) {
-    //movePID->SetP(frc::SmartDashboard::GetNumber("p", 0.000575));
     double power = std::min(movePID->Get(fabs(GetEncoderL()), fabs(distance * ENC_PER_INCH)), 0.6);
     power *= (distance < 0) ? -1 : 1;
-    
     Tank(power, -power);
     
-    return (fabs(GetEncoderL() >= fabs(distance * ENC_PER_INCH) / 2) && (fabs(GetLeftVelocity()) <= 10);
-    // if (fabs(GetEncoderL()) >= fabs(distance * ENC_PER_INCH) && !crossedMove) crossedMove = true;
-    // if (crossedMove) {
-    //     sumMove += fabs(GetEncoderL());
-    //     nMove++;
-    //     //frc::SmartDashboard::PutNumber("mov", fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)));
-    //     if (fabs((sumMove / (double)nMove) - fabs(distance * ENC_PER_INCH)) < ENC_PER_INCH*3) return true; 
-    // }
-    // return false;
+    return (fabs(GetEncoderL()) >= (fabs(distance * ENC_PER_INCH) / 4)) && (fabs(GetLeftVelocity())==0);
 }
 void DriveTrain::ResetMoveVars() {
     ResetEncoder();
     movePID->Reset();
-    crossedMove = false;
-    sumMove = 0.0;
-    nMove = 0;
 }
 
 bool DriveTrain::Turn(double angle) {
     double speed = turnPID->Get(fabs(GetAngle()), fabs(angle));
+    speed = (angle<0) ? -1 : 1;
     Tank(speed, -speed);
-    
-    if (fabs(GetAngle()) >= fabs(angle) && !crossedTurn) crossedTurn = true;
-    if (crossedMove) {
-        sumTurn += fabs(GetAngle());
-        nTurn++;
-        
-        if (fabs((sumTurn / (double)nTurn) - fabs(angle)) < 4) return true;
-    }
-    return false;
+
+    return (fabs(GetAngle()) >= (fabs(angle)/4)) && (fabs(GetLeftVelocity())==0);
 }
 void DriveTrain::ResetTurnVars() {
     ResetGyro();
     turnPID->Reset();
-    crossedTurn = false;
-    sumTurn = 0.0;
-    nTurn = 0;
 }
 
 void DriveTrain::MoveStraight(double power) {

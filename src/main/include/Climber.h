@@ -2,6 +2,7 @@
 
 #include <frc/Solenoid.h>
 #include <frc/DigitalInput.h>
+#include <frc/Encoder.h>
 
 #include <ctre/Phoenix.h>
 
@@ -21,6 +22,8 @@ public:
     
     bool GetGrabState();
     bool GetTiltState();
+
+    double GetEncoder();
     
 private:
     WPI_TalonSRX *leftMotor, *rightMotor;
@@ -28,4 +31,6 @@ private:
     frc::Solenoid *tilt, *grab, *brake;
 
     frc::DigitalInput *topLimit, *botLimit;
+
+    frc::Encoder *encoder;
 };

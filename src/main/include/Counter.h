@@ -11,6 +11,8 @@ public:
   void Stop();
   
   bool SecondsPassed(double sec);
+
+  void ResetAll();
   
 private:
   frc::Timer *timer;

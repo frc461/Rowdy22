@@ -61,6 +61,8 @@ private:
   
   Shooter *shooter;
   bool hoodState;
+  bool loaded;
+  double distanceToMove;
   
   Vision *vision;
   
