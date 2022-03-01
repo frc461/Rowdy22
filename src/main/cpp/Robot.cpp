@@ -35,7 +35,8 @@ void Robot::IntakeConveyorPeriodic()  {
 void Robot::ShooterPeriodic() {
   shooter->RunShooter((control->Shooter()) ? (hoodState) ? GET_NUM("HighSpeed", SHOOTER_SPEED_TOP) : GET_NUM("LowSpeed", SHOOTER_SPEED_BOT) : 0.0);
   
-  control->VibrateDriver((control->Shooter()) ? 1.0 : 0.0); control->VibrateOper((control->Shooter()) ? 1.0 : 0.0);
+  // control->VibrateDriver((control->Shooter()) ? 1.0 : 0.0);
+  //control->VibrateOper((control->Shooter()) ? 1.0 : 0.0);
   
   if (control->ShooterHood()) { 
     hoodState = (hoodState) ? false : true;
