@@ -21,6 +21,9 @@
 #define SHOOTER_SPEED_TOP_AUTO 0.7
 #define SHOOTER_SPEED_BOT_AUTO 0.35
 
+#define CLIMBER_TOP_ENC 500
+#define CLIMBER_BOT_ENC 0
+
 #define PUT_BOOL(name,val) frc::SmartDashboard::PutBoolean(name,val)
 #define GET_BOOL(name,val) frc::SmartDashboard::GetBoolean(name,val)
 #define PUT_NUM(name,val) frc::SmartDashboard::PutNumber(name,val)
