@@ -17,8 +17,8 @@ public:
     void RunTilt(bool dir);
     void RunBrake(bool dir);
 
-    bool GetTopLimit();
-    bool GetBotLimit();
+    bool GetTopLimit(double enc);
+    bool GetBotLimit(double enc);
     
     bool GetGrabState();
     bool GetTiltState();
