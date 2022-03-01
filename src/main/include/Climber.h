@@ -24,6 +24,7 @@ public:
     bool GetTiltState();
 
     double GetEncoder();
+    void ResetEncoder();
     
 private:
     WPI_TalonSRX *leftMotor, *rightMotor;

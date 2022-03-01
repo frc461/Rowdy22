@@ -28,3 +28,4 @@ bool Climber::GetGrabState() { return grab->Get(); }
 bool Climber::GetTiltState() { return tilt->Get(); }
 
 double Climber::GetEncoder() { return encoder->GetRaw(); }
+void Climber::ResetEncoder() { encoder->Reset(); }
