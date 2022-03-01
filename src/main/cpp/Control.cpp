@@ -14,6 +14,8 @@ double Control::LeftX() { return driver->GetRawAxis(XboxAxisLeftStickX); }
 double Control::LeftY() { return driver->GetRawAxis(XboxAxisLeftStickY); }
 double Control::RightX() { return driver->GetRawAxis(XboxAxisRightStickX); }
 double Control::RightY() { return driver->GetRawAxis(XboxAxisRightStickY); }
+void Control::VibrateDriver(double power) { driver->SetRumble(frc::GenericHID::RumbleType::kLeftRumble,power); driver->SetRumble(frc::GenericHID::RumbleType::kRightRumble,power); }
+void Control::VibrateOper(double power) { oper->SetRumble(frc::GenericHID::RumbleType::kLeftRumble,power); driver->SetRumble(frc::GenericHID::RumbleType::kRightRumble,power); }
 
 bool Control::Shooter() { return oper->GetRawAxis(XboxAxisRightTrigger)>0.1; }
 bool Control::ShooterHood() { return hood->Get(oper->GetRawButton(XboxButtonA)); }

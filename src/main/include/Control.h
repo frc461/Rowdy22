@@ -15,6 +15,9 @@ public:
     double RightX();
     double RightY();
 
+    void VibrateDriver(double power);
+    void VibrateOper(double power);
+
     bool Shooter();
     bool ShooterHood();
 

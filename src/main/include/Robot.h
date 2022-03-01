@@ -18,7 +18,7 @@
 #define SHOOTER_SPEED_TOP 0.7
 #define SHOOTER_SPEED_BOT 0.35
 
-#define SHOOTER_SPEED_TOP_AUTO 0.8
+#define SHOOTER_SPEED_TOP_AUTO 0.7
 #define SHOOTER_SPEED_BOT_AUTO 0.35
 
 #define PUT_BOOL(name,val) frc::SmartDashboard::PutBoolean(name,val)
