@@ -21,8 +21,8 @@ void Climber::RunGrab(bool dir) { grab->Set(dir); }
 void Climber::RunTilt(bool dir) { tilt->Set(dir); }
 void Climber::RunBrake(bool dir) { brake->Set(dir); }
 
-bool Climber::GetTopLimit() { return topLimit->Get(); }
-bool Climber::GetBotLimit() { return botLimit->Get(); }
+bool Climber::GetTopLimit(double enc) { return fabs(GetEncoder()) >= enc; }
+bool Climber::GetBotLimit(double enc) { return fabs(GetEncoder()) <= enc; }
 
 bool Climber::GetGrabState() { return grab->Get(); }
 bool Climber::GetTiltState() { return tilt->Get(); }
