@@ -35,9 +35,6 @@ void Robot::IntakeConveyorPeriodic()  {
 void Robot::ShooterPeriodic() {
   shooter->RunShooter((control->Shooter()) ? (hoodState) ? GET_NUM("HighSpeed", SHOOTER_SPEED_TOP) : GET_NUM("LowSpeed", SHOOTER_SPEED_BOT) : 0.0);
   
-  // control->VibrateDriver((control->Shooter()) ? 1.0 : 0.0);
-  //control->VibrateOper((control->Shooter()) ? 1.0 : 0.0);
-  
   if (control->ShooterHood()) { 
     hoodState = (hoodState) ? false : true;
     climb = false;
@@ -47,9 +44,9 @@ void Robot::ShooterPeriodic() {
 //-----------------------------------------------------------------------------Climber--
 void Robot::ClimberPeriodic() {
   double speed = 1.0;
-  climber->RunLeft((control->ClimberExtend() && climber->GetBotLimit()) ? speed : (control->ClimberRetract() && climber->GetTopLimit()) ? -speed : 0.0);
-  climber->RunRight((control->ClimberExtend() && climber->GetBotLimit()) ? -speed : (control->ClimberRetract() && climber->GetTopLimit()) ? speed : 0.0);
-  climber->RunBrake(!((!control->ClimberExtend() && !control->ClimberRetract()) || (!climber->GetBotLimit() && !control->ClimberRetract()) || (!climber->GetTopLimit() && !control->ClimberExtend())));
+  climber->RunLeft((control->ClimberExtend() && !climber->GetBotLimit(CLIMBER_BOT_ENC)) ? speed : (control->ClimberRetract() && !climber->GetTopLimit(CLIMBER_TOP_ENC)) ? -speed : 0.0);
+  climber->RunRight((control->ClimberExtend() && !climber->GetBotLimit(CLIMBER_BOT_ENC)) ? -speed : (control->ClimberRetract() && !climber->GetTopLimit(CLIMBER_TOP_ENC)) ? speed : 0.0);
+  climber->RunBrake(!((!control->ClimberExtend() && !control->ClimberRetract()) || (climber->GetBotLimit(CLIMBER_BOT_ENC) && !control->ClimberRetract()) || (climber->GetTopLimit(CLIMBER_TOP_ENC) && !control->ClimberExtend())));
 
   if (control->ClimberExtend() || control->ClimberRetract()) climb = true;
 
@@ -86,6 +83,7 @@ void Robot::RobotInit() {
   PUT_NUM("HighSpeed", SHOOTER_SPEED_TOP);
   PUT_NUM("LowSpeed", SHOOTER_SPEED_BOT);
   PUT_NUM("Auto", 2);
+  PUT_BOOL("AutoHigh", true);
 }
 
 void Robot::AutonomousInit() {
@@ -95,9 +93,7 @@ void Robot::AutonomousInit() {
   driveTrain->ResetEncoder();
   driveTrain->ResetGyro();
 
-  loaded = false;
-  moveNow = false;
-  shot = shooterloaded = false;
+  shooterloaded = loaded = shot = moveNow = false;
 
   done = shoot1 = back1 = forward1 = shoot2 = false; // CURRENT AUTO ORDER
   turn1 = back2 = turn2 = false;
@@ -143,7 +139,7 @@ void Robot::Auto(int level, bool high) {
   }
 }
 void Robot::AutonomousPeriodic() {
-  Auto(GET_NUM("Auto", 2), true);
+  Auto(GET_NUM("Auto", 2), GET_BOOL("AutoHigh",true));
 }
 
 void Robot::TeleopInit() {
