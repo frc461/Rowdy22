@@ -97,7 +97,9 @@ void Robot::AutonomousInit() {
   driveTrain->ResetEncoder();
   driveTrain->ResetGyro();
 
-  loaded = true;
+  loaded = false;
+  moveNow = false;
+  shot = shooterloaded = false;
 
   done = shoot1 = back1 = forward1 = shoot2 = false; // CURRENT AUTO ORDER
   turn1 = back2 = turn2 = false;
@@ -105,17 +107,21 @@ void Robot::AutonomousInit() {
 void Robot::Auto(int level, bool high) {
   if (!shoot1) {
     shooter->RunHood(high);   shooter->RunShooter((high) ? SHOOTER_SPEED_TOP : SHOOTER_SPEED_BOT);
-    conveyor->RunHold(true);  conveyor->RunMotor(0.8);
-    if (loaded && !conveyor->GetBallSensorState(true)) {
-      //std::cout << shoot2 << std::endl;
-      loaded = false;
+    conveyor->RunHold(true);
+    if (!shooterloaded && counter->SecondsPassed(1.5)) { conveyor->RunMotor(0.8); shooterloaded = true; }
+    if (!loaded) { loaded = conveyor->GetBallSensorState(true); }
+    if (!shot && loaded && !conveyor->GetBallSensorState(true)) {
+      counter->ResetAll();
+      moveNow = true;
+      shot = true;
+    }
+    if (moveNow && counter->SecondsPassed(1.0)) {
       shooter->RunShooter(0.0);
       conveyor->RunMotor(0.0); conveyor->RunHold(false);
       shoot1 = true;
     }
   }
   else if (shoot1 && !back1) {
-    //(level==1) ? driveTrain->MoveDistance(-110.0) : driveTrain->Arcade(-0.6, 0.0);
     if (level != 1) {
       intake->RunPush(true);
       intake->RunMotor(0.8);
@@ -128,16 +134,19 @@ void Robot::Auto(int level, bool high) {
     }
   }
   else if (back1 && !forward1 && level != 1) {
-    loaded = conveyor->GetBallSensorState(true);
-    conveyor->RunMotor((!loaded) ? 0.8 : 0.0);
-    if (driveTrain->MoveDistance(110.0)) { // distanceToMove
+    conveyor->RunMotor(0.8);
+    if (driveTrain->MoveDistance(100.0)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       forward1 = true;
     }
   }
   else if (forward1 && !shoot2) {
     counter->ResetAll();
-    shoot1 = shoot2 = true;
+    shoot1 = false;
+    loaded = false;
+    shot = false;
+    shooterloaded = false;
+    shoot2 = true;
   }
 }
 void Robot::AutonomousPeriodic() {
@@ -154,6 +163,7 @@ void Robot::TeleopPeriodic() {
   ShooterPeriodic();
   ClimberPeriodic();
   VisionPeriodic();
+  PUT_NUM("shooterSenseor",conveyor->GetBallSensorState(true));
   // if (control->Shooter()) std::cout << driveTrain->MoveDistance(-40) << std::endl;
   // if (control->IntakeConveyor()) driveTrain->ResetEncoder();
 }
