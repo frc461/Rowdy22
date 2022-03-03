@@ -48,22 +48,16 @@ void Robot::ClimberPeriodic() {
   double speed = 1.0;
   climber->RunLeft((control->ClimberExtend() && !climber->GetTopLimit(climber->GetTiltState() ? CLIMBER_TOP_ENC_2 : CLIMBER_TOP_ENC_1)) ? speed : (control->ClimberRetract() && !climber->GetBotLimit(CLIMBER_BOT_ENC)) ? -speed : 0.0);
   climber->RunRight((control->ClimberExtend() && !climber->GetTopLimit(climber->GetTiltState() ? CLIMBER_TOP_ENC_2 : CLIMBER_TOP_ENC_1)) ? -speed : (control->ClimberRetract() && !climber->GetBotLimit(CLIMBER_BOT_ENC)) ? speed : 0.0);
-  climber->RunBrake(!((!control->ClimberExtend() && !control->ClimberRetract() && !control->ClimberOverrideRetract() && !climberMoveDown) || (climber->GetBotLimit(CLIMBER_BOT_ENC) && !control->ClimberExtend() && !control->ClimberOverrideRetract()) || (climber->GetTopLimit((climber->GetTiltState()) ? CLIMBER_TOP_ENC_2 : CLIMBER_TOP_ENC_1)) && !control->ClimberRetract()));
-  
+  climber->RunBrake(!((!control->ClimberExtend() && !control->ClimberRetract() && !control->ClimberOverrideRetract()) || (climber->GetBotLimit(CLIMBER_BOT_ENC) && !control->ClimberExtend() && !control->ClimberOverrideRetract()) || (climber->GetTopLimit((climber->GetTiltState()) ? CLIMBER_TOP_ENC_2 : CLIMBER_TOP_ENC_1)) && !control->ClimberRetract()));
+
   if (control->ClimberExtend() || control->ClimberRetract()) climb = true;
 
   if (control->ClimberOverrideRetract()) { climber->RunLeft(-speed); climber->RunRight(speed); }
   if (control->ClimberResetEncoder()) { climber->ResetEncoder(); }
 
-  // if (!climber->GetTiltState() && (-climber->GetEncoder()) >= CLIMBER_TOP_ENC_1) {     // Auto move down
-  //   climber->RunLeft(speed); climber->RunRight(-speed);
-  //   climberMoveDown = true;
-  // } else climberMoveDown = false;
-
-  std::cout << climber->GetEncoder() << std::endl;
-
-  if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? false : true); climb = true; }
   if (control->ClimberGrab()) { climber->RunGrab((climber->GetGrabState()) ? false : true); climb = true; }
+  // if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? ((climber->GetTopLimit(CLIMBER_TOP_ENC_1)) ? true : false) : true); climb = true; }               // FOR INSPECTION ONLY
+  if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? false : true); climb = true; }
 }
 //--------------------------------------------------------------------------------Vision---------
 void Robot::VisionPeriodic() {
@@ -87,7 +81,7 @@ void Robot::RobotInit() {
 
   lSpeed = rSpeed = 0.0;
 
-  climb = climberMoveDown = false;
+  climb = climberMoveDown = climberDelay = false;
   hoodState = false;
 
   PUT_BOOL("Tank", true);
@@ -156,6 +150,8 @@ void Robot::AutonomousPeriodic() {
 
 void Robot::TeleopInit() {
   climber->ResetEncoder();
+  counter = new Counter();
+  counter->Start();
 }
 
 void Robot::TeleopPeriodic() {
@@ -178,3 +174,15 @@ void Robot::TestPeriodic() {}
 int main() { return frc::StartRobot<Robot>(); }
 #endif
 //====================================================================================================================================================
+
+// if(!climber->GetTopLimit(CLIMBER_TOP_ENC_1)){
+  //   cantilt = true;
+  // }else{
+  //   cantilt = false;
+  // }
+
+  // if (control->ClimberTilt() && cantilt) {
+  //   climber->RunTilt(!climber->GetTiltState());
+  //   climb = true;
+  // }
+  //PUT_BOOL("Tilt back?", cantilt);

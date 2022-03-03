@@ -18,15 +18,15 @@
 #define SHOOTER_SPEED_TOP 0.7
 #define SHOOTER_SPEED_BOT 0.35
 
-#define SHOOTER_RPM_TOP 1000
-#define SHOOTER_RPM_BOT 1000
+#define SHOOTER_RPM_TOP 14000
+#define SHOOTER_RPM_BOT 7000
 
 #define SHOOTER_SPEED_TOP_AUTO 0.7
 #define SHOOTER_SPEED_BOT_AUTO 0.35
 
-#define CLIMBER_TOP_ENC_1 65000
-#define CLIMBER_TOP_ENC_2 80000//60000
-#define CLIMBER_BOT_ENC 0
+#define CLIMBER_TOP_ENC_1 75000
+#define CLIMBER_TOP_ENC_2 85000//60000
+#define CLIMBER_BOT_ENC 500
 
 #define PUT_BOOL(name,val) frc::SmartDashboard::PutBoolean(name,val)
 #define GET_BOOL(name,val) frc::SmartDashboard::GetBoolean(name,val)
@@ -69,6 +69,7 @@ private:
   Climber *climber;
   bool climb;
   bool climberMoveDown;
+  bool climberDelay;
   
   Shooter *shooter;
   bool hoodState;
@@ -89,4 +90,5 @@ private:
   bool shooterloaded;
   bool shot;
   bool shoot1, back1, turn1, back2, turn2, forward1, shoot2;
+  bool cantilt = true;
 };
