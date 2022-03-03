@@ -77,19 +77,22 @@ void Robot::RobotInit() {
   vision = new Vision();
 
   driveTrain->CalibrateGyro();
-  climber->ResetEncoder();
 
   lSpeed = rSpeed = 0.0;
+  numBalls = 0;
 
   climb = climberMoveDown = climberDelay = false;
   hoodState = false;
 
   PUT_BOOL("Tank", true);
   PUT_BOOL("Ramp", false);
+  
   PUT_NUM("HighSpeed", SHOOTER_SPEED_TOP);
   PUT_NUM("LowSpeed", SHOOTER_SPEED_BOT);
+
   PUT_NUM("Auto", 2);
   PUT_BOOL("AutoHigh", true);
+  PUT_NUM("AutoDelay", 0.0);
 }
 
 void Robot::AutonomousInit() {
@@ -101,11 +104,14 @@ void Robot::AutonomousInit() {
 
   shooterloaded = loaded = shot = moveNow = false;
 
-  done = shoot1 = back1 = forward1 = shoot2 = false; // CURRENT AUTO ORDER
+  shoot1 = back1 = forward1 = shoot2 = false; // CURRENT AUTO ORDER
   turn1 = back2 = turn2 = false;
 }
-void Robot::Auto(int level, bool high) {
-  if (!shoot1) {
+void Robot::Auto(int level, bool high, double delaySeconds) {
+  if (!delayed) {
+    if (counter->SecondsPassed(delaySeconds)) { counter->ResetAll(); delayed = true; }
+  }
+  else if (delayed && !shoot1) {
     shooter->RunHood(high);   shooter->RunShooter((high) ? SHOOTER_SPEED_TOP_AUTO : SHOOTER_SPEED_BOT_AUTO);
     conveyor->RunHold(true);
     if (!shooterloaded && counter->SecondsPassed(1.5)) { conveyor->RunMotor(0.8); shooterloaded = true; }
@@ -145,13 +151,11 @@ void Robot::Auto(int level, bool high) {
   }
 }
 void Robot::AutonomousPeriodic() {
-  Auto(GET_NUM("Auto", 2), GET_BOOL("AutoHigh",true));
+  Auto(GET_NUM("Auto", 2), GET_BOOL("AutoHigh",true), GET_NUM("AutoDelay",0.0));
 }
 
 void Robot::TeleopInit() {
   climber->ResetEncoder();
-  counter = new Counter();
-  counter->Start();
 }
 
 void Robot::TeleopPeriodic() {

@@ -79,16 +79,17 @@ private:
   Vision *vision;
   
   Conveyor *conveyor;
+  int numBalls;
   //------------------------------------------------
   
   Counter *counter;
   
   //------------------------------------------------
   
-  bool done;
+  bool delayed;
   bool moveNow;
   bool shooterloaded;
   bool shot;
   bool shoot1, back1, turn1, back2, turn2, forward1, shoot2;
-  bool cantilt = true;
+  // bool cantilt = true;
 };
