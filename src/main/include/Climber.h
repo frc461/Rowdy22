@@ -31,7 +31,5 @@ private:
 
     frc::Solenoid *tilt, *grab, *brake;
 
-    frc::DigitalInput *topLimit, *botLimit;
-
     frc::Encoder *encoder;
 };

@@ -32,6 +32,9 @@ public:
     bool ClimberTilt();
     bool ClimberGrab();
 
+    bool ClimberOverrideRetract();
+    bool ClimberResetEncoder();
+
 private:
     class PressOnce {
     public:

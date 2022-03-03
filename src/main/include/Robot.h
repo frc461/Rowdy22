@@ -18,10 +18,14 @@
 #define SHOOTER_SPEED_TOP 0.7
 #define SHOOTER_SPEED_BOT 0.35
 
+#define SHOOTER_RPM_TOP 1000
+#define SHOOTER_RPM_BOT 1000
+
 #define SHOOTER_SPEED_TOP_AUTO 0.7
 #define SHOOTER_SPEED_BOT_AUTO 0.35
 
-#define CLIMBER_TOP_ENC 500
+#define CLIMBER_TOP_ENC_1 65000
+#define CLIMBER_TOP_ENC_2 80000//60000
 #define CLIMBER_BOT_ENC 0
 
 #define PUT_BOOL(name,val) frc::SmartDashboard::PutBoolean(name,val)
@@ -64,6 +68,7 @@ private:
 
   Climber *climber;
   bool climb;
+  bool climberMoveDown;
   
   Shooter *shooter;
   bool hoodState;

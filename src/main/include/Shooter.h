@@ -14,6 +14,8 @@ public:
   
   bool GetHoodState();
   
+  double GetShooterSpeed();
+  
 private:
   WPI_TalonFX *shooter;
 

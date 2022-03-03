@@ -34,6 +34,8 @@ void Robot::IntakeConveyorPeriodic()  {
 //--------------------------------------------------------------------------Shooter-----
 void Robot::ShooterPeriodic() {
   shooter->RunShooter((control->Shooter()) ? (hoodState) ? GET_NUM("HighSpeed", SHOOTER_SPEED_TOP) : GET_NUM("LowSpeed", SHOOTER_SPEED_BOT) : 0.0);
+
+  PUT_BOOL("ShooterLoadedUp", (shooter->GetShooterSpeed() >= ((hoodState) ? SHOOTER_RPM_TOP : SHOOTER_RPM_BOT)));
   
   if (control->ShooterHood()) { 
     hoodState = (hoodState) ? false : true;
@@ -44,11 +46,21 @@ void Robot::ShooterPeriodic() {
 //-----------------------------------------------------------------------------Climber--
 void Robot::ClimberPeriodic() {
   double speed = 1.0;
-  climber->RunLeft((control->ClimberExtend() && !climber->GetBotLimit(CLIMBER_BOT_ENC)) ? speed : (control->ClimberRetract() && !climber->GetTopLimit(CLIMBER_TOP_ENC)) ? -speed : 0.0);
-  climber->RunRight((control->ClimberExtend() && !climber->GetBotLimit(CLIMBER_BOT_ENC)) ? -speed : (control->ClimberRetract() && !climber->GetTopLimit(CLIMBER_TOP_ENC)) ? speed : 0.0);
-  climber->RunBrake(!((!control->ClimberExtend() && !control->ClimberRetract()) || (climber->GetBotLimit(CLIMBER_BOT_ENC) && !control->ClimberRetract()) || (climber->GetTopLimit(CLIMBER_TOP_ENC) && !control->ClimberExtend())));
-
+  climber->RunLeft((control->ClimberExtend() && !climber->GetTopLimit(climber->GetTiltState() ? CLIMBER_TOP_ENC_2 : CLIMBER_TOP_ENC_1)) ? speed : (control->ClimberRetract() && !climber->GetBotLimit(CLIMBER_BOT_ENC)) ? -speed : 0.0);
+  climber->RunRight((control->ClimberExtend() && !climber->GetTopLimit(climber->GetTiltState() ? CLIMBER_TOP_ENC_2 : CLIMBER_TOP_ENC_1)) ? -speed : (control->ClimberRetract() && !climber->GetBotLimit(CLIMBER_BOT_ENC)) ? speed : 0.0);
+  climber->RunBrake(!((!control->ClimberExtend() && !control->ClimberRetract() && !control->ClimberOverrideRetract() && !climberMoveDown) || (climber->GetBotLimit(CLIMBER_BOT_ENC) && !control->ClimberExtend() && !control->ClimberOverrideRetract()) || (climber->GetTopLimit((climber->GetTiltState()) ? CLIMBER_TOP_ENC_2 : CLIMBER_TOP_ENC_1)) && !control->ClimberRetract()));
+  
   if (control->ClimberExtend() || control->ClimberRetract()) climb = true;
+
+  if (control->ClimberOverrideRetract()) { climber->RunLeft(-speed); climber->RunRight(speed); }
+  if (control->ClimberResetEncoder()) { climber->ResetEncoder(); }
+
+  // if (!climber->GetTiltState() && (-climber->GetEncoder()) >= CLIMBER_TOP_ENC_1) {     // Auto move down
+  //   climber->RunLeft(speed); climber->RunRight(-speed);
+  //   climberMoveDown = true;
+  // } else climberMoveDown = false;
+
+  std::cout << climber->GetEncoder() << std::endl;
 
   if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? false : true); climb = true; }
   if (control->ClimberGrab()) { climber->RunGrab((climber->GetGrabState()) ? false : true); climb = true; }
@@ -68,14 +80,14 @@ void Robot::RobotInit() {
   intake = new Intake();
   climber = new Climber();
   conveyor = new Conveyor();
-  //vision = new Vision();
+  vision = new Vision();
 
   driveTrain->CalibrateGyro();
   climber->ResetEncoder();
 
   lSpeed = rSpeed = 0.0;
 
-  climb = false;
+  climb = climberMoveDown = false;
   hoodState = false;
 
   PUT_BOOL("Tank", true);
@@ -143,6 +155,7 @@ void Robot::AutonomousPeriodic() {
 }
 
 void Robot::TeleopInit() {
+  climber->ResetEncoder();
 }
 
 void Robot::TeleopPeriodic() {

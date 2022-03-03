@@ -8,9 +8,6 @@ Climber::Climber() {
     grab = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 9);
     brake = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 11);
 
-    topLimit = new frc::DigitalInput(6);
-    botLimit = new frc::DigitalInput(7);
-
     encoder = new frc::Encoder(8,9);
 }
 
@@ -21,8 +18,8 @@ void Climber::RunGrab(bool dir) { grab->Set(dir); }
 void Climber::RunTilt(bool dir) { tilt->Set(dir); }
 void Climber::RunBrake(bool dir) { brake->Set(dir); }
 
-bool Climber::GetTopLimit(double enc) { return fabs(GetEncoder()) >= enc; }
-bool Climber::GetBotLimit(double enc) { return fabs(GetEncoder()) <= enc; }
+bool Climber::GetTopLimit(double enc) { return (GetEncoder()) >= enc; }
+bool Climber::GetBotLimit(double enc) { return (GetEncoder()) <= enc; }
 
 bool Climber::GetGrabState() { return grab->Get(); }
 bool Climber::GetTiltState() { return tilt->Get(); }
