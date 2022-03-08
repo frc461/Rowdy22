@@ -15,10 +15,15 @@ public:
     void RunHold(bool dir);
 
     bool GetBallSensorState(bool top);
+    
+    double GetNumBalls();
 
 private:
     WPI_TalonSRX *motor;
     frc::Solenoid *hold;
 
     frc::DigitalInput *topSensor, *bottomSensor;
+    
+    int nBalls;
+    bool out, in;
 };
