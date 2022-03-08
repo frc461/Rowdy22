@@ -15,13 +15,13 @@
 #include "Counter.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#define SHOOTER_SPEED_TOP 0.7
+#define SHOOTER_SPEED_TOP 0.65
 #define SHOOTER_SPEED_BOT 0.35
 
 #define SHOOTER_RPM_TOP 14000
 #define SHOOTER_RPM_BOT 7000
 
-#define SHOOTER_SPEED_TOP_AUTO 0.7
+#define SHOOTER_SPEED_TOP_AUTO 0.65
 #define SHOOTER_SPEED_BOT_AUTO 0.35
 
 #define CLIMBER_TOP_ENC_1 75000
@@ -55,7 +55,7 @@ public:
   void ClimberPeriodic();
   void VisionPeriodic();
   
-  void Auto(int level, bool high);
+  void Auto(int level, bool high, double delay);
 
 private:
   //------------------------------------------------

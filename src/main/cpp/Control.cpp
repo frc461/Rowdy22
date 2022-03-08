@@ -3,7 +3,6 @@
 Control::Control() {
     oper = new frc::Joystick(1);
     driver = new frc::Joystick(2);
-    
     hood = new PressOnce();
     tilt = new PressOnce();
     grab = new PressOnce();
