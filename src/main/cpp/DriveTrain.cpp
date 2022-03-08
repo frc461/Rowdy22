@@ -65,5 +65,5 @@ void DriveTrain::ResetTurnVars() {
 }
 
 void DriveTrain::MoveStraight(double power) {
-    Arcade(power, -(GetAngle() / 7.5));
+    Arcade(power, -(GetAngle() / 5.0));
 }
