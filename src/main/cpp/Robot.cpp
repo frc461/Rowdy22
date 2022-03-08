@@ -56,8 +56,8 @@ void Robot::ClimberPeriodic() {
   if (control->ClimberResetEncoder()) { climber->ResetEncoder(); }
 
   if (control->ClimberGrab()) { climber->RunGrab((climber->GetGrabState()) ? false : true); climb = true; }
-  // if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? ((climber->GetTopLimit(CLIMBER_TOP_ENC_1)) ? true : false) : true); climb = true; }               // FOR INSPECTION ONLY
   if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? false : true); climb = true; }
+  // if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? ((climber->GetTopLimit(CLIMBER_TOP_ENC_1)) ? true : false) : true); climb = true; }               // FOR INSPECTION ONLY
 }
 //--------------------------------------------------------------------------------Vision---------
 void Robot::VisionPeriodic() {
