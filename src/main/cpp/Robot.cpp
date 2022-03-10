@@ -24,12 +24,14 @@ void Robot::DriveTrainPeriodic() {
 //-------------------------------------------------------------------------Intake-----
 void Robot::IntakeConveyorPeriodic()  {
   double speed = 0.8;
-  intake->RunMotor((control->IntakeConveyor()) ? speed : (control->IntakeConveyorR()) ? -speed : 0.0);
+  intake->RunMotor((control->IntakeConveyor()) ? ((conveyor->GetNumBalls()<=2) ? speed : -speed) : (control->IntakeConveyorR()) ? -speed : 0.0);
   conveyor->RunMotor((control->IntakeConveyor() || control->Conveyor()) ? speed : (control->IntakeConveyorR()) ? -speed : 0.0);
 
   conveyor->RunHold(control->Conveyor() && control->Shooter());
 
   if (control->IntakePush()) { intake->RunPush((intake->GetPushState()) ? false : true); }
+
+  PUT_NUM("NumBalls", conveyor->GetNumBalls());
 }
 //--------------------------------------------------------------------------Shooter-----
 void Robot::ShooterPeriodic() {
@@ -58,11 +60,12 @@ void Robot::ClimberPeriodic() {
   if (control->ClimberGrab()) { climber->RunGrab((climber->GetGrabState()) ? false : true); climb = true; }
   if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? false : true); climb = true; }
   // if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? ((climber->GetTopLimit(CLIMBER_TOP_ENC_1)) ? true : false) : true); climb = true; }               // FOR INSPECTION ONLY
+
+  PUT_NUM("CLIMBER",climber->GetEncoder());
 }
 //--------------------------------------------------------------------------------Vision---------
 void Robot::VisionPeriodic() {
   PUT_NUM("Gyro",driveTrain->GetAngle());
-  PUT_NUM("CLIMBER",climber->GetEncoder());
 }
 //-----------------------------------------------------------------------------------------
 //====================================================================================================================================================
@@ -104,8 +107,7 @@ void Robot::AutonomousInit() {
 
   shooterloaded = loaded = shot = moveNow = false;
 
-  shoot1 = back1 = forward1 = shoot2 = false; // CURRENT AUTO ORDER
-  turn1 = back2 = turn2 = false;
+  shoot1 = back1 = forward1 = shoot2 = turn1 = back2 = turn2 = false;
 }
 void Robot::Auto(int level, bool high, double delaySeconds) {
   if (!delayed) {
@@ -114,7 +116,7 @@ void Robot::Auto(int level, bool high, double delaySeconds) {
   else if (delayed && !shoot1) {
     shooter->RunHood(high);   shooter->RunShooter((high) ? SHOOTER_SPEED_TOP_AUTO : SHOOTER_SPEED_BOT_AUTO);
     conveyor->RunHold(true);
-    if (!shooterloaded && counter->SecondsPassed(1.5)) { conveyor->RunMotor(0.8); shooterloaded = true; }
+    if (!shooterloaded && shooter->GetShooterSpeed() >= ((high) ? SHOOTER_RPM_TOP : SHOOTER_RPM_BOT)) { conveyor->RunMotor(0.8); shooterloaded = true; }
     if (!loaded) { loaded = conveyor->GetBallSensorState(true); }
     if (!shot && loaded && !conveyor->GetBallSensorState(true)) {
       counter->ResetAll();
@@ -132,14 +134,24 @@ void Robot::Auto(int level, bool high, double delaySeconds) {
       intake->RunPush(true); intake->RunMotor(0.8);
       conveyor->RunMotor(0.8);
     }
-    if (driveTrain->MoveDistance((level==2) ? -110.0 : -90.0)) {
+    if (driveTrain->MoveDistance((level==2) ? -120.0 : (turn1) ? -110 : -100)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       intake->RunPush(false); intake->RunMotor(0.0);
+      back2 = turn1;
+      turn1 = false;
       back1 = true;
     }
   }
-  else if (back1 && !forward1 && level != 1) {
-    if (driveTrain->MoveDistance((level==2) ? 100.0 : 80.0)) {
+  else if (back1 && !turn1) {
+    if (level != 4) turn1 = true;
+    else if (driveTrain->Turn((back2) ? -60.0 : 126.5)) {
+      turn1 = true;
+      back1 = false;
+      turn2 = back2;
+    }
+  }
+  else if (turn2 && !forward1 && level != 1) {
+    if (driveTrain->MoveDistance((level==2) ? 110.0 : 90.0)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       forward1 = true;
     }
@@ -164,6 +176,7 @@ void Robot::TeleopPeriodic() {
   ShooterPeriodic();
   ClimberPeriodic();
   VisionPeriodic();
+  // driveTrain->MoveStraight(control->LeftY());
 }
 
 void Robot::RobotPeriodic() {}
@@ -178,15 +191,3 @@ void Robot::TestPeriodic() {}
 int main() { return frc::StartRobot<Robot>(); }
 #endif
 //====================================================================================================================================================
-
-// if(!climber->GetTopLimit(CLIMBER_TOP_ENC_1)){
-  //   cantilt = true;
-  // }else{
-  //   cantilt = false;
-  // }
-
-  // if (control->ClimberTilt() && cantilt) {
-  //   climber->RunTilt(!climber->GetTiltState());
-  //   climb = true;
-  // }
-  //PUT_BOOL("Tilt back?", cantilt);
