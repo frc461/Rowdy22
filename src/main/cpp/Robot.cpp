@@ -133,13 +133,14 @@ void Robot::Auto(int level, bool high, double delaySeconds) {
     if (driveTrain->MoveDistance((level==2) ? -110.0 : -90.0)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       intake->RunPush(false); intake->RunMotor(0.0);
-      if (turn1) { back2 = turn1 = true; }
+      if (turn1) { back2 = true; turn1 = false; }
       back1 = true;
     }
   }
   else if (back1 && !turn1) {
     if (level != 4) { turn1 = turn2 = true; }
     else if (driveTrain->Turn((back2) ? -90 : 90)) {
+      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       back1 = false;
       if (back2) { turn2 = true; }
       turn1 = true;
