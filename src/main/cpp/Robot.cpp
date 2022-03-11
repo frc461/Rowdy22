@@ -40,6 +40,7 @@ void Robot::ShooterPeriodic() {
   shooter->RunShooter((control->Shooter()) ? (hoodState) ? GET_NUM("HighSpeed", SHOOTER_SPEED_TOP) : GET_NUM("LowSpeed", SHOOTER_SPEED_BOT) : 0.0);
 
   PUT_BOOL("ShooterLoadedUp", (shooter->GetShooterSpeed() >= ((hoodState) ? SHOOTER_RPM_TOP : SHOOTER_RPM_BOT)));
+  PUT_NUM("OK", shooter->GetShooterSpeed());
   
   if (control->ShooterHood()) { 
     hoodState = (hoodState) ? false : true;
@@ -61,7 +62,7 @@ void Robot::ClimberPeriodic() {
 
   if (control->ClimberGrab()) { climber->RunGrab((climber->GetGrabState()) ? false : true); climb = true; }
   if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? false : true); climb = true; }
-  // if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? ((climber->GetTopLimit(CLIMBER_TOP_ENC_1)) ? true : false) : true); climb = true; }               // FOR INSPECTION ONLY
+  // if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? ((climber->GetTopLimit(CLIMBER_TOP_ENC_1)) ? true : false) : true); climb = true; }         // FOR INSPECTION ONLY
 
   PUT_NUM("CLIMBER",climber->GetEncoder());
 }
@@ -135,7 +136,7 @@ void Robot::Auto(int level, bool high, double delaySeconds) {
       intake->RunPush(true); intake->RunMotor(0.8);
       conveyor->RunMotor(0.8);
     }
-    if (driveTrain->MoveDistance((level==2) ? -120.0 : (turn1) ? -110 : -100)) {
+    if (driveTrain->MoveDistance((level==2) ? -120.0 : (turn1) ? -100 : -110)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       intake->RunPush(false); intake->RunMotor(0.0);
       if (turn1) { back2 = true; turn1 = false; }

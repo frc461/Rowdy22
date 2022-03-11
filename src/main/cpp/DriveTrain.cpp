@@ -43,7 +43,7 @@ void DriveTrain::CalibrateGyro() { gyro->Calibrate(); }
 bool DriveTrain::MoveDistance(double distance) {
     double power = std::min(movePID->Get(fabs(GetEncoderL()), fabs(distance * ENC_PER_INCH)), 0.6);
     power *= (distance < 0) ? -1 : 1;
-    Tank(power, -power);
+    MoveStraight(power);//Tank(power, -power);
     
     return (fabs(GetEncoderL()) >= (fabs(distance * ENC_PER_INCH) / 4)) && (fabs(GetLeftVelocity())==0);
 }
@@ -65,5 +65,5 @@ void DriveTrain::ResetTurnVars() {
 }
 
 void DriveTrain::MoveStraight(double power) {
-    Arcade(power, -(GetAngle() / 4.0));
+    Arcade(power, -(GetAngle() / 5.0));
 }
