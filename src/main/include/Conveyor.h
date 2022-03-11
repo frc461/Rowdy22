@@ -16,7 +16,7 @@ public:
 
     bool GetBallSensorState(bool top);
     
-    double GetNumBalls();
+    int GetNumBalls();
 
 private:
     WPI_TalonSRX *motor;

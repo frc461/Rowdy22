@@ -16,10 +16,12 @@ void Conveyor::RunHold(bool dir) { hold->Set(dir); }
 
 bool Conveyor::GetBallSensorState(bool top) { return (top) ? !topSensor->Get() : !bottomSensor->Get(); }
 
-double Conveyor::GetNumBalls() {
+int Conveyor::GetNumBalls() {
     if (!in && GetBallSensorState(false)) { nBalls++; in = true; }
     else if (in && !GetBallSensorState(false)) { in = false; }
     
     if (!out && GetBallSensorState(true)) { out = true; }
     else if (out && !GetBallSensorState(true)) { nBalls--; out = false; }
+
+    return nBalls;
 }

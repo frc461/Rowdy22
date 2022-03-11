@@ -24,10 +24,12 @@ void Robot::DriveTrainPeriodic() {
 //-------------------------------------------------------------------------Intake-----
 void Robot::IntakeConveyorPeriodic()  {
   double speed = 0.8;
-  intake->RunMotor((control->IntakeConveyor()) ? ((conveyor->GetNumBalls()<=2) ? speed : -speed) : (control->IntakeConveyorR()) ? -speed : 0.0);
+  intake->RunMotor((control->IntakeConveyor()) ? speed : (control->IntakeConveyorR()) ? -speed : 0.0);
   conveyor->RunMotor((control->IntakeConveyor() || control->Conveyor()) ? speed : (control->IntakeConveyorR()) ? -speed : 0.0);
 
   conveyor->RunHold(control->Conveyor() && control->Shooter());
+
+  //((conveyor->GetNumBalls()<=2) ? speed : -speed)
 
   if (control->IntakePush()) { intake->RunPush((intake->GetPushState()) ? false : true); }
 
@@ -144,8 +146,8 @@ void Robot::Auto(int level, bool high, double delaySeconds) {
     if (level != 4) { turn1 = turn2 = true; }
     else if (driveTrain->Turn((back2) ? -90 : 90)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-      back1 = false;
       if (back2) { turn2 = true; }
+      else back1 = false;
       turn1 = true;
     }
   }
@@ -175,7 +177,6 @@ void Robot::TeleopPeriodic() {
   ShooterPeriodic();
   ClimberPeriodic();
   VisionPeriodic();
-  // driveTrain->MoveStraight(control->LeftY());
 }
 
 void Robot::RobotPeriodic() {}
