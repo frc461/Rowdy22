@@ -29,8 +29,6 @@ void Robot::IntakeConveyorPeriodic()  {
 
   conveyor->RunHold(control->Conveyor() && control->Shooter());
 
-  //((conveyor->GetNumBalls()<=2) ? speed : -speed)
-
   if (control->IntakePush()) { intake->RunPush((intake->GetPushState()) ? false : true); }
 
   PUT_NUM("NumBalls", conveyor->GetNumBalls());
@@ -40,7 +38,6 @@ void Robot::ShooterPeriodic() {
   shooter->RunShooter((control->Shooter()) ? (hoodState) ? GET_NUM("HighSpeed", SHOOTER_SPEED_TOP) : GET_NUM("LowSpeed", SHOOTER_SPEED_BOT) : 0.0);
 
   PUT_BOOL("ShooterLoadedUp", (shooter->GetShooterSpeed() >= ((hoodState) ? SHOOTER_RPM_TOP : SHOOTER_RPM_BOT)));
-  PUT_NUM("OK", shooter->GetShooterSpeed());
   
   if (control->ShooterHood()) { 
     hoodState = (hoodState) ? false : true;
