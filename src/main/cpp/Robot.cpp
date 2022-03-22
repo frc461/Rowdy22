@@ -29,8 +29,6 @@ void Robot::IntakeConveyorPeriodic()  {
 
   conveyor->RunHold(control->Conveyor() && control->Shooter());
 
-  //((conveyor->GetNumBalls()<=2) ? speed : -speed)
-
   if (control->IntakePush()) { intake->RunPush((intake->GetPushState()) ? false : true); }
 
   PUT_NUM("NumBalls", conveyor->GetNumBalls());
@@ -40,7 +38,6 @@ void Robot::ShooterPeriodic() {
   shooter->RunShooter((control->Shooter()) ? (hoodState) ? GET_NUM("HighSpeed", SHOOTER_SPEED_TOP) : GET_NUM("LowSpeed", SHOOTER_SPEED_BOT) : 0.0);
 
   PUT_BOOL("ShooterLoadedUp", (shooter->GetShooterSpeed() >= ((hoodState) ? SHOOTER_RPM_TOP : SHOOTER_RPM_BOT)));
-  PUT_NUM("OK", shooter->GetShooterSpeed());
   
   if (control->ShooterHood()) { 
     hoodState = (hoodState) ? false : true;
@@ -152,8 +149,21 @@ void Robot::Auto(int level, bool high, double delaySeconds) {
       if (nTimes == 1) while(true) {}
     }
   }
+<<<<<<< HEAD
   else if (back1 && !forward1 && level != 1) {
     if (driveTrain->MoveDistance((level==2) ? 100.0 : ((level==4 && shoot2) ? 110.0 : 80.0))) {
+=======
+  else if (back1 && !turn1) {
+    if (level != 4) { turn1 = turn2 = true; }
+    else if (driveTrain->Turn((back2) ? -90 : 90)) {
+      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
+      if (back2) { turn2 = true; } else back1 = false;
+      turn1 = true;
+    }
+  }
+  else if (turn1 && turn2 && !forward1 && level != 1) {
+    if (driveTrain->MoveDistance((level==2) ? 110.0 : ((level==4) ? 90.0 : 100.0))) {
+>>>>>>> 922e89037496124ae9546c36edf080559ca28c57
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       forward1 = true;
     }
