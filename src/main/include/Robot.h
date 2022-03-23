@@ -92,4 +92,5 @@ private:
   bool shot;
   bool shoot1, back1, turn1, back2, turn2, forward1, shoot2, shoot3;
   int nTimes;
+  bool thirdPickedUp;
 };

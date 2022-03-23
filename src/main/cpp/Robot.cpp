@@ -107,6 +107,7 @@ void Robot::AutonomousInit() {
   shooterloaded = loaded = shot = moveNow = false;
 
   nTimes = 0;
+  thirdPickedUp = false;
 
   delayed = shoot1 = back1 = forward1 = shoot2 = turn1 = back2 = turn2 = shoot3 = false;
 }
@@ -125,7 +126,7 @@ void Robot::Auto(int level, bool high, double delaySeconds) {
       shot = true;
     }
     if (moveNow && counter->SecondsPassed(1.0)) {
-      conveyor->RunMotor(0.0); conveyor->RunHold(false);
+      conveyor->RunHold(false);
       if (!shoot3) shoot1 = true;
     }
   }
@@ -141,37 +142,27 @@ void Robot::Auto(int level, bool high, double delaySeconds) {
     if (level != 1) {
       intake->RunPush(true); intake->RunMotor(0.8);
       conveyor->RunMotor(0.8);
+      if (level==4 && shoot2 && conveyor->GetBallSensorState(false)) conveyor->RunMotor(0.0);
+      PUT_BOOL("ok", conveyor->GetBallSensorState(false));
     }
-    if (driveTrain->MoveDistance((level==2) ? -110.0 : ((level==4 && shoot2) ? -250.0 : -90.0))) {
+
+    if (driveTrain->MoveDistance((level==2) ? -110.0 : ((level==4 && shoot2) ? -270.0 : -90.0))) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       intake->RunPush(false); intake->RunMotor(0.0);
       if (!(level==4 && shoot2)) back1 = true;
-      if (nTimes == 1) while(true) {}
+      else { shoot1 = turn1 = back1 = forward1 = shoot2 = true; }
     }
   }
-<<<<<<< HEAD
   else if (back1 && !forward1 && level != 1) {
     if (driveTrain->MoveDistance((level==2) ? 100.0 : ((level==4 && shoot2) ? 110.0 : 80.0))) {
-=======
-  else if (back1 && !turn1) {
-    if (level != 4) { turn1 = turn2 = true; }
-    else if (driveTrain->Turn((back2) ? -90 : 90)) {
-      driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-      if (back2) { turn2 = true; } else back1 = false;
-      turn1 = true;
-    }
-  }
-  else if (turn1 && turn2 && !forward1 && level != 1) {
-    if (driveTrain->MoveDistance((level==2) ? 110.0 : ((level==4) ? 90.0 : 100.0))) {
->>>>>>> 922e89037496124ae9546c36edf080559ca28c57
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       forward1 = true;
     }
   }
   else if (forward1 && !shoot2) {
     counter->ResetAll();
-    if (nTimes == 1) { turn1 = false; shoot3 = true; driveTrain->ResetTurnVars(); std::cout << "LMAOO" << std::endl; }
-    else { shoot1 = loaded = shot = shooterloaded = moveNow = false; back1 = turn1 = forward1 = false; }
+    if (nTimes == 1) { turn1 = false; shoot3 = true; driveTrain->ResetTurnVars(); }
+    else { shoot1 = loaded = shot = shooterloaded = moveNow = false; if (level==4) back1 = turn1 = forward1 = false; }
     nTimes++;
     shoot2 = true;
   }
@@ -240,7 +231,7 @@ if (!delayed) {
   }
   else if (back1 && !turn1) {
     if (level != 4) { turn1 = turn2 = true; }
-    else if (driveTrain->Turn((back2) ? -40 : 80)) {
+    else if (driveTrain->Turn((back2) ? ((forward1) ? -60 : -40) : 80)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       if (back2) { turn2 = true; }
       else back1 = false;
@@ -250,6 +241,7 @@ if (!delayed) {
   else if (turn1 && turn2 && !forward1 && level != 1) {
     if (driveTrain->MoveDistance((level==2) ? 100.0 : ((level==4) ? 100.0 : 80.0))) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
+      turn1 = false;
       forward1 = true;
     }
   }

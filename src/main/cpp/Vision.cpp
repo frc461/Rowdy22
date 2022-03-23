@@ -2,7 +2,7 @@
 
 Vision::Vision() {
     auto instance = nt::NetworkTableInstance::GetDefault();
-    limelight = instance.GetTable("limelight")->GetNumber("stream", 2);
+    limelight = instance.GetTable("limelight");//->GetNumber("stream", 2);
     
     // backCam = frc::CameraServer::StartAutomaticCapture("backCam", 0);
     // backCam->SetResolution(320,240);

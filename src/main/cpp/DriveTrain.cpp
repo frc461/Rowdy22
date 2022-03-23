@@ -41,7 +41,7 @@ void DriveTrain::ResetGyro() { gyro->Reset(); }
 void DriveTrain::CalibrateGyro() { gyro->Calibrate(); }
 
 bool DriveTrain::MoveDistance(double distance) {
-    double power = std::min(movePID->Get(fabs(GetEncoderL()), fabs(distance * ENC_PER_INCH)), 0.7);
+    double power = std::min(movePID->Get(fabs(GetEncoderL()), fabs(distance * ENC_PER_INCH)), 0.6);
     power *= (distance < 0) ? -1 : 1;
     MoveStraight(power);//Tank(power, -power);
     
