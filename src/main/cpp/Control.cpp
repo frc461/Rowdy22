@@ -17,7 +17,9 @@ void Control::VibrateDriver(double power) { driver->SetRumble(frc::GenericHID::R
 void Control::VibrateOper(double power) { oper->SetRumble(frc::GenericHID::RumbleType::kLeftRumble,power); driver->SetRumble(frc::GenericHID::RumbleType::kRightRumble,power); }
 
 bool Control::Shooter() { return oper->GetRawAxis(XboxAxisRightTrigger)>0.1; }
-bool Control::ShooterHood() { return hood->Get(oper->GetRawButton(XboxButtonA)); }
+bool Control::ShooterHoodUp() { return hood->Get(oper->GetRawButton(XboxButtonY)); }
+bool Control::ShooterHoodDown() { return hood->Get(oper->GetRawButton(XboxButtonA)); }
+bool Control::ShooterHoodMid() { return hood->Get(oper->GetRawButton(XboxButtonX)); }
 
 bool Control::IntakeConveyor() { return oper->GetRawButton(XboxButtonRightBumper); }
 bool Control::IntakeConveyorR() { return oper->GetRawButton(XboxButtonLeftBumper); }

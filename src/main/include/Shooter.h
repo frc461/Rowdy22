@@ -10,7 +10,7 @@ public:
   ~Shooter();
   
   void RunShooter(double speed);
-  void RunHood(bool dir);
+  void RunHood(int dir);
   
   bool GetHoodState();
   
@@ -19,5 +19,6 @@ public:
 private:
   WPI_TalonFX *shooter;
 
-  frc::Solenoid *hood;
+  frc::Solenoid *hoodTall;
+  frc::Solenoid *hoodShort;
 };

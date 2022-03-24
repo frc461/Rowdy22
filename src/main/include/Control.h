@@ -19,7 +19,9 @@ public:
     void VibrateOper(double power);
 
     bool Shooter();
-    bool ShooterHood();
+    bool ShooterHoodUp();
+    bool ShooterHoodDown();
+    bool ShooterHoodMid();
 
     bool IntakeConveyor();
     bool IntakeConveyorR();

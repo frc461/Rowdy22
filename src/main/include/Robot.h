@@ -72,7 +72,7 @@ private:
   bool climberDelay;
   
   Shooter *shooter;
-  bool hoodState;
+  int hoodState;
   bool loaded;
   double distanceToMove;
   

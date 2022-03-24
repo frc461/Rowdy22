@@ -35,15 +35,26 @@ void Robot::IntakeConveyorPeriodic()  {
 }
 //--------------------------------------------------------------------------Shooter-----
 void Robot::ShooterPeriodic() {
-  shooter->RunShooter((control->Shooter()) ? (hoodState) ? GET_NUM("HighSpeed", SHOOTER_SPEED_TOP) : GET_NUM("LowSpeed", SHOOTER_SPEED_BOT) : 0.0);
+  shooter->RunShooter((control->Shooter()) ? ((hoodState > 0) ? GET_NUM("HighSpeed", SHOOTER_SPEED_TOP) : GET_NUM("LowSpeed", SHOOTER_SPEED_BOT)) : 0.0);
 
   PUT_BOOL("ShooterLoadedUp", (shooter->GetShooterSpeed() >= ((hoodState) ? SHOOTER_RPM_TOP : SHOOTER_RPM_BOT)));
   
-  if (control->ShooterHood()) { 
-    hoodState = (hoodState) ? false : true;
-    climb = false;
-  }
-  shooter->RunHood((climb) ? true : hoodState);
+  if (control->ShooterHoodUp() ) { hoodState = 1; }
+  if (control->ShooterHoodDown() ) { hoodState = 0; }
+  if (control->ShooterHoodMid() ) { hoodState = 2; }
+
+  // TODO
+  // Momentarily go to high before going to mid
+  // Set a 3rd shooter speed
+
+  // if (control->ShooterHood()) { 
+  //   hoodState = (hoodState) ? false : true;
+  //   climb = false;
+  // }
+  // shooter->RunHood(hoodState);
+
+  shooter->RunHood(hoodState);
+  PUT_NUM("HoodState", hoodState);
 }
 //-----------------------------------------------------------------------------Climber--
 void Robot::ClimberPeriodic() {
