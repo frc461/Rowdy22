@@ -6,6 +6,8 @@
 
 #include <frc/DigitalInput.h>
 
+#include <iostream>
+
 class Conveyor{
 public:
     Conveyor();
@@ -26,4 +28,5 @@ private:
     
     int nBalls;
     bool out, in;
+    int direction;
 };

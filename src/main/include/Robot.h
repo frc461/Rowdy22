@@ -17,11 +17,12 @@
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 #define SHOOTER_SPEED_TOP 0.65
 #define SHOOTER_SPEED_BOT 0.35
+#define SHOOTER_SPEED_MID 1.00
 
 #define SHOOTER_RPM_TOP 13500
 #define SHOOTER_RPM_BOT 6700
 
-#define SHOOTER_SPEED_TOP_AUTO 0.65
+#define SHOOTER_SPEED_TOP_AUTO 0.69
 #define SHOOTER_SPEED_BOT_AUTO 0.35
 
 #define CLIMBER_TOP_ENC_1 75000
@@ -54,8 +55,10 @@ public:
   void ShooterPeriodic();
   void ClimberPeriodic();
   void VisionPeriodic();
+
+  bool WiggleHood();
   
-  void Auto(int level, bool high, double delay);
+  void Auto(int level, int hood, double delay);
 
 private:
   //------------------------------------------------
@@ -74,7 +77,7 @@ private:
   Shooter *shooter;
   int hoodState;
   bool loaded;
-  double distanceToMove;
+  bool toMid;
   
   Vision *vision;
   

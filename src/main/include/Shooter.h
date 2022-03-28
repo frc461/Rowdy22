@@ -4,10 +4,14 @@
 
 #include <frc/Solenoid.h>
 
+#include <Counter.h>
+
 class Shooter {
 public:
   Shooter();
   ~Shooter();
+
+  Counter *hoodCounter;
   
   void RunShooter(double speed);
   void RunHood(int dir);
