@@ -7,7 +7,7 @@ void Robot::DriveTrainPeriodic() {
 
   PUT_NUM("Gyro",driveTrain->GetAngle());
   
-  if (t) {
+  if (t && !aim) {
     if (driveTrain->GetLeftVelocity() > 7500 || !ramp) {
       driveTrain->Tank(-control->LeftY(), control->RightY());
     }
@@ -20,7 +20,7 @@ void Robot::DriveTrainPeriodic() {
     driveTrain->Tank(-control->LeftY(),control->RightY());
   }
   else {
-    driveTrain->Arcade(-control->LeftY(),control->RightX());
+    if (!aim) driveTrain->Arcade(-control->LeftY(),control->RightX());
   }
 }
 //-------------------------------------------------------------------------Intake-----
@@ -85,7 +85,15 @@ void Robot::ClimberPeriodic() {
 }
 //--------------------------------------------------------------------------------Vision---------
 void Robot::VisionPeriodic() {
-  vision->SetLimelightState(control->Shooter(), control->Shooter());
+  if (control->Aim()) {
+    vision->SetLimelightState(control->Aim(), control->Aim());
+    
+    double p = aimPID->Get(vision->GetValues().x, 0.0);
+    double power = (p<0) ? std::max(p, -0.6) : std::min(p, 0.6);
+    driveTrain->Arcade(0.0, power);
+    
+    aim = true;
+  } else { aimPID->Reset(); aim = false; }
 }
 //-----------------------------------------------------------------------------------------
 //====================================================================================================================================================
@@ -98,6 +106,7 @@ void Robot::RobotInit() {
   climber = new Climber();
   conveyor = new Conveyor();
   vision = new Vision();
+  aimPID = new PID(0.02, 0.0, 0.0, "aim");
 
   counter = new Counter();
   counter->Start();
@@ -218,7 +227,6 @@ int main() { return frc::StartRobot<Robot>(); }
 //====================================================================================================================================================
 
 /*
-
 if (!delayed) {
     if (counter->SecondsPassed(delaySeconds)) { counter->ResetAll(); delayed = true; }
   }
@@ -254,8 +262,7 @@ if (!delayed) {
     if (level != 4) { turn1 = turn2 = true; }
     else if (driveTrain->Turn((back2) ? ((forward1) ? -60 : -40) : 80)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-      if (back2) { turn2 = true; }
-      else back1 = false;
+      if (back2) { turn2 = true; } else back1 = false;
       turn1 = true;
     }
   }

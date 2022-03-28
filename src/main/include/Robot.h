@@ -80,6 +80,8 @@ private:
   bool toMid;
   
   Vision *vision;
+  PID *aimPID;
+  bool aim;
   
   Conveyor *conveyor;
   int numBalls;
