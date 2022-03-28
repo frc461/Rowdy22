@@ -10,8 +10,6 @@ class Shooter {
 public:
   Shooter();
   ~Shooter();
-
-  Counter *hoodCounter;
   
   void RunShooter(double speed);
   void RunHood(int dir);

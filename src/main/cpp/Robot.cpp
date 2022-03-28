@@ -33,10 +33,10 @@ void Robot::IntakeConveyorPeriodic()  {
 
   if (control->IntakePush()) { intake->RunPush((intake->GetPushState()) ? false : true); }
 
-  //PUT_NUM("NumBalls", conveyor->GetNumBalls());
+  PUT_NUM("NumBalls", conveyor->GetNumBalls());
   PUT_BOOL("poko", conveyor->GetBallSensorState(false));
 }
-
+//--------------------------------------------------------------------------Shooter-----
 bool Robot::WiggleHood() {
   shooter->RunHood(0);
   if (counter->SecondsPassed(0.1)) { 
@@ -45,7 +45,6 @@ bool Robot::WiggleHood() {
   }
   return false;
 }
-//--------------------------------------------------------------------------Shooter-----
 void Robot::ShooterPeriodic() {
   // shooter->RunShooter((control->Shooter()) ? ((hoodState > 0) ? GET_NUM("HighSpeed", SHOOTER_SPEED_TOP) : GET_NUM("LowSpeed", SHOOTER_SPEED_BOT)) : 0.0);
   shooter->RunShooter((control->Shooter()) ? ((hoodState==1) ? GET_NUM("HighSpeed", SHOOTER_SPEED_TOP) : ((hoodState==2) ? GET_NUM("MidSpeed", SHOOTER_SPEED_TOP) : GET_NUM("LowSpeed", SHOOTER_SPEED_BOT))) : 0.0 );
@@ -59,9 +58,7 @@ void Robot::ShooterPeriodic() {
     climb = false;
   }
 
-  if (toMid) {
-    if (WiggleHood()) { counter->ResetAll(); toMid = false; }
-  }
+  if (toMid) if (WiggleHood()) { counter->ResetAll(); toMid = false; }
   else shooter->RunHood((climb) ? 1 : hoodState);
 }
 //-----------------------------------------------------------------------------Climber--
@@ -79,7 +76,6 @@ void Robot::ClimberPeriodic() {
 
   if (control->ClimberGrab()) { climber->RunGrab((climber->GetGrabState()) ? false : true); climb = true; }
   if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? false : true); climb = true; }
-  // if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? ((climber->GetTopLimit(CLIMBER_TOP_ENC_1)) ? true : false) : true); climb = true; }         // FOR INSPECTION ONLY
 
   PUT_NUM("CLIMBER",climber->GetEncoder());
 }
@@ -116,8 +112,7 @@ void Robot::RobotInit() {
   lSpeed = rSpeed = 0.0;
 
   climb = climberMoveDown = climberDelay = false;
-  hoodState = false;
-  toMid = false;
+  hoodState = toMid = false;
 
   PUT_BOOL("Tank", true);
   PUT_BOOL("Ramp", false);

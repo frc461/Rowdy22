@@ -40,32 +40,24 @@ void DriveTrain::ResetEncoder() { leftEncoder->Reset(); rightEncoder->Reset(); }
 void DriveTrain::ResetGyro() { gyro->Reset(); }
 void DriveTrain::CalibrateGyro() { gyro->Calibrate(); }
 
+void DriveTrain::MoveStraight(double power) {
+    Arcade(power, -(GetAngle() / 6.0));
+}
+
 bool DriveTrain::MoveDistance(double distance) {
     double power = std::min(movePID->Get(fabs(GetEncoderL()), fabs(distance * ENC_PER_INCH)), 0.6);
     power *= (distance < 0) ? -1 : 1;
-    MoveStraight(power);//Tank(power, -power);
+    MoveStraight(power);
     
     return (fabs(GetEncoderL()) >= (fabs(distance * ENC_PER_INCH) / 4)) && (fabs(GetLeftVelocity())==0);
 }
-void DriveTrain::ResetMoveVars() {
-    ResetEncoder();
-    movePID->Reset();
-}
+void DriveTrain::ResetMoveVars() { ResetEncoder(); movePID->Reset(); }
 
 bool DriveTrain::Turn(double angle) {
     double speed = std::min(turnPID->Get(fabs(GetAngle()), fabs(angle)), 0.7);
     speed *= (angle<0) ? -1 : 1;
     Tank(speed, speed);
 
-    std::cout << speed << std::endl;
-
     return (fabs(GetAngle()) >= (fabs(angle)/4.0)) && (fabs(GetLeftVelocity())==0);
 }
-void DriveTrain::ResetTurnVars() {
-    ResetGyro();
-    turnPID->Reset();
-}
-
-void DriveTrain::MoveStraight(double power) {
-    Arcade(power, -(GetAngle() / 6.0));
-}
+void DriveTrain::ResetTurnVars() { ResetGyro(); turnPID->Reset(); }
