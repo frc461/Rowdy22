@@ -3,6 +3,7 @@
 #include <ctre/Phoenix.h>
 
 #include <frc/Solenoid.h>
+#include <frc/SmartDashboard/SmartDashboard.h>
 
 #include "PID.h"
 
@@ -20,8 +21,6 @@ public:
   
 private:
   WPI_TalonFX *shooter;
-
-  PID *speedPID;
 
   frc::Solenoid *hoodTall;
   frc::Solenoid *hoodShort;
