@@ -13,14 +13,14 @@ Shooter::Shooter() {
   shooter->Config_kI(0, 0);
   shooter->Config_kD(0, 0);
   
-  frc::SmartDashboard::PutNumber("f",0.05);
+  frc::SmartDashboard::PutNumber("f",0.048);
   frc::SmartDashboard::PutNumber("p",0.0);
   frc::SmartDashboard::PutNumber("i",0.0);
   frc::SmartDashboard::PutNumber("d",0.0);
 }
 
 void Shooter::RunShooter(double speed) {
-  shooter->Config_kF(0, frc::SmartDashboard::GetNumber("f",0.05));
+  shooter->Config_kF(0, frc::SmartDashboard::GetNumber("f",0.048));
   shooter->Config_kP(0, frc::SmartDashboard::GetNumber("p",0.0));
   shooter->Config_kI(0, frc::SmartDashboard::GetNumber("i",0.0));
   shooter->Config_kD(0, frc::SmartDashboard::GetNumber("d",0.0));

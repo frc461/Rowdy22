@@ -33,7 +33,7 @@ void Robot::IntakeConveyorPeriodic()  {
 
   if (control->IntakePush()) { intake->RunPush((intake->GetPushState()) ? false : true); }
 
-  // PUT_NUM("NumBalls", conveyor->GetNumBalls());
+  PUT_NUM("NumBalls", conveyor->GetNumBalls());
   // PUT_BOOL("poko", conveyor->GetBallSensorState(false));
 }
 //--------------------------------------------------------------------------Shooter-----
@@ -46,10 +46,9 @@ bool Robot::WiggleHood() {
   return false;
 }
 void Robot::ShooterPeriodic() {
-  //shooter->RunShooter((control->Shooter()) ? ((hoodState==1) ? GET_NUM("HighSpeed", SHOOTER_SPEED_TOP) : ((hoodState==2) ? GET_NUM("MidSpeed", SHOOTER_SPEED_TOP) : GET_NUM("LowSpeed", SHOOTER_SPEED_BOT))) : 0.0 );
+  shooter->RunShooter((control->Shooter()) ? ((hoodState==1) ? GET_NUM("HighSpeed", SHOOTER_RPM_TOP) : ((hoodState==2) ? GET_NUM("MidSpeed", SHOOTER_RPM_MID) : GET_NUM("LowSpeed", SHOOTER_RPM_BOT))) : 0.0 );
   PUT_BOOL("ShooterLoadedUp", (shooter->GetShooterSpeed() >= ((hoodState==1) ? SHOOTER_RPM_TOP : (hoodState==2) ? SHOOTER_RPM_MID : SHOOTER_RPM_BOT)));
 
-  shooter->RunShooter((control->Shooter()) ? SHOOTER_RPM_MID : 0.0);
   PUT_NUM("velcoty", shooter->GetShooterSpeed());
   
   if (control->ShooterHoodUp()) { hoodState = 0; climb = false; }
@@ -60,7 +59,7 @@ void Robot::ShooterPeriodic() {
     climb = false;
   }
 
-  if (toMid) if (WiggleHood()) { counter->ResetAll(); toMid = false; }
+  if (toMid) { if (WiggleHood()) { counter->ResetAll(); toMid = false; } }
   else shooter->RunHood((climb) ? 1 : hoodState);
 }
 //-----------------------------------------------------------------------------Climber--
@@ -82,6 +81,7 @@ void Robot::ClimberPeriodic() {
 }
 //--------------------------------------------------------------------------------Vision---------
 void Robot::VisionPeriodic() {
+  vision->SetLimelightState(control->Aim(), control->Aim());
   if (control->Aim()) {
     vision->SetLimelightState(control->Aim(), control->Aim());
     
@@ -119,9 +119,9 @@ void Robot::RobotInit() {
   PUT_BOOL("Tank", true);
   PUT_BOOL("Ramp", false);
   
-  PUT_NUM("HighSpeed", SHOOTER_SPEED_TOP);
-  PUT_NUM("MidSpeed", SHOOTER_SPEED_MID);
-  PUT_NUM("LowSpeed", SHOOTER_SPEED_BOT);
+  PUT_NUM("HighSpeed", SHOOTER_RPM_TOP);
+  PUT_NUM("MidSpeed", SHOOTER_RPM_MID);
+  PUT_NUM("LowSpeed", SHOOTER_RPM_BOT);
 
   PUT_NUM("Auto", 2);
   PUT_NUM("AutoHigh", 1);
