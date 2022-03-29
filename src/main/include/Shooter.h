@@ -4,7 +4,7 @@
 
 #include <frc/Solenoid.h>
 
-#include <Counter.h>
+#include "PID.h"
 
 class Shooter {
 public:
@@ -20,6 +20,8 @@ public:
   
 private:
   WPI_TalonFX *shooter;
+
+  PID *speedPID;
 
   frc::Solenoid *hoodTall;
   frc::Solenoid *hoodShort;
