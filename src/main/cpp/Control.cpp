@@ -13,7 +13,7 @@ double Control::LeftX() { return driver->GetRawAxis(XboxAxisLeftStickX); }
 double Control::LeftY() { return driver->GetRawAxis(XboxAxisLeftStickY); }
 double Control::RightX() { return driver->GetRawAxis(XboxAxisRightStickX); }
 double Control::RightY() { return driver->GetRawAxis(XboxAxisRightStickY); }
-bool Control::Aim() { return driver->GetRawButton(XboxButtonRightStick); }
+int Control::DPadAngle() { return driver->GetPOV(); }
 
 void Control::VibrateDriver(double power) { driver->SetRumble(frc::GenericHID::RumbleType::kLeftRumble,power); driver->SetRumble(frc::GenericHID::RumbleType::kRightRumble,power); }
 void Control::VibrateOper(double power) { oper->SetRumble(frc::GenericHID::RumbleType::kLeftRumble,power); driver->SetRumble(frc::GenericHID::RumbleType::kRightRumble,power); }

@@ -14,7 +14,8 @@ public:
     double LeftY();
     double RightX();
     double RightY();
-    bool Aim();
+    
+    int DPadAngle();
 
     void VibrateDriver(double power);
     void VibrateOper(double power);

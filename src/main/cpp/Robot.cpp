@@ -81,14 +81,13 @@ void Robot::ClimberPeriodic() {
 }
 //--------------------------------------------------------------------------------Vision---------
 void Robot::VisionPeriodic() {
-  vision->SetLimelightState(control->Aim(), control->Aim());
-  if (control->Aim()) {
-    vision->SetLimelightState(control->Aim(), control->Aim());
-    
+  bool on = control->DPadAngle()==0 || control->DPadAngle()==180;
+  vision->SetLimelightState(on, on);
+  if (control->DPadAngle() == 0) {
     double p = aimPID->Get(vision->GetValues().x, 0.0);
     double power = (p<0) ? std::max(p, -0.6) : std::min(p, 0.6);
     PUT_NUM("lime", power);
-    // driveTrain->Arcade(0.0, power);
+    driveTrain->Arcade(0.0, -power);
     
     aim = true;
   } else { aimPID->Reset(); aim = false; }
@@ -104,7 +103,7 @@ void Robot::RobotInit() {
   climber = new Climber();
   conveyor = new Conveyor();
   vision = new Vision();
-  aimPID = new PID(0.02, 0.0, 0.0, "aim");
+  aimPID = new PID(0.05, 0.0, 0.0, "aim");
 
   counter = new Counter();
   counter->Start();

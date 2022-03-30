@@ -21,6 +21,7 @@ public:
   
 private:
   WPI_TalonFX *shooter;
+  WPI_VictorSPX *smallShooter;
 
   frc::Solenoid *hoodTall;
   frc::Solenoid *hoodShort;
