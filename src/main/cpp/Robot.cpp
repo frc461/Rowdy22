@@ -4,8 +4,6 @@
 void Robot::DriveTrainPeriodic() {
   bool t = GET_BOOL("Tank", true);
   bool ramp = GET_BOOL("Ramp",false);
-
-  // PUT_NUM("Gyro",driveTrain->GetAngle());
   
   if (t && !aim) {
     if (driveTrain->GetLeftVelocity() > 7500 || !ramp) {
@@ -34,7 +32,6 @@ void Robot::IntakeConveyorPeriodic()  {
   if (control->IntakePush()) { intake->RunPush((intake->GetPushState()) ? false : true); }
 
   PUT_NUM("NumBalls", conveyor->GetNumBalls());
-  // PUT_BOOL("poko", conveyor->GetBallSensorState(false));
 }
 //--------------------------------------------------------------------------Shooter-----
 bool Robot::WiggleHood() {
@@ -76,8 +73,6 @@ void Robot::ClimberPeriodic() {
 
   if (control->ClimberGrab()) { climber->RunGrab((climber->GetGrabState()) ? false : true); climb = true; }
   if (control->ClimberTilt()) { climber->RunTilt((climber->GetTiltState()) ? false : true); climb = true; }
-
-  // PUT_NUM("CLIMBER",climber->GetEncoder());
 }
 //--------------------------------------------------------------------------------Vision---------
 void Robot::VisionPeriodic() {
@@ -86,7 +81,6 @@ void Robot::VisionPeriodic() {
   if (control->DPadAngle() == 0) {
     double p = aimPID->Get(vision->GetValues().x, 0.0);
     double power = (p<0) ? std::max(p, -0.6) : std::min(p, 0.6);
-    PUT_NUM("lime", power);
     driveTrain->Arcade(0.0, -power);
     
     aim = true;
@@ -112,7 +106,7 @@ void Robot::RobotInit() {
 
   lSpeed = rSpeed = 0.0;
 
-  climb = climberMoveDown = climberDelay = false;
+  climb = false;
   hoodState = toMid = false;
 
   PUT_BOOL("Tank", true);
@@ -134,7 +128,6 @@ void Robot::AutonomousInit() {
   shooterloaded = loaded = shot = moveNow = false;
 
   nTimes = 0;
-  thirdPickedUp = false;
 
   delayed = shoot1 = back1 = forward1 = shoot2 = turn1 = back2 = turn2 = shoot3 = false;
 }
@@ -144,7 +137,7 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
   }
   else if (delayed && !shoot1) {
     shooter->RunHood(hood);
-    shooter->RunShooter((hood==1) ? SHOOTER_SPEED_TOP_AUTO : ((hood==2) ? SHOOTER_SPEED_MID : SHOOTER_SPEED_BOT_AUTO));
+    shooter->RunShooter((hood==1) ? SHOOTER_RPM_TOP : ((hood==2) ? SHOOTER_RPM_MID : SHOOTER_RPM_BOT));
     conveyor->RunHold(true);
     if (!shooterloaded && shooter->GetShooterSpeed() > ((hood==1) ? SHOOTER_RPM_TOP : ((hood==2) ? SHOOTER_RPM_MID : SHOOTER_RPM_BOT))) { conveyor->RunMotor(0.8); shooterloaded = true; }
     if (!loaded) { loaded = conveyor->GetBallSensorState(true); }
@@ -160,7 +153,7 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
       intake->RunPush(true); intake->RunMotor(0.8);
       conveyor->RunMotor(0.8);
     }
-    if (driveTrain->MoveDistance((level==2) ? -120.0 : (turn1) ? -90 : -100)) {
+    if (driveTrain->MoveDistance((level==2) ? -120.0 : (turn1) ? -80 : -90)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       intake->RunPush(false); intake->RunMotor(0.0);
       if (turn1 && level==4) { back2 = true; turn1 = false; }
@@ -176,9 +169,9 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
     }
   }
   else if (turn1 && turn2 && !forward1 && level != 1) {
-    if (driveTrain->MoveDistance((level==2) ? 100.0 : ((level==4) ? 100.0 : 80.0))) {
+    if (driveTrain->MoveDistance((level==2) ? 110.0 : ((level==4) ? 100.0 : 80.0))) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-      turn1 = false;
+      if (level==4) turn1 = false;
       forward1 = true;
     }
   }
@@ -226,7 +219,7 @@ if (!delayed) {
   }
   else if (delayed && !shoot1) {
     shooter->RunHood(hood);
-    shooter->RunShooter((hood==1) ? SHOOTER_SPEED_TOP_AUTO : ((hood==2) ? SHOOTER_SPEED_MID : SHOOTER_SPEED_BOT_AUTO));
+    shooter->RunShooter((hood==1) ? SHOOTER_RPM_TOP : ((hood==2) ? SHOOTER_RPM_MID : SHOOTER_RPM_BOT));
     conveyor->RunHold(true);
     if (!shooterloaded && counter->SecondsPassed(1.5)) { conveyor->RunMotor(0.8); shooterloaded = true; }
     if (!loaded) { loaded = conveyor->GetBallSensorState(true); }

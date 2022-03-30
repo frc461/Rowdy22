@@ -15,20 +15,17 @@
 #include "Counter.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#define SHOOTER_SPEED_TOP 0.65
-#define SHOOTER_SPEED_BOT 0.35
-#define SHOOTER_SPEED_MID 1.00
-
 #define SHOOTER_RPM_TOP 13500
 #define SHOOTER_RPM_MID 19000
 #define SHOOTER_RPM_BOT 6700
 
-#define SHOOTER_SPEED_TOP_AUTO 0.69
-#define SHOOTER_SPEED_BOT_AUTO 0.35
-
 #define CLIMBER_TOP_ENC_1 75000
-#define CLIMBER_TOP_ENC_2 85000//60000
+#define CLIMBER_TOP_ENC_2 85000
 #define CLIMBER_BOT_ENC 500
+
+#define CONVEYOR_SPEED 0.8
+#define CLIMBER_SPEED 1.0
+#define INTAKE_SPEED 0.8
 
 #define PUT_BOOL(name,val) frc::SmartDashboard::PutBoolean(name,val)
 #define GET_BOOL(name,val) frc::SmartDashboard::GetBoolean(name,val)
@@ -72,12 +69,9 @@ private:
 
   Climber *climber;
   bool climb;
-  bool climberMoveDown;
-  bool climberDelay;
   
   Shooter *shooter;
   int hoodState;
-  bool loaded;
   bool toMid;
   
   Vision *vision;
@@ -91,12 +85,7 @@ private:
   Counter *counter;
   
   //------------------------------------------------
-  
-  bool delayed;
-  bool moveNow;
-  bool shooterloaded;
-  bool shot;
-  bool shoot1, back1, turn1, back2, turn2, forward1, shoot2, shoot3;
+  bool moveNow, shooterloaded, shot, loaded;
+  bool delayed, shoot1, back1, turn1, back2, turn2, forward1, shoot2, shoot3;
   int nTimes;
-  bool thirdPickedUp;
 };
