@@ -147,6 +147,7 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
       if (moveNow && counter->SecondsPassed(1.0)) {
         conveyor->RunMotor(0.0); conveyor->RunHold(false);
         shooter->RunShooter(0.0);
+        if (turn2) turn1 = false;
         shoot1 = true;
       }
     }
@@ -156,7 +157,7 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
       intake->RunPush(true); intake->RunMotor(0.8);
       conveyor->RunMotor(0.8);
     }
-    if (driveTrain->MoveDistance((level==2) ? -100 : ((level==5 && turn2) ? -150 : -90))) {
+    if (driveTrain->MoveDistance((level==2) ? -100 : ((level==5 && turn2) ? -150 : ((turn1) ? -80 : -40)))) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       if (!turn1) shoot1 = false; else back2 = true;
       if (!turn2) turn1 = false;
@@ -164,11 +165,11 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
     }
   }
   else if (back1 && !turn1 && level>3) {
-    if (driveTrain->Turn((back2) ? -60 : 100)) {
+    if (driveTrain->Turn((back2) ? ((turn2) ? 20 : -60) : 100)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       if (!back2) back1 = false;
-      else if (back2 && level==4) { shoot1 = loaded = shot = shooterloaded = moveNow = false; turn2 = true; }
-      else if (back2 && level==5) { back1 = false; turn2 = true; }
+      else if (back2 && !turn2 && level==4) { shoot1 = loaded = shot = shooterloaded = moveNow = false; turn2 = true; }
+      else if (back2 && !turn2 && level==5) { back1 = false; turn2 = true; }
       turn1 = true;
     }
   }
