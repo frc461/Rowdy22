@@ -14,6 +14,7 @@ public:
   ~Shooter();
   
   void RunShooter(double speed);
+  void RunSmallShooter(double speed);
   void RunHood(int dir);
   
   bool GetHoodState();
