@@ -163,8 +163,8 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
       back1 = true;
     }
   }
-  else if (back1 && !turn1 && level!=1) {
-    if (driveTrain->Turn(100)) {
+  else if (back1 && !turn1 && level>3) {
+    if (driveTrain->Turn((back2) ? -60 : 100)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       if (!back2) back1 = false;
       else if (back2 && level==4) { shoot1 = loaded = shot = shooterloaded = moveNow = false; turn2 = true; }
@@ -172,7 +172,7 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
       turn1 = true;
     }
   }
-  else if (turn1 && !forward1) {
+  else if (turn1 && !forward1 && level==5) {
     if (driveTrain->MoveDistance(150)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       shoot1 = loaded = shot = shooterloaded = moveNow = false;
