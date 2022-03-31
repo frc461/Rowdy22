@@ -2,6 +2,7 @@
 
 Shooter::Shooter() {
   shooter = new WPI_TalonFX(17);
+  smallShooter = new rev::CANSparkMax(0, rev::CANSparkMax::MotorType::kBrushless);
 
   hoodTall = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 10);
   hoodShort = new frc::Solenoid(frc::PneumaticsModuleType::REVPH, 14);
@@ -27,6 +28,9 @@ void Shooter::RunShooter(double speed) {
   shooter->Config_kD(0, frc::SmartDashboard::GetNumber("d",0.0));
   
   shooter->Set(ControlMode::Velocity, speed);
+}
+void Shooter::RunSmallShooter(double speed) {
+  smallShooter->Set(speed);
 }
 void Shooter::RunHood(int dir) {
   hoodTall->Set((dir==1 || dir==2));
