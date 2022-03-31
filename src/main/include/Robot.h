@@ -15,9 +15,9 @@
 #include "Counter.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#define SHOOTER_RPM_TOP 13500
-#define SHOOTER_RPM_MID 19000
-#define SHOOTER_RPM_BOT 6700
+#define SHOOTER_RPM_TOP 13500 // 7000
+#define SHOOTER_RPM_MID 19000 // 10000
+#define SHOOTER_RPM_BOT 6700 // 6000
 
 #define CLIMBER_TOP_ENC_1 75000
 #define CLIMBER_TOP_ENC_2 85000
