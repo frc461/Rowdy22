@@ -43,7 +43,9 @@ bool Robot::WiggleHood() {
   return false;
 }
 void Robot::ShooterPeriodic() {
-  shooter->RunShooter((control->Shooter()) ? ((hoodState==1) ? GET_NUM("HighSpeed", SHOOTER_RPM_TOP) : ((hoodState==2) ? GET_NUM("MidSpeed", SHOOTER_RPM_MID) : GET_NUM("LowSpeed", SHOOTER_RPM_BOT))) : 0.0 );
+  shooter->RunShooter((control->Shooter()) ? ((hoodState==1) ? GET_NUM("HighSpeed", SHOOTER_RPM_TOP) : ((hoodState==2) ? GET_NUM("MidSpeed", SHOOTER_RPM_MID) : GET_NUM("LowSpeed", SHOOTER_RPM_BOT))) : 0.0);
+  shooter->RunSmallShooter((control->Shooter()) ? ((hoodState==1) ? GET_NUM("sHighSpeed", 0.5) : ((hoodState==2) ? GET_NUM("sMidSpeed", 0.9) : GET_NUM("sLowSpeed", 0.5))) : 0.0);
+  
   PUT_BOOL("ShooterLoadedUp", (shooter->GetShooterSpeed() >= ((hoodState==1) ? SHOOTER_RPM_TOP : (hoodState==2) ? SHOOTER_RPM_MID : SHOOTER_RPM_BOT)));
 
   PUT_NUM("velcoty", shooter->GetShooterSpeed());
@@ -116,6 +118,10 @@ void Robot::RobotInit() {
   PUT_NUM("MidSpeed", SHOOTER_RPM_MID);
   PUT_NUM("LowSpeed", SHOOTER_RPM_BOT);
 
+  PUT_NUM("sHighSpeed", 0.5);
+  PUT_NUM("sMidSpeed", 0.9);
+  PUT_NUM("sLowSpeed", 0.5);
+
   PUT_NUM("Auto", 2);
   PUT_NUM("AutoHigh", 1);
   PUT_NUM("AutoDelay", 0.0);
@@ -140,6 +146,7 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
     else {
       shooter->RunHood(hood);
       shooter->RunShooter((hood==1) ? SHOOTER_RPM_TOP : ((hood==2) ? SHOOTER_RPM_MID : SHOOTER_RPM_BOT));
+      shooter->RunSmallShooter((hood==1) ? 0.5 : ((hood==2) ? 0.9 : 0.5));
       conveyor->RunHold(true);
       if (!shooterloaded && shooter->GetShooterSpeed() > ((hood==1) ? SHOOTER_RPM_TOP : ((hood==2) ? SHOOTER_RPM_MID : SHOOTER_RPM_BOT))) { conveyor->RunMotor(0.8); shooterloaded = true; }
       if (!loaded) { loaded = conveyor->GetBallSensorState(true); }
@@ -156,7 +163,7 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
       intake->RunPush(true); intake->RunMotor(0.8);
       conveyor->RunMotor(0.8);
     }
-    if (driveTrain->MoveDistance((level==2) ? -100 : ((level==5 && turn2) ? -150 : ((turn1) ? -80 : -40)))) {
+    if (driveTrain->MoveDistance((level==2) ? -100 : ((level==5 && turn2) ? -150 : ((turn1) ? -80 : -55)))) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       if (!turn1) shoot1 = false; else back2 = true;
       if (!turn2) turn1 = false;

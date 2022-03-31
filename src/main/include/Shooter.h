@@ -2,6 +2,7 @@
 
 #include <ctre/Phoenix.h>
 #include <rev/CANSparkMax.h>
+#include <frc/PWM.h>
 
 #include <frc/Solenoid.h>
 #include <frc/SmartDashboard/SmartDashboard.h>
@@ -23,7 +24,7 @@ public:
   
 private:
   WPI_TalonFX *shooter;
-  rev::CANSparkMax *smallShooter;
+  frc::PWM *smallShooter;
 
   frc::Solenoid *hoodTall;
   frc::Solenoid *hoodShort;

@@ -15,17 +15,17 @@
 #include "Counter.h"
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-#define SHOOTER_RPM_TOP 13500 // 7000
-#define SHOOTER_RPM_MID 19000 // 10000
-#define SHOOTER_RPM_BOT 6700 // 6000
+#define SHOOTER_RPM_TOP 8400 // 13500
+#define SHOOTER_RPM_MID 10000 // (10000 tarmac) (11500 launchpad)
+#define SHOOTER_RPM_BOT 6000
+
+#define SHOOTER_RPM_TOP 8400 // 13500
+#define SHOOTER_RPM_MID 10000 // bacc tarmac 
+#define SHOOTER_RPM_BOT 6000
 
 #define CLIMBER_TOP_ENC_1 75000
 #define CLIMBER_TOP_ENC_2 85000
 #define CLIMBER_BOT_ENC 500
-
-#define CONVEYOR_SPEED 0.8
-#define CLIMBER_SPEED 1.0
-#define INTAKE_SPEED 0.8
 
 #define PUT_BOOL(name,val) frc::SmartDashboard::PutBoolean(name,val)
 #define GET_BOOL(name,val) frc::SmartDashboard::GetBoolean(name,val)
