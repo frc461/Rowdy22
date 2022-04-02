@@ -33,10 +33,10 @@ public:
     void ResetGyro();
     void CalibrateGyro();
 
-    bool MoveDistance(double distance);
+    bool MoveDistance(double distance, double cap, bool fast);
     void ResetMoveVars();
     
-    bool Turn(double angle);
+    bool Turn(double angle, bool fast);
     void ResetTurnVars();
     
     void MoveStraight(double power);
