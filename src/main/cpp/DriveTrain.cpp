@@ -54,7 +54,7 @@ bool DriveTrain::MoveDistance(double distance) {
 void DriveTrain::ResetMoveVars() { ResetEncoder(); movePID->Reset(); }
 
 bool DriveTrain::Turn(double angle) {
-    double speed = std::min(turnPID->Get(fabs(GetAngle()), fabs(angle)), 0.7);
+    double speed = std::min(turnPID->Get(fabs(GetAngle()), fabs(angle)), 0.6);
     speed *= (angle<0) ? -1 : 1;
     Tank(speed, speed);
 

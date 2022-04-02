@@ -147,11 +147,12 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
       shooter->RunHood(hood);
       shooter->RunShooter((hood==1) ? SHOOTER_RPM_TOP : ((hood==2) ? SHOOTER_RPM_MID : SHOOTER_RPM_BOT));
       shooter->RunSmallShooter((hood==1) ? 0.5 : ((hood==2) ? 0.9 : 0.5));
-      conveyor->RunHold(true);
-      if (!shooterloaded && shooter->GetShooterSpeed() > ((hood==1) ? SHOOTER_RPM_TOP : ((hood==2) ? SHOOTER_RPM_MID : SHOOTER_RPM_BOT))) { conveyor->RunMotor(0.8); shooterloaded = true; }
+      conveyor->RunMotor(0.8);
+      // shooter->GetShooterSpeed() > ((hood==1) ? SHOOTER_RPM_TOP-1000 : ((hood==2) ? SHOOTER_RPM_MID-1000 : SHOOTER_RPM_BOT-1000))
+      if (!shooterloaded && counter->SecondsPassed(1.0)) { conveyor->RunHold(true); shooterloaded = true; }
       if (!loaded) { loaded = conveyor->GetBallSensorState(true); }
       if (!shot && loaded && !conveyor->GetBallSensorState(true)) { counter->ResetAll(); moveNow = shot = true; }
-      if (moveNow && counter->SecondsPassed(1.0)) {
+      if (moveNow && counter->SecondsPassed(1.5)) {
         conveyor->RunMotor(0.0); conveyor->RunHold(false);
         shooter->RunShooter(0.0);
         shoot1 = true;
@@ -163,7 +164,7 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
       intake->RunPush(true); intake->RunMotor(0.8);
       conveyor->RunMotor(0.8);
     }
-    if (driveTrain->MoveDistance((level==2) ? -100 : ((level==5 && turn2) ? -150 : ((turn1) ? -80 : -55)))) {
+    if (driveTrain->MoveDistance((level==2) ? -140 : ((level==5 && turn2) ? -150 : ((turn1) ? -100 : -55)))) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       if (!turn1) shoot1 = false; else back2 = true;
       if (!turn2) turn1 = false;
@@ -171,7 +172,7 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
     }
   }
   else if (back1 && !turn1 && level>3) {
-    if (driveTrain->Turn((back2) ? ((forward1) ? -20 : ((level==4) ? -80 : -50)) : 100)) {
+    if (driveTrain->Turn((back2) ? ((forward1) ? -20 : ((level==4) ? -70 : -50)) : 106)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       if (!back2) back1 = false;
       else if (back2 && !turn2 && level==4) { shoot1 = loaded = shot = shooterloaded = moveNow = false; turn2 = true; }
