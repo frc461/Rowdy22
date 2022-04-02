@@ -163,72 +163,54 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
         if (back1){
           if(driveTrain->MoveDistance(-110.0)){
             driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-          back1 = false;
+            back1 = false;
         }
       }
       
       if (level=2){
-        if (!shoot2){
-          shoot1= true;
-        }
+        
         if (back1){
           if (driveTrain->MoveDistance(-110.0)){
             driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-        }
-          if (driveTrain->MoveDistance(110.0)){
-            driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-            shoot2 = false;
-        }
-          back1 = false;
-        }
-          
-          if (!shoot2){
-            shoot1= true;
+            back1 = false;
           }
-          back1 = false;
+        }
+         if (!shoot2){
+          shoot1= true;
+         }
       }
       if (level=3){
-        if (!shoot2){
-          shoot1= true;
-        }
         if (back1){
           if (driveTrain->MoveDistance(-90.0)){
             driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
+            back1 = false;
+          }
         }
-          if (driveTrain->MoveDistance(90.0)){
+        if (!shoot2){
+          shoot1= true;
+        }
+      }
+      if(level = 4){
+        if (back1){
+          if (driveTrain->MoveDistance(-90.0)){
             driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-            shoot2 = false;
+            back1 = false;
+          }
         }
-          back1 = false;
-        }
-          
           if (!shoot2){
             shoot1= true;
           }
-          back1 = false;
-      }
-      if(level = 4){
-        if (!shoot2){
-          shoot1= true;
-        }
-        if (back1){
-          if (driveTrain->MoveDistance(-90.0)){
+        if (back2){
+          if (driveTrain->Turn(60)){
             driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
           }
-          if (driveTrain->MoveDistance(90.0)){
-            driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
-            shoot2 = false;
-          }
-          back1 = false;
         }
         
         if (!shoot2){
           shoot1= true;
         }
         if (back1){
-          intake->RunPush(false);
-          if (driveTrain->Turn(60)){
-            driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
+          
           }
           intake->RunPush(true);
           if (driveTrain->MoveDistance(-400.0)){
