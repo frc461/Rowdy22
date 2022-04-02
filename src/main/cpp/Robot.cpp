@@ -145,14 +145,14 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
     if (level != 1 && !back1) shoot1 = true;
     else {
       shooter->RunHood(hood);
-      shooter->RunShooter((hood==1) ? SHOOTER_RPM_TOP : ((hood==2) ? SHOOTER_RPM_MID : SHOOTER_RPM_BOT));
-      shooter->RunSmallShooter((hood==1) ? 0.5 : ((hood==2) ? 0.9 : 0.5));
+      shooter->RunShooter((hood==1) ? SHOOTER_RPM_TOP : ((hood==2) ? ((back2) ? SHOOTER_RPM_MID+400 : SHOOTER_RPM_MID) : SHOOTER_RPM_BOT));
+      shooter->RunSmallShooter((hood==1) ? 0.5 : ((hood==2) ? ((back2) ? 1.0 : 0.9) : 0.5));
       conveyor->RunMotor(0.8);
-      // shooter->GetShooterSpeed() > ((hood==1) ? SHOOTER_RPM_TOP-1000 : ((hood==2) ? SHOOTER_RPM_MID-1000 : SHOOTER_RPM_BOT-1000))
-      if (!shooterloaded && counter->SecondsPassed(1.0)) { conveyor->RunHold(true); shooterloaded = true; }
+      // shooter->GetShooterSpeed() > ((hood==1) ? SHOOTER_RPM_TOP-500 : ((hood==2) ? SHOOTER_RPM_MID-500 : SHOOTER_RPM_BOT-500))
+      if (!shooterloaded && counter->SecondsPassed(0.65)) { conveyor->RunHold(true); shooterloaded = true; }
       if (!loaded) { loaded = conveyor->GetBallSensorState(true); }
       if (!shot && loaded && !conveyor->GetBallSensorState(true)) { counter->ResetAll(); moveNow = shot = true; }
-      if (moveNow && counter->SecondsPassed(1.5)) {
+      if (moveNow && counter->SecondsPassed(0.75)) {
         conveyor->RunMotor(0.0); conveyor->RunHold(false);
         shooter->RunShooter(0.0);
         shoot1 = true;
@@ -175,7 +175,7 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
     if (driveTrain->Turn((back2) ? ((forward1) ? -20 : ((level==4) ? -70 : -50)) : 106)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       if (!back2) back1 = false;
-      else if (back2 && !turn2 && level==4) { shoot1 = loaded = shot = shooterloaded = moveNow = false; turn2 = true; }
+      else if (back2 && !turn2 && level==4) { counter->ResetAll(); shoot1 = loaded = shot = shooterloaded = moveNow = false; turn2 = true; }
       else if (back2 && !turn2 && level==5) { back1 = false; turn2 = true; }
       else if (turn2) shoot1 = loaded = shot = shooterloaded = moveNow = false;
       turn1 = true;
