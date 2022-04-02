@@ -4,6 +4,8 @@
 void Robot::DriveTrainPeriodic() {
   bool t = GET_BOOL("Tank", true);
   bool ramp = GET_BOOL("Ramp",false);
+
+  PUT_NUM("gyro", driveTrain->GetAngle());
   
   if (t && !aim) {
     if (driveTrain->GetLeftVelocity() > 7500 || !ramp) {
@@ -123,7 +125,7 @@ void Robot::RobotInit() {
   PUT_NUM("sLowSpeed", 0.5);
 
   PUT_NUM("Auto", 2);
-  PUT_NUM("AutoHigh", 1);
+  PUT_NUM("AutoHigh", 2);
   PUT_NUM("AutoDelay", 0.0);
 }
 
@@ -150,12 +152,13 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
       conveyor->RunMotor(0.8);
       // shooter->GetShooterSpeed() > ((hood==1) ? SHOOTER_RPM_TOP-500 : ((hood==2) ? SHOOTER_RPM_MID-500 : SHOOTER_RPM_BOT-500))
       if (!shooterloaded && counter->SecondsPassed(0.65)) { conveyor->RunHold(true); shooterloaded = true; }
-      if (!loaded) { loaded = conveyor->GetBallSensorState(true); }
+      if (!loaded) { loaded = conveyor->GetBallSensorState(true);  }
       if (!shot && loaded && !conveyor->GetBallSensorState(true)) { counter->ResetAll(); moveNow = shot = true; }
       if (moveNow && counter->SecondsPassed(0.75)) {
         conveyor->RunMotor(0.0); conveyor->RunHold(false);
         shooter->RunShooter(0.0);
         shoot1 = true;
+        std::cout << "shoot done" << std::endl;
       }
     }
   }
@@ -172,7 +175,7 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
     }
   }
   else if (back1 && !turn1 && level>3) {
-    if (driveTrain->Turn((back2) ? ((forward1) ? ((level==6) ? 45 : -20) : ((level==4) ? -70 : -50)) : ((level==6) ? -42 : 106), level==6)) {
+    if (driveTrain->Turn((back2) ? ((forward1) ? ((level==6) ? 42 : -20) : ((level==4) ? -70 : -50)) : ((level==6) ? -42 : 102), level==6)) {
       driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
       if (!back2) back1 = false;
       else if (back2 && !turn2 && (level==4 || level==6)) { counter->ResetAll(); shoot1 = loaded = shot = shooterloaded = moveNow = false; turn2 = true; }
@@ -190,7 +193,7 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
   }
 }
 void Robot::AutonomousPeriodic() {
-  Auto(GET_NUM("Auto", 2), GET_NUM("AutoHigh", 1), GET_NUM("AutoDelay",0.0));
+  Auto(GET_NUM("Auto", 2), GET_NUM("AutoHigh", 2), GET_NUM("AutoDelay",0.0));
 }
 
 void Robot::TeleopInit() {

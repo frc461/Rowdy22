@@ -48,7 +48,7 @@ bool DriveTrain::MoveDistance(double distance, double cap, bool fast) {
     double power = std::min(movePID->Get(fabs(GetEncoderL()), fabs(distance * ENC_PER_INCH)), cap);
     power *= (distance < 0) ? -1 : 1;
     MoveStraight(power);
-    
+
     return (fabs(GetEncoderL()) >= (fabs(distance * ENC_PER_INCH) / 4)) && ((fast) ? fabs(GetLeftVelocity())<100 : fabs(GetLeftVelocity())==0);
 }
 void DriveTrain::ResetMoveVars() { ResetEncoder(); movePID->Reset(); }
@@ -56,8 +56,9 @@ void DriveTrain::ResetMoveVars() { ResetEncoder(); movePID->Reset(); }
 bool DriveTrain::Turn(double angle, bool fast) {
     double speed = std::min(turnPID->Get(fabs(GetAngle()), fabs(angle)), 0.6);
     speed *= (angle<0) ? -1 : 1;
-    Tank(speed, speed);
+    Tank(speed,speed);
 
-    return (fabs(GetAngle()) >= (fabs(angle)/4.0)) && ((fast) ? fabs(GetLeftVelocity())<50 : fabs(GetLeftVelocity())==0);
+    // ((fast) ? fabs(GetLeftVelocity())<50 : fabs(GetLeftVelocity())==0)
+    return (fabs(GetAngle()) >= (fabs(angle)/4.0)) && fabs(GetLeftVelocity())==0;
 }
 void DriveTrain::ResetTurnVars() { ResetGyro(); turnPID->Reset(); }
