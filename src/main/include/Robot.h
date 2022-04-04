@@ -56,6 +56,9 @@ public:
 
   bool WiggleHood();
   
+  void AutoShoot(double time);
+  void AutoMove(double distance);
+  void AutoTurn(double angle);
   void Auto(int level, int hood, double delay);
 
 private:
@@ -85,7 +88,4 @@ private:
   Counter *counter;
   
   //------------------------------------------------
-  bool moveNow, shooterloaded, shot, loaded;
-  bool delayed, shoot1, back1, turn1, back2, turn2, forward1, shoot2, shoot3;
-  int nTimes;
 };
