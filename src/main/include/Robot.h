@@ -95,7 +95,7 @@ private:
   std::vector<Moves> moves;
   std::vector<Values> values;
   int index;
-  bool bDummy; int iDummy;
+  double dDummy; bool bDummy; int iDummy;
   
   bool shooterloaded, loaded, shot, moveNow;
 };
