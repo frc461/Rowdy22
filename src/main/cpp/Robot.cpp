@@ -188,7 +188,7 @@ void Robot::AutoTurn(double angle, double cap, bool fast, int dummy) {
 }
 void Robot::AutonomousPeriodic() {
   if (!delayed) if (counter->SecondsPassed(GET_NUM("AutoDelay",0.0))) { counter->ResetAll(); delayed = true; }
-  else if (index <= moves.size()-1) if (this->*moves.at(index))(values.at(index).d1, values.at(index).d2, values.at(index).b, values.at(index).i)) index++;
+  else if (index <= moves.size()-1) if ((this->*moves.at(index))(values.at(index).d1, values.at(index).d2, values.at(index).b, values.at(index).i)) index++;
 }
 
 void Robot::TeleopInit() {
