@@ -97,5 +97,6 @@ private:
   int index;
   double dDummy; bool bDummy; int iDummy;
   
+  bool delayed;
   bool shooterloaded, loaded, shot, moveNow;
 };
