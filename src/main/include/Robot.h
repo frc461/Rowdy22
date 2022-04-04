@@ -1,6 +1,7 @@
 #pragma once
 
 #include <iostream>
+#include <vector>
 #include <frc/TimedRobot.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 
@@ -56,9 +57,10 @@ public:
 
   bool WiggleHood();
   
-  void AutoShoot(double time);
-  void AutoMove(double distance);
-  void AutoTurn(double angle);
+  bool AutoShoot( double time,      double midSpeed,  bool dummy,   int hood);
+  bool AutoMove(  double distance,  double cap,       bool fast,    int dummy);
+  bool AutoTurn(  double angle,     double cap,       bool fast,    int dummy);
+  
   void Auto(int level, int hood, double delay);
 
 private:
@@ -88,4 +90,12 @@ private:
   Counter *counter;
   
   //------------------------------------------------
+  struct Values { double d1,double d2, bool b, int i; };
+  typedef bool (Robot::*Moves)(double,double,bool,int);
+  std::vector<Moves> moves;
+  std::vector<Values> values;
+  int index;
+  bool bDummy; int iDummy;
+  
+  bool shooterloaded, loaded, shot, moveNow;
 };
