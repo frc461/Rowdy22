@@ -145,7 +145,7 @@ void Robot::AutonomousInit() {
     moves.push_back(&Robot::AutoMove);  values.push_back({-70.0, 0.6, false, iDummy});
   }
   else if (level == 2 || level == 3) {
-    moves.push_back(&Robot::AutoMove);  values.push_back({(level==2) ? -55.0 : -60.0, 0.6, false, iDummy});
+    moves.push_back(&Robot::AutoMove);  values.push_back({(level==2) ? -60.0 : -55.0, 0.6, false, iDummy});
     moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_MID, bDummy, GET_NUM("AutoHigh",2)});
   }
   else if (level == 4 || level == 5) {
