@@ -2,9 +2,7 @@
 
 #include <frc/drive/DifferentialDrive.h>
 #include <frc/motorcontrol/MotorControllerGroup.h>
-
 #include <frc/ADXRS450_Gyro.h>
-
 #include <frc/Encoder.h>
 
 #include <ctre/Phoenix.h>
@@ -33,7 +31,7 @@ public:
     void ResetGyro();
     void CalibrateGyro();
 
-    bool MoveDistance(double distance, double cap, bool fast);
+    std::pair<bool,bool> MoveDistance(double distance, double cap, bool fast);
     void ResetMoveVars();
     
     bool Turn(double angle, bool fast);
@@ -58,4 +56,6 @@ private:
     PID *movePID, *turnPID;
     
     double max;
+
+    bool crossed, done;
 };

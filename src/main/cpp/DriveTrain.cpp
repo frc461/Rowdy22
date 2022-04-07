@@ -21,8 +21,8 @@ DriveTrain::DriveTrain() {
 
     gyro = new frc::ADXRS450_Gyro(frc::SPI::Port::kOnboardCS0);
 
-    movePID = new PID(0.0007, 0.0, 0.0002, "move");
-    turnPID = new PID(0.07, 0.0, 0.0, "turn");
+    movePID = new PID(0.0007, 0.0, 0.0004, "move");
+    turnPID = new PID(0.15, 0.0, 0.2, "turn");
 
     max = 1.0;
 }
@@ -44,14 +44,17 @@ void DriveTrain::MoveStraight(double power) {
     Arcade(power, -(GetAngle() / 6.0));
 }
 
-bool DriveTrain::MoveDistance(double distance, double cap, bool fast) {
+std::pair<bool,bool> DriveTrain::MoveDistance(double distance, double cap, bool fast) {
     double power = std::min(movePID->Get(fabs(GetEncoderL()), fabs(distance * ENC_PER_INCH)), cap);
     power *= (distance < 0) ? -1 : 1;
     MoveStraight(power);
 
-    return (fabs(GetEncoderL()) >= (fabs(distance * ENC_PER_INCH) / 4)) && ((fast) ? fabs(GetLeftVelocity())<100 : fabs(GetLeftVelocity())==0);
+    crossed = (fabs(GetEncoderL()) >= (fabs(distance * ENC_PER_INCH) / 2));
+    done = (fabs(GetEncoderL()) >= (fabs(distance * ENC_PER_INCH) / 4)) && ((fast) ? fabs(GetLeftVelocity())<20 : fabs(GetLeftVelocity())==0);
+
+    return {crossed, done};
 }
-void DriveTrain::ResetMoveVars() { ResetEncoder(); movePID->Reset(); }
+void DriveTrain::ResetMoveVars() { ResetEncoder(); movePID->Reset(); crossed = done = false; }
 
 bool DriveTrain::Turn(double angle, bool fast) {
     double speed = std::min(turnPID->Get(fabs(GetAngle()), fabs(angle)), 0.6);
@@ -59,6 +62,6 @@ bool DriveTrain::Turn(double angle, bool fast) {
     Tank(speed,speed);
 
     // ((fast) ? fabs(GetLeftVelocity())<50 : fabs(GetLeftVelocity())==0)
-    return (fabs(GetAngle()) >= (fabs(angle)/4.0)) && ((fast) ? fabs(GetLeftVelocity())<50 : fabs(GetLeftVelocity())==0);
+    return (fabs(GetAngle()) >= (fabs(angle)/4.0)) && fabs(GetLeftVelocity())==0;
 }
 void DriveTrain::ResetTurnVars() { ResetGyro(); turnPID->Reset(); }

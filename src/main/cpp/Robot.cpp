@@ -84,8 +84,10 @@ void Robot::VisionPeriodic() {
   vision->SetLimelightState(on, on);
   if (control->DPadAngle() == 0) {
     double p = aimPID->Get(vision->GetValues().x, 0.0);
-    double power = (p<0) ? std::max(p, -0.6) : std::min(p, 0.6);
+    double power = (p<0) ? std::max(p, -0.5) : std::min(p, 0.5);
     driveTrain->Arcade(0.0, -power);
+
+    vision->SetIndicator(true);
     
     aim = true;
   } else { aimPID->Reset(); aim = false; }
@@ -101,7 +103,7 @@ void Robot::RobotInit() {
   climber = new Climber();
   conveyor = new Conveyor();
   vision = new Vision();
-  aimPID = new PID(0.05, 0.0, 0.0, "aim");
+  aimPID = new PID(0.07, 0.0, 0.0, "aim");
 
   counter = new Counter();
   counter->Start();
@@ -133,48 +135,51 @@ void Robot::AutonomousInit() {
   driveTrain->ResetEncoder();
   driveTrain->ResetGyro();
 
+  conveyor->RunHold(false);
+  intake->RunPush(false);
+
   moves.erase(moves.begin(), moves.end());
   values.erase(values.begin(), values.end());
   delayed = shooterloaded = loaded = shot = moveNow = false;
   index = 0;
   dDummy = 0.0; bDummy = false; iDummy = 0;
   
-  int level = GET_NUM("Auto",5); //change back to 2 if needed
+  int level = GET_NUM("Auto",2);
   if (level==1) {
-    moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_MID+400, bDummy, 1});
+    moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_TOP, false, 1});
     moves.push_back(&Robot::AutoMove);  values.push_back({-70.0, 0.6, false, iDummy});
   }
   else if (level == 2 || level == 3) {
     moves.push_back(&Robot::AutoMove);  values.push_back({(level==2) ? -60.0 : -55.0, 0.6, false, iDummy});
-    moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_MID+400, bDummy, GET_NUM("AutoHigh",2)});
+    moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_MID+400, true, GET_NUM("AutoHigh",2)});
   }
   else if (level == 4) {
-    moves.push_back(&Robot::AutoMove);  values.push_back({-55.0, 0.6, level==5, iDummy});
-    moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_MID+200, bDummy, GET_NUM("AutoHigh",2)});
-    moves.push_back(&Robot::AutoTurn);  values.push_back({102.0, 0.6, level==5, iDummy});
-    moves.push_back(&Robot::AutoMove);  values.push_back({-100.0, 0.8, level==5, iDummy});
-    moves.push_back(&Robot::AutoTurn);  values.push_back({-70.0, 0.6, level==5, iDummy});
-    moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_MID+400, bDummy, GET_NUM("AutoHigh",2)});
+    moves.push_back(&Robot::AutoMove);  values.push_back({-55.0, 0.6, false, iDummy});
+    moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_MID+400, true, GET_NUM("AutoHigh",2)});
+    moves.push_back(&Robot::AutoTurn);  values.push_back({102.0, 0.6, false, iDummy});
+    moves.push_back(&Robot::AutoMove);  values.push_back({-100.0, 0.6, false, iDummy});
+    moves.push_back(&Robot::AutoTurn);  values.push_back({-70.0, 0.6, false, iDummy});
+    moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_MID+400, true, GET_NUM("AutoHigh",2)});
   }
   else if (level == 5) {
-    moves.push_back(&Robot::AutoMove);  values.push_back({-55.0, 0.6, level==5, iDummy});
-    moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_MID+200, bDummy, GET_NUM("AutoHigh",2)});
-    moves.push_back(&Robot::AutoTurn);  values.push_back({-42.0, 0.6, level==5, iDummy});
-    moves.push_back(&Robot::AutoMove);  values.push_back({-182.0, 0.8, false, iDummy});
-    moves.push_back(&Robot::AutoMove);  values.push_back({182.0, 0.7, level==5, iDummy});
+    moves.push_back(&Robot::AutoMove);  values.push_back({-55.0, 0.6, true, iDummy});
+    moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_MID+400, false, GET_NUM("AutoHigh",2)});
+    moves.push_back(&Robot::AutoTurn);  values.push_back({-42.0, 0.6, true, iDummy});
+    moves.push_back(&Robot::AutoMove);  values.push_back({-187.0, 0.8, true, iDummy});
+    moves.push_back(&Robot::AutoMove);  values.push_back({190.0, 0.7, true, iDummy});
     moves.push_back(&Robot::AutoTurn);  values.push_back({40.0, 0.6, false, iDummy});
-    moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_MID+400, bDummy, GET_NUM("AutoHigh",2)});
+    moves.push_back(&Robot::AutoShoot); values.push_back({dDummy, SHOOTER_RPM_MID+450, true, GET_NUM("AutoHigh",2)});
   }
 }
-bool Robot::AutoShoot(double time1, double midSpeed, bool dummy, int hood) {
+bool Robot::AutoShoot(double time1, double midSpeed, bool two, int hood) {
   shooter->RunHood(hood);
   shooter->RunShooter((hood==1) ? SHOOTER_RPM_TOP : ((hood==2) ? midSpeed : SHOOTER_RPM_BOT));
   shooter->RunSmallShooter((hood==1) ? 0.5 : ((hood==2) ? ((midSpeed>SHOOTER_RPM_MID) ? 1.0 : 0.9) : 0.5));
   conveyor->RunMotor(0.8);
-  if (!shooterloaded && counter->SecondsPassed(0.50)) { conveyor->RunHold(true); shooterloaded = true; }
+  if (!shooterloaded && counter->SecondsPassed(0.45)) { conveyor->RunHold(true); shooterloaded = true; }
   if (!loaded) { loaded = conveyor->GetBallSensorState(true);  }
   if (!shot && loaded && !conveyor->GetBallSensorState(true)) { counter->ResetAll(); moveNow = shot = true; }
-  if (moveNow && counter->SecondsPassed(1.0)) {
+  if (moveNow && counter->SecondsPassed((two) ? 1.0 : 0.3)) {
     conveyor->RunMotor(0.0); conveyor->RunHold(false);
     shooter->RunShooter(0.0); shooter->RunSmallShooter(0.0);
     shooterloaded = loaded = shot = moveNow = false; counter->ResetAll();
@@ -183,7 +188,7 @@ bool Robot::AutoShoot(double time1, double midSpeed, bool dummy, int hood) {
 }
 bool Robot::AutoMove(double distance, double cap, bool fast, int dummy) {
   intake->RunPush(true); intake->RunMotor(0.8); conveyor->RunMotor(0.8);
-  if (driveTrain->MoveDistance(distance, cap, fast)) {
+  if (driveTrain->MoveDistance(distance, cap, fast).second) {
     intake->RunMotor(0.0); conveyor->RunMotor(0.0);
     driveTrain->ResetMoveVars(); driveTrain->ResetTurnVars();
     return true;

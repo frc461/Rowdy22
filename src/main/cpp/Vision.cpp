@@ -3,6 +3,8 @@
 Vision::Vision() {
     auto instance = nt::NetworkTableInstance::GetDefault();
     limelight = instance.GetTable("limelight");//->GetNumber("stream", 2);
+
+    lightIndicator = new frc::DigitalOutput(6);
     
     // backCam = frc::CameraServer::StartAutomaticCapture("backCam", 0);
     // backCam->SetResolution(320,240);
@@ -19,6 +21,11 @@ Vision::Values Vision::GetValues() {
 void Vision::SetLimelightState(bool cam, bool light) {
     limelight->PutNumber("ledMode", (light) ? 3 : 1);
     limelight->PutNumber("camMode", (cam) ? 0 : 1);
+}
+
+void Vision::SetIndicator(bool state) {
+    lightIndicator->Set(state);
+    frc::SmartDashboard::PutBoolean("lihgtOKOK", lightIndicator->Get());
 }
 
 void Vision::SetBackCamState(bool state) {

@@ -7,6 +7,10 @@
 #include "cameraserver/CameraServer.h"
 #include <opencv2/core/core.hpp>
 
+#include <frc/smartdashboard/SmartDashboard.h>
+
+#include <frc/DigitalOutput.h>
+
 #include <iostream>
 
 class Vision {
@@ -22,12 +26,15 @@ public:
     void SetLimelightState(bool cam, bool light);
     void SetBackCamState(bool state);
 
+    void SetIndicator(bool state);
+
 private:
     std::shared_ptr<nt::NetworkTable> limelight;
     Values values;
     
-    cs::UsbCamera *backCam;
-    cs::CvSink *sink;
-    cs::CvSource output;
-    cv::Mat frameData;
+    frc::DigitalOutput *lightIndicator;
+    // cs::UsbCamera *backCam;
+    // cs::CvSink *sink;
+    // cs::CvSource output;
+    // cv::Mat frameData;
 };

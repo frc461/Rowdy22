@@ -20,10 +20,6 @@
 #define SHOOTER_RPM_MID 10000 // (10000 tarmac) (11500 launchpad)
 #define SHOOTER_RPM_BOT 6000
 
-#define SHOOTER_RPM_TOP 8400 // 13500
-#define SHOOTER_RPM_MID 10000 // bacc tarmac 
-#define SHOOTER_RPM_BOT 6000
-
 #define CLIMBER_TOP_ENC_1 75000
 #define CLIMBER_TOP_ENC_2 85000
 #define CLIMBER_BOT_ENC 500
@@ -57,7 +53,7 @@ public:
 
   bool WiggleHood();
   
-  bool AutoShoot( double time,      double midSpeed,  bool dummy,   int hood);
+  bool AutoShoot( double time,      double midSpeed,  bool two,   int hood);
   bool AutoMove(  double distance,  double cap,       bool fast,    int dummy);
   bool AutoTurn(  double angle,     double cap,       bool fast,    int dummy);
   
