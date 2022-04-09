@@ -49,7 +49,7 @@ std::pair<bool,bool> DriveTrain::MoveDistance(double distance, double cap, bool 
     power *= (distance < 0) ? -1 : 1;
     MoveStraight(power);
 
-    crossed = (fabs(GetEncoderL()) >= (fabs(distance * ENC_PER_INCH) / 2));
+    crossed = (fabs(GetEncoderL()) >= (fabs(distance * ENC_PER_INCH) / 3));
     done = (fabs(GetEncoderL()) >= (fabs(distance * ENC_PER_INCH) / 4)) && ((fast) ? fabs(GetLeftVelocity())<20 : fabs(GetLeftVelocity())==0);
 
     return {crossed, done};

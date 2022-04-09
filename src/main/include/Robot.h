@@ -54,8 +54,9 @@ public:
   bool WiggleHood();
   
   bool AutoShoot( double time,      double midSpeed,  bool two,   int hood);
-  bool AutoMove(  double distance,  double cap,       bool fast,    int dummy);
+  bool AutoMove(  double distance,  double cap,       bool fast,    int hood);
   bool AutoTurn(  double angle,     double cap,       bool fast,    int dummy);
+  bool Aim(       double dummyD1,   double dummyD2,   bool dummyB, int dummyI);
   
   void Auto(int level, int hood, double delay);
 
