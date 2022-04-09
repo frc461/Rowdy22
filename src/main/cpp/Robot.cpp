@@ -45,15 +45,14 @@ bool Robot::WiggleHood() {
   return false;
 }
 void Robot::ShooterPeriodic() {
-  shooter->RunShooter((control->Shooter()) ? ((hoodState==1) ? GET_NUM("HighSpeed", SHOOTER_RPM_TOP) : ((hoodState==2) ? GET_NUM("MidSpeed", SHOOTER_RPM_MID) : GET_NUM("LowSpeed", SHOOTER_RPM_BOT))) : 0.0);
-  shooter->RunSmallShooter((control->Shooter()) ? ((hoodState==1) ? GET_NUM("sHighSpeed", 0.5) : ((hoodState==2) ? GET_NUM("sMidSpeed", 0.9) : GET_NUM("sLowSpeed", 0.5))) : 0.0);
+  shooter->RunShooter((control->Shooter()) ? ((hoodState==1) ? GET_NUM("HighSpeed", SHOOTER_RPM_TOP) : ((hoodState==2) ? GET_NUM("MidSpeed", SHOOTER_RPM_MID) : GET_NUM("LowSpeed", SHOOTER_RPM_BOT))) : ((control->ShooterLP()) ? GET_NUM("MidSpeedLP", SHOOTER_RPM_MID_LP) : 0.0));
+  shooter->RunSmallShooter((control->Shooter()) ? ((hoodState==1) ? GET_NUM("sHighSpeed", 0.5) : ((hoodState==2) ? GET_NUM("sMidSpeed", 0.9) : GET_NUM("sLowSpeed", 0.5))) : ((control->ShooterLP()) ? 0.9 : 0.0));
   
-  PUT_BOOL("ShooterLoadedUp", (shooter->GetShooterSpeed() >= ((hoodState==1) ? SHOOTER_RPM_TOP : (hoodState==2) ? SHOOTER_RPM_MID : SHOOTER_RPM_BOT)));
+  PUT_BOOL("ShooterLoadedUp", (shooter->GetShooterSpeed() >= ((hoodState==1) ? SHOOTER_RPM_TOP : (hoodState==2) ? ((control->ShooterLP()) ? SHOOTER_RPM_MID_LP : SHOOTER_RPM_MID) : SHOOTER_RPM_BOT)));
 
   PUT_NUM("velcoty", shooter->GetShooterSpeed());
-  
-  if (control->ShooterHoodUp()) { hoodState = 0; climb = false; }
-  else if (control->ShooterHoodDown()) { hoodState = 1; climb = false; }
+
+  if (control->ShooterHoodUpDown()) { hoodState = (hoodState==0) ? 1 : 0; climb = false; }
   else if (control->ShooterHoodMid()) { 
     if (hoodState == 1) toMid = true;
     hoodState = 2;
@@ -130,6 +129,7 @@ void Robot::RobotInit() {
   
   PUT_NUM("HighSpeed", SHOOTER_RPM_TOP);
   PUT_NUM("MidSpeed", SHOOTER_RPM_MID);
+  PUT_NUM("MidSpeedLP", SHOOTER_RPM_MID_LP);
   PUT_NUM("LowSpeed", SHOOTER_RPM_BOT);
 
   PUT_NUM("sHighSpeed", 0.5);

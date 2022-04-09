@@ -21,9 +21,9 @@ public:
     void VibrateOper(double power);
 
     bool Shooter();
-    bool ShooterHoodUp();
-    bool ShooterHoodDown();
+    bool ShooterLP();
     bool ShooterHoodMid();
+    bool ShooterHoodUpDown();
 
     bool IntakeConveyor();
     bool IntakeConveyorR();
@@ -48,7 +48,7 @@ private:
         bool pressed;
     };
     
-    PressOnce *hood, *tilt, *grab, *push;
+    PressOnce *hood, *hoodMid, *tilt, *grab, *push;
 
     frc::Joystick *oper, *driver;
 };

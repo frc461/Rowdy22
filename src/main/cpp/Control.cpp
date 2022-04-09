@@ -4,6 +4,7 @@ Control::Control() {
     oper = new frc::Joystick(1);
     driver = new frc::Joystick(2);
     hood = new PressOnce();
+    hoodMid = new PressOnce();
     tilt = new PressOnce();
     grab = new PressOnce();
     push = new PressOnce();
@@ -19,9 +20,9 @@ void Control::VibrateDriver(double power) { driver->SetRumble(frc::GenericHID::R
 void Control::VibrateOper(double power) { oper->SetRumble(frc::GenericHID::RumbleType::kLeftRumble,power); driver->SetRumble(frc::GenericHID::RumbleType::kRightRumble,power); }
 
 bool Control::Shooter() { return oper->GetRawAxis(XboxAxisRightTrigger)>0.1; }
-bool Control::ShooterHoodUp() { return hood->Get(oper->GetRawButton(XboxButtonY)); }
-bool Control::ShooterHoodDown() { return hood->Get(oper->GetRawButton(XboxButtonA)); }
+bool Control::ShooterLP() { return oper->GetRawButton(XboxButtonY); }
 bool Control::ShooterHoodMid() { return hood->Get(oper->GetRawButton(XboxButtonX)); }
+bool Control::ShooterHoodUpDown() { return hoodMid->Get(oper->GetRawButton(XboxButtonA)); }
 
 bool Control::IntakeConveyor() { return oper->GetRawButton(XboxButtonRightBumper); }
 bool Control::IntakeConveyorR() { return oper->GetRawButton(XboxButtonLeftBumper); }
