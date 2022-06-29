@@ -143,17 +143,17 @@ void Robot::Auto(int level, int hood, double delaySeconds) {
    }
     if (delayed){
       if (shoot1){
-      shooter->RunHood(hood);
-      shooter->RunShooter((hood==1) ? SHOOTER_SPEED_TOP_AUTO : ((hood==2) ? SHOOTER_SPEED_MID : SHOOTER_SPEED_BOT_AUTO));
-      conveyor->RunHold(true);
-      if (!shooterloaded && counter->SecondsPassed(1.5)) { conveyor->RunMotor(0.8); shooterloaded = true; }
-      if (!loaded) { loaded = conveyor->GetBallSensorState(true); }
-      if (!shot && loaded && !conveyor->GetBallSensorState(true)) {
-      counter->ResetAll();
-      conveyor->RunHold(false);
-      shoot1 = false;
-      shoot2 = true;
-      back1 = true;
+        shooter->RunHood(hood);
+        shooter->RunShooter((hood==1) ? SHOOTER_RPM_TOP : ((hood==2) ? midSpeed : SHOOTER_RPM_BOT));
+        shooter->RunSmallShooter((hood==1) ? 0.5 : ((hood==2) ? ((midSpeed>SHOOTER_RPM_MID) ? 1.0 : 0.9) : 0.5));
+        conveyor->RunMotor(0.8);
+        if (!shooterloaded && fabs(shooter->GetShooterSpeed()) > ((hood==1) ? SHOOTER_RPM_TOP-200 : ((hood==2) ? midSpeed-200 : SHOOTER_RPM_BOT-200))) { conveyor->RunHold(true); shooterloaded = true; }
+        if (!loaded) { loaded = conveyor->GetBallSensorState(true);  }
+        if (!shot && loaded && !conveyor->GetBallSensorState(true)) { counter->ResetAll(); moveNow = shot = true; }
+        if (moveNow && counter->SecondsPassed((two) ? 1.0 : 0.3)) {
+          conveyor->RunHold(false); conveyor->RunMotor(0.0);
+          shooter->RunShooter(0.0); shooter->RunSmallShooter(0.0);
+          shooterloaded = loaded = shot = moveNow = false; counter->ResetAll();
       }
         
       if (level == 1){
